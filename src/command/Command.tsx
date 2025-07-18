@@ -9,10 +9,10 @@ const CommandContext = React.createContext<{
   selectedIndex: number
   setSelectedIndex: (index: number) => void
   items: CommandItemData[]
-  setItems: (items: CommandItemData[]) => void
+  setItems: React.Dispatch<React.SetStateAction<CommandItemData[]>>
   onSelect?: (value: string) => void
   visibleCount: number
-  setVisibleCount: (count: number) => void
+  setVisibleCount: React.Dispatch<React.SetStateAction<number>>
 } | null>(null)
 
 const useCommand = () => {
@@ -29,7 +29,7 @@ interface CommandItemData {
   disabled?: boolean
 }
 
-export interface CommandProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface CommandProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onSelect'> {
   children: ReactNode
   className?: string
   onSelect?: (value: string) => void
@@ -91,7 +91,8 @@ export const Command: React.FC<CommandProps> & {
     return 0
   }
 
-  const filterFunction = filter || defaultFilter // eslint-disable-line @typescript-eslint/no-unused-vars
+  // Filter function available for potential future use
+  filter || defaultFilter
 
   return (
     <CommandContext.Provider 
@@ -241,7 +242,7 @@ const CommandGroup = forwardRef<HTMLDivElement, CommandGroupProps>(
 
 CommandGroup.displayName = 'CommandGroup'
 
-export interface CommandItemProps {
+export interface CommandItemProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onSelect'> {
   children: ReactNode
   value: string
   keywords?: string[]
@@ -265,7 +266,7 @@ const CommandItem = forwardRef<HTMLDivElement, CommandItemProps>(
       })
 
       return () => {
-        setItems((prev: CommandItemData[]) => prev.filter((item: CommandItemData) => item.value !== value))
+        setItems((prev: CommandItemData[]) => prev.filter((prevItem: CommandItemData) => prevItem.value !== value))
       }
     }, [value, keywords, disabled, setItems])
 

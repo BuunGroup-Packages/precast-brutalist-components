@@ -49,28 +49,55 @@ export const Typography = forwardRef<HTMLElement, TypographyProps>(
   }, ref) => {
     const Component = asChild ? 'span' : variantElementMap[variant] as keyof JSX.IntrinsicElements
 
-    return (
-      <Component
-        ref={ref as React.Ref<HTMLElement>}
-        className={clsx(
-          styles.typography,
-          styles[variant],
-          size && styles[`size-${size}`],
-          weight && styles[`weight-${weight}`],
-          align && styles[`align-${align}`],
-          transform && styles[`transform-${transform}`],
-          color && styles[`color-${color}`],
-          family && styles[`family-${family}`],
-          {
-            [styles.truncate]: truncate
-          },
-          className
-        )}
-        {...props}
-      >
-        {children}
-      </Component>
+    const classNames = clsx(
+      styles.typography,
+      styles[variant],
+      size && styles[`size-${size}`],
+      weight && styles[`weight-${weight}`],
+      align && styles[`align-${align}`],
+      transform && styles[`transform-${transform}`],
+      color && styles[`color-${color}`],
+      family && styles[`family-${family}`],
+      {
+        [styles.truncate]: truncate
+      },
+      className
     )
+
+    // Handle different component types manually to avoid type conflicts
+    if (Component === 'h1') {
+      return <h1 ref={ref as React.ForwardedRef<HTMLHeadingElement>} className={classNames} {...props}>{children}</h1>
+    }
+    if (Component === 'h2') {
+      return <h2 ref={ref as React.ForwardedRef<HTMLHeadingElement>} className={classNames} {...props}>{children}</h2>
+    }
+    if (Component === 'h3') {
+      return <h3 ref={ref as React.ForwardedRef<HTMLHeadingElement>} className={classNames} {...props}>{children}</h3>
+    }
+    if (Component === 'h4') {
+      return <h4 ref={ref as React.ForwardedRef<HTMLHeadingElement>} className={classNames} {...props}>{children}</h4>
+    }
+    if (Component === 'h5') {
+      return <h5 ref={ref as React.ForwardedRef<HTMLHeadingElement>} className={classNames} {...props}>{children}</h5>
+    }
+    if (Component === 'h6') {
+      return <h6 ref={ref as React.ForwardedRef<HTMLHeadingElement>} className={classNames} {...props}>{children}</h6>
+    }
+    if (Component === 'blockquote') {
+      return <blockquote ref={ref as React.ForwardedRef<HTMLQuoteElement>} className={classNames} {...props}>{children}</blockquote>
+    }
+    if (Component === 'code') {
+      return <code ref={ref as React.ForwardedRef<HTMLElement>} className={classNames} {...props}>{children}</code>
+    }
+    if (Component === 'ul') {
+      return <ul ref={ref as React.ForwardedRef<HTMLUListElement>} className={classNames} {...props}>{children}</ul>
+    }
+    if (Component === 'span') {
+      return <span ref={ref as React.ForwardedRef<HTMLSpanElement>} className={classNames} {...props}>{children}</span>
+    }
+    
+    // Default to paragraph
+    return <p ref={ref as React.ForwardedRef<HTMLParagraphElement>} className={classNames} {...props}>{children}</p>
   }
 )
 

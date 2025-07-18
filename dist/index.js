@@ -218,7 +218,7 @@ const ma = "_container_tzk6s_4", ha = "_sm_tzk6s_11", pa = "_md_tzk6s_15", ga = 
       }), x(b);
       const N = b.join("");
       n == null || n(N);
-      const z = b.findLastIndex((S) => S !== "");
+      const z = b.map((S, D) => S !== "" ? D : -1).filter((S) => S !== -1).pop() ?? -1;
       g(Math.min(z + 1, e - 1)), N.length === e && !b.includes("") && (o == null || o(N));
     };
     return /* @__PURE__ */ r(
@@ -6236,7 +6236,7 @@ const vb = "_areaChart_zuq85_3", yb = "_header_zuq85_59", wb = "_title_zuq85_67"
       md: { headerHeight: 70, footerHeight: 50, padding: 16 },
       lg: { headerHeight: 90, footerHeight: 60, padding: 24 }
     }[l], D = t || n ? S.headerHeight : 0, E = o - D - S.footerHeight, F = (A) => {
-      if (e.length === 0) return "";
+      if (e.length === 0) return { linePath: "", areaPath: "" };
       const T = e.map((B, H) => {
         const ee = H / (e.length - 1) * 100, ne = 100 - (B.value - b) / N * 100;
         return { x: ee, y: ne };
@@ -7042,7 +7042,7 @@ const C0 = Object.assign($r, {
         "div",
         {
           ref: (y) => {
-            C && (C.current = y), typeof f == "function" ? f(y) : f && "current" in f && (f.current = y);
+            C && (C.current = y), typeof f == "function" ? f(y) : f && "current" in f && f.current !== y && (f.current = y);
           },
           className: _(
             Fe.content,

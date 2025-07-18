@@ -1,4 +1,4 @@
-import React, { HTMLAttributes } from 'react';
+import { HTMLAttributes } from 'react';
 export interface SpinnerProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
     /** Size of the spinner */
     size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -13,4 +13,4 @@ export interface SpinnerProps extends Omit<HTMLAttributes<HTMLDivElement>, 'chil
     /** Additional CSS classes */
     className?: string;
 }
-export declare const Spinner: React.ForwardRefExoticComponent<SpinnerProps & React.RefAttributes<HTMLDivElement>>;
+export declare const Spinner: import("react").ForwardRefExoticComponent<SpinnerProps & import("react").RefAttributes<HTMLDivElement>>;

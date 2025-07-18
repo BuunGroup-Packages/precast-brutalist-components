@@ -1,4 +1,3 @@
-import React from 'react';
 export interface InputOTPProps {
     length?: number;
     value?: string;
@@ -13,4 +12,4 @@ export interface InputOTPProps {
     className?: string;
     brutalistShadow?: boolean;
 }
-export declare const InputOTP: React.ForwardRefExoticComponent<InputOTPProps & React.RefAttributes<HTMLDivElement>>;
+export declare const InputOTP: import("react").ForwardRefExoticComponent<InputOTPProps & import("react").RefAttributes<HTMLDivElement>>;

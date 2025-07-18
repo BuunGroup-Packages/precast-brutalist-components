@@ -133,6 +133,17 @@ const SheetContent = React.forwardRef<HTMLDivElement, SheetContentProps>(
     const contentRef = useRef<HTMLDivElement>(null)
     const overlayRef = useRef<HTMLDivElement>(null)
 
+    const sheetRefCallback = useCallback((node: HTMLDivElement | null) => {
+      if (contentRef && contentRef.current !== node) {
+        (contentRef as React.MutableRefObject<HTMLDivElement | null>).current = node
+      }
+      if (typeof ref === 'function') {
+        ref(node)
+      } else if (ref) {
+        (ref as React.MutableRefObject<HTMLDivElement | null>).current = node
+      }
+    }, [ref])
+
     // Handle escape key
     useEffect(() => {
       if (!open || !closeOnEscape) return
@@ -236,16 +247,7 @@ const SheetContent = React.forwardRef<HTMLDivElement, SheetContentProps>(
           />
         )}
         <div
-          ref={(node) => {
-            if (contentRef) {
-              contentRef.current = node
-            }
-            if (typeof ref === 'function') {
-              ref(node)
-            } else if (ref && 'current' in ref) {
-              ref.current = node
-            }
-          }}
+          ref={sheetRefCallback}
           className={clsx(
             styles.content,
             styles[`side-${side}`],

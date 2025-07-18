@@ -1,4 +1,4 @@
-import React, { forwardRef, useRef, useState, useEffect, KeyboardEvent, ClipboardEvent } from 'react'
+import { forwardRef, useRef, useState, useEffect, KeyboardEvent, ClipboardEvent } from 'react'
 import { clsx } from 'clsx'
 import styles from './InputOTP.module.css'
 
@@ -105,7 +105,7 @@ export const InputOTP = forwardRef<HTMLDivElement, InputOTPProps>(
       onChange?.(otpValue)
 
       // Focus last filled input or last input
-      const lastFilledIndex = newOtp.findLastIndex(val => val !== '')
+      const lastFilledIndex = newOtp.map((val, i) => val !== '' ? i : -1).filter(i => i !== -1).pop() ?? -1
       focusInput(Math.min(lastFilledIndex + 1, length - 1))
 
       // Check if complete

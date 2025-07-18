@@ -88,8 +88,8 @@ const AreaChart = React.forwardRef<HTMLDivElement, AreaChartProps>(
     const actualChartHeight = height - headerHeight - config.footerHeight
 
     // Generate SVG path for the area
-    const generateAreaPath = (smooth: boolean) => {
-      if (data.length === 0) return ''
+    const generateAreaPath = (smooth: boolean): { linePath: string; areaPath: string } => {
+      if (data.length === 0) return { linePath: '', areaPath: '' }
       
       const points = data.map((point, index) => {
         const x = (index / (data.length - 1)) * 100

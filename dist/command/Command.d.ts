@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-export interface CommandProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface CommandProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onSelect'> {
     children: ReactNode;
     className?: string;
     onSelect?: (value: string) => void;
@@ -38,7 +38,7 @@ export interface CommandGroupProps {
     className?: string;
 }
 declare const CommandGroup: React.ForwardRefExoticComponent<CommandGroupProps & React.RefAttributes<HTMLDivElement>>;
-export interface CommandItemProps {
+export interface CommandItemProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onSelect'> {
     children: ReactNode;
     value: string;
     keywords?: string[];

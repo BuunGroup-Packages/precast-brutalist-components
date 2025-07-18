@@ -116,7 +116,7 @@ const ContextMenuTrigger = forwardRef<HTMLDivElement, ContextMenuTriggerProps>(
     const { onOpen } = useContextMenu()
 
     if (asChild && React.isValidElement(children)) {
-      return React.cloneElement(children as React.ReactElement<{ onContextMenu?: (e: React.MouseEvent) => void }>, {
+      return React.cloneElement(children as React.ReactElement<{ onContextMenu?: (e: React.MouseEvent) => void; ref?: React.Ref<HTMLElement> }>, {
         onContextMenu: onOpen,
         ref
       })
@@ -166,6 +166,18 @@ const ContextMenuContent = forwardRef<HTMLDivElement, ContextMenuContentProps>(
     const size = sizeProp || contextSize
     const variant = variantProp || contextVariant
     const contentRef = useRef<HTMLDivElement>(null)
+
+    // Define ref callback outside of conditionals
+    const refCallback = useCallback((node: HTMLDivElement | null) => {
+      if (contentRef.current !== node) {
+        (contentRef as React.MutableRefObject<HTMLDivElement | null>).current = node
+      }
+      if (typeof ref === 'function') {
+        ref(node)
+      } else if (ref) {
+        (ref as React.MutableRefObject<HTMLDivElement | null>).current = node
+      }
+    }, [ref])
 
     // No need for click-outside detection since we have backdrop
 
@@ -234,11 +246,7 @@ const ContextMenuContent = forwardRef<HTMLDivElement, ContextMenuContentProps>(
           }}
         />
         <div
-          ref={(node) => {
-            contentRef.current = node
-            if (typeof ref === 'function') ref(node)
-            else if (ref) ref.current = node
-          }}
+          ref={refCallback}
           className={clsx(
             styles.content,
             className
@@ -522,6 +530,17 @@ const ContextMenuSubContent = forwardRef<HTMLDivElement, ContextMenuSubContentPr
     const context = useContextMenu()
     const elementRef = useRef<HTMLDivElement>(null)
     
+    const subRefCallback = useCallback((node: HTMLDivElement | null) => {
+      if (elementRef.current !== node) {
+        (elementRef as React.MutableRefObject<HTMLDivElement | null>).current = node
+      }
+      if (typeof ref === 'function') {
+        ref(node)
+      } else if (ref) {
+        (ref as React.MutableRefObject<HTMLDivElement | null>).current = node
+      }
+    }, [ref])
+    
     const handleMouseEnter = () => {
       // When hovering over sub-content, keep it open by calling onKeepOpen 
       // which will clear any pending close timeout without repositioning
@@ -539,11 +558,7 @@ const ContextMenuSubContent = forwardRef<HTMLDivElement, ContextMenuSubContentPr
     return (
       <ContextMenuContent 
         {...props} 
-        ref={(node) => {
-          elementRef.current = node
-          if (typeof ref === 'function') ref(node)
-          else if (ref) ref.current = node
-        }}
+        ref={subRefCallback}
         className={clsx(styles.subContent, className)}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
