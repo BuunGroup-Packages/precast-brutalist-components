@@ -82,7 +82,7 @@ function App() {
 
 ## Documentation
 
-For full documentation and examples, visit [our documentation site](https://github.com/yourusername/brutalist-components).
+For full documentation and examples, visit [our documentation site](https://brutalist.precast.dev).
 
 ## License
 
