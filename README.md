@@ -1,15 +1,15 @@
-# @brutalist-ui/components
+# @buun_group/brutalist-ui
 
 A brutalist-styled React component library that embraces raw, unpolished aesthetics with bold typography and stark contrasts.
 
 ## Installation
 
 ```bash
-npm install @brutalist-ui/components
+npm install @buun_group/brutalist-ui
 # or
-yarn add @brutalist-ui/components
+yarn add @buun_group/brutalist-ui
 # or
-pnpm add @brutalist-ui/components
+pnpm add@buun_group/brutalist-ui
 ```
 
 ## Usage
@@ -17,7 +17,7 @@ pnpm add @brutalist-ui/components
 ```jsx
 import { Button, Card, Input } from '@brutalist-ui/components';
 import '@brutalist-ui/components/styles'; // Import the CSS
-
+  
 function App() {
   return (
     <Card>
