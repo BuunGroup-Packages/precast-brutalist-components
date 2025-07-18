@@ -1,0 +1,12 @@
+import { BrutalistTheme } from './types';
+export declare const CLASSIC_THEME: BrutalistTheme;
+export declare const NEON_THEME: BrutalistTheme;
+export declare const PASTEL_THEME: BrutalistTheme;
+export declare const DARK_THEME: BrutalistTheme;
+export declare const RETRO_THEME: BrutalistTheme;
+export declare const NATURE_THEME: BrutalistTheme;
+export declare const OCEAN_THEME: BrutalistTheme;
+export declare const MONOCHROME_THEME: BrutalistTheme;
+export declare const AVAILABLE_THEMES: BrutalistTheme[];
+export declare const DEFAULT_THEME: BrutalistTheme;
+export declare const getThemeById: (id: string) => BrutalistTheme | undefined;

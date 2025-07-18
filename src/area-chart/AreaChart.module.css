@@ -1,0 +1,394 @@
+/* ===== AREA CHART COMPONENT ===== */
+
+.areaChart {
+  display: flex;
+  flex-direction: column;
+  gap: var(--brutal-space-4);
+  font-family: var(--brutal-font-mono);
+  color: var(--brutal-foreground);
+  background-color: var(--brutal-background);
+  position: relative;
+  width: 100%;
+}
+
+/* ===== SIZE VARIANTS ===== */
+
+.areaChart[data-size="sm"] {
+  --brutal-text-title: var(--brutal-text-lg);
+  --brutal-text-subtitle: var(--brutal-text-xs);
+  --brutal-text-label: var(--brutal-text-2xs);
+  --brutal-space-header: var(--brutal-space-2);
+  --brutal-space-footer: var(--brutal-space-2);
+}
+
+.areaChart[data-size="md"] {
+  --brutal-text-title: var(--brutal-text-xl);
+  --brutal-text-subtitle: var(--brutal-text-sm);
+  --brutal-text-label: var(--brutal-text-xs);
+  --brutal-space-header: var(--brutal-space-3);
+  --brutal-space-footer: var(--brutal-space-3);
+}
+
+.areaChart[data-size="lg"] {
+  --brutal-text-title: var(--brutal-text-2xl);
+  --brutal-text-subtitle: var(--brutal-text-base);
+  --brutal-text-label: var(--brutal-text-sm);
+  --brutal-space-header: var(--brutal-space-4);
+  --brutal-space-footer: var(--brutal-space-4);
+}
+
+/* ===== STYLE VARIANTS ===== */
+
+.areaChart[data-variant="minimal"] {
+  --brutal-border-width: 1px;
+  --brutal-shadow-size: 0px;
+}
+
+.areaChart[data-variant="default"] {
+  --brutal-border-width: 2px;
+  --brutal-shadow-size: 4px;
+}
+
+.areaChart[data-variant="brutal"] {
+  --brutal-border-width: 5px;
+  --brutal-shadow-size: 8px;
+}
+
+/* ===== HEADER ===== */
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--brutal-space-1);
+  text-align: center;
+  padding: var(--brutal-space-header);
+}
+
+.title {
+  font-family: var(--brutal-font-mono);
+  font-size: var(--brutal-text-title);
+  font-weight: var(--brutal-font-black);
+  letter-spacing: var(--brutal-letter-spacing-wide);
+  text-transform: uppercase;
+  color: var(--brutal-foreground);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.areaChart[data-variant="brutal"] .title {
+  text-shadow: 2px 2px 0 var(--brutal-accent);
+  font-weight: var(--brutal-font-black);
+}
+
+.subtitle {
+  font-family: var(--brutal-font-mono);
+  font-size: var(--brutal-text-subtitle);
+  font-weight: var(--brutal-font-medium);
+  color: var(--brutal-muted-foreground);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: var(--brutal-letter-spacing-wide);
+}
+
+/* ===== CHART CONTAINER ===== */
+
+.chartContainer {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  background-color: var(--brutal-background);
+  overflow: hidden;
+}
+
+.chartContainer[data-show-container="true"] {
+  border: var(--brutal-border-width) var(--brutal-border-style, solid) var(--brutal-foreground);
+  box-shadow: var(--brutal-shadow-size) var(--brutal-shadow-size) 0 var(--brutal-foreground);
+  padding: var(--brutal-space-4);
+}
+
+/* ===== Y-AXIS ===== */
+
+.yAxis {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  height: 100%;
+  margin-right: var(--brutal-space-2);
+}
+
+.areaChart[data-show-grid="false"] .yAxis {
+  display: none;
+}
+
+.yAxisLabels {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-right: var(--brutal-space-2);
+  width: 60px;
+  font-family: var(--brutal-font-mono);
+  font-size: var(--brutal-text-label);
+  font-weight: var(--brutal-font-bold);
+  color: var(--brutal-muted-foreground);
+}
+
+.yAxisLabel {
+  text-transform: uppercase;
+  letter-spacing: var(--brutal-letter-spacing-wide);
+  line-height: 1;
+}
+
+.gridLines {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  width: 2px;
+}
+
+.gridLine {
+  height: 1px;
+  background-color: var(--brutal-muted-foreground);
+  opacity: 0.3;
+}
+
+.areaChart[data-variant="brutal"] .gridLine {
+  height: 2px;
+  opacity: 0.6;
+}
+
+/* ===== AREA CONTAINER ===== */
+
+.areaContainer {
+  position: relative;
+  flex: 1;
+  height: 100%;
+  overflow: hidden;
+}
+
+.areaSvg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+/* ===== ANIMATIONS ===== */
+
+.animatedArea {
+  animation: drawArea 1.2s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes drawArea {
+  from {
+    opacity: 0;
+    transform: scaleY(0);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+.animatedLine {
+  animation: drawLine 1s ease-out forwards;
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+}
+
+@keyframes drawLine {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.animatedDot {
+  animation: fadeInDot 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes fadeInDot {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ===== DATA POINTS ===== */
+
+.dataPointHover {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.dataPointHover:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ===== VALUE LABELS ===== */
+
+.valueLabel {
+  position: absolute;
+  font-family: var(--brutal-font-mono);
+  font-size: var(--brutal-text-label);
+  font-weight: var(--brutal-font-black);
+  color: var(--brutal-foreground);
+  text-transform: uppercase;
+  letter-spacing: var(--brutal-letter-spacing-wide);
+  background-color: var(--brutal-background);
+  border: 1px solid var(--brutal-foreground);
+  padding: 2px 6px;
+  border-radius: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.areaChart[data-variant="brutal"] .valueLabel {
+  border-width: 2px;
+  box-shadow: 2px 2px 0 var(--brutal-foreground);
+  background-color: var(--brutal-accent);
+  color: var(--brutal-background);
+}
+
+.areaChart[data-variant="minimal"] .valueLabel {
+  border: none;
+  background-color: transparent;
+  color: var(--brutal-muted-foreground);
+}
+
+.areaChart[data-animated="true"] .valueLabel {
+  animation: fadeInValue 0.8s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes fadeInValue {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ===== FOOTER ===== */
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--brutal-space-2);
+  padding: var(--brutal-space-footer);
+}
+
+.xAxisLabels {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--brutal-space-1);
+}
+
+.xAxisLabel {
+  font-family: var(--brutal-font-mono);
+  font-size: var(--brutal-text-label);
+  font-weight: var(--brutal-font-bold);
+  color: var(--brutal-muted-foreground);
+  text-transform: uppercase;
+  letter-spacing: var(--brutal-letter-spacing-wide);
+  text-align: center;
+  cursor: pointer;
+  padding: var(--brutal-space-1);
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.xAxisLabel:hover {
+  color: var(--brutal-foreground);
+  border-color: var(--brutal-foreground);
+}
+
+.dataCount {
+  text-align: center;
+  font-family: var(--brutal-font-mono);
+  font-size: var(--brutal-text-2xs);
+  font-weight: var(--brutal-font-bold);
+  color: var(--brutal-muted-foreground);
+  text-transform: uppercase;
+  letter-spacing: var(--brutal-letter-spacing-wide);
+}
+
+/* ===== EMPTY STATE ===== */
+
+.empty {
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: var(--brutal-border-width) dashed var(--brutal-muted-foreground);
+  background-color: var(--brutal-muted);
+}
+
+.emptyState {
+  text-align: center;
+}
+
+.emptyText {
+  font-family: var(--brutal-font-mono);
+  font-size: var(--brutal-text-sm);
+  font-weight: var(--brutal-font-black);
+  color: var(--brutal-muted-foreground);
+  text-transform: uppercase;
+  letter-spacing: var(--brutal-letter-spacing-wide);
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+
+@media (max-width: 768px) {
+  .areaChart {
+    gap: var(--brutal-space-3);
+  }
+  
+  .header {
+    padding: var(--brutal-space-2);
+  }
+  
+  .title {
+    font-size: var(--brutal-text-lg);
+  }
+  
+  .subtitle {
+    font-size: var(--brutal-text-xs);
+  }
+  
+  .yAxisLabels {
+    width: 40px;
+    font-size: 10px;
+  }
+  
+  .valueLabel {
+    font-size: 10px;
+    padding: 1px 4px;
+  }
+  
+  .xAxisLabel {
+    font-size: 10px;
+    padding: 2px;
+  }
+  
+  .footer {
+    padding: var(--brutal-space-2);
+  }
+}

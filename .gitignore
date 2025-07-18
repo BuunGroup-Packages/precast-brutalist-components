@@ -1,0 +1,20 @@
+# Secret files
+# This file is used to ignore sensitive files that should not be committed to the repository.
+# It is important to keep these files out of version control to protect sensitive information.
+
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Configuration files
+# These files contain configuration settings that may include sensitive information.
+config.json
+config.local.json
+
+# AI
+
+.claude
+.cursor
+.vscode

@@ -1,0 +1,212 @@
+@import '../../../styles/src/variables.css';
+
+.container {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--brutal-space-3);
+  position: relative;
+  user-select: none;
+}
+
+.checkboxWrapper {
+  position: relative;
+  display: inline-block;
+  line-height: 0;
+}
+
+/* Hide native checkbox */
+.input {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  z-index: 1;
+}
+
+/* Custom checkbox */
+.checkbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--brutal-white);
+  border: var(--brutal-border-width) var(--brutal-border-style) var(--brutal-black);
+  cursor: pointer;
+  transition: all var(--brutal-transition-base);
+  position: relative;
+  overflow: hidden;
+}
+
+.checkbox.withShadow {
+  box-shadow: var(--brutal-shadow-sm);
+}
+
+/* Size variants */
+.sm .checkbox {
+  width: 16px;
+  height: 16px;
+}
+
+.md .checkbox {
+  width: 20px;
+  height: 20px;
+}
+
+.lg .checkbox {
+  width: 24px;
+  height: 24px;
+}
+
+/* Checkmark */
+.checkmark {
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transform: scale(0.8) rotate(-5deg);
+  transition: all var(--brutal-transition-base);
+  color: var(--brutal-black);
+}
+
+/* Indeterminate line */
+.indeterminateLine {
+  position: absolute;
+  height: var(--brutal-border-width);
+  width: 60%;
+  background-color: var(--brutal-black);
+  opacity: 0;
+  transition: opacity var(--brutal-transition-base);
+}
+
+/* Label */
+.label {
+  font-family: var(--brutal-font-sans);
+  font-weight: var(--brutal-font-medium);
+  color: var(--brutal-black);
+  cursor: pointer;
+  transition: color var(--brutal-transition-base);
+}
+
+.sm .label {
+  font-size: var(--brutal-text-sm);
+}
+
+.md .label {
+  font-size: var(--brutal-text-base);
+}
+
+.lg .label {
+  font-size: var(--brutal-text-lg);
+}
+
+/* States */
+/* Checked state */
+.input:checked + .checkbox .checkmark {
+  opacity: 1;
+  transform: scale(1) rotate(0);
+}
+
+/* Indeterminate state */
+.checkbox.indeterminate .indeterminateLine {
+  opacity: 1;
+}
+
+.checkbox.indeterminate .checkmark {
+  opacity: 0;
+}
+
+/* Hover state */
+.container:not(.disabled):hover .checkbox {
+  background-color: var(--brutal-gray-100);
+  transform: translate(-1px, -1px);
+}
+
+.container:not(.disabled):hover .checkbox.withShadow {
+  box-shadow: 5px 5px 0px var(--brutal-black);
+}
+
+.container:not(.disabled):hover .label {
+  color: var(--brutal-gray-700);
+}
+
+/* Focus state */
+.input:focus-visible + .checkbox {
+  outline: var(--brutal-border-width) var(--brutal-border-style) var(--brutal-accent);
+  outline-offset: 2px;
+  background-color: var(--brutal-gray-100);
+}
+
+/* Active state */
+.container:not(.disabled):active .checkbox {
+  transform: translate(2px, 2px);
+}
+
+.container:not(.disabled):active .checkbox.withShadow {
+  box-shadow: 2px 2px 0px var(--brutal-black);
+}
+
+/* Disabled state */
+.disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.disabled .checkbox {
+  cursor: not-allowed;
+  background-color: var(--brutal-gray-300);
+}
+
+.disabled .label {
+  cursor: not-allowed;
+  color: var(--brutal-gray-500);
+}
+
+/* Error state */
+.error .checkbox {
+  border-color: var(--brutal-error);
+}
+
+.error .checkbox.withShadow {
+  box-shadow: 4px 4px 0px var(--brutal-error);
+}
+
+.error:not(.disabled):hover .checkbox.withShadow {
+  box-shadow: 5px 5px 0px var(--brutal-error);
+}
+
+.error .input:focus-visible + .checkbox {
+  outline-color: var(--brutal-error);
+}
+
+.error .checkmark {
+  color: var(--brutal-error);
+}
+
+.error .indeterminateLine {
+  background-color: var(--brutal-error);
+}
+
+/* Keyboard navigation enhancement */
+.input:focus-visible + .checkbox {
+  transform: translate(-1px, -1px);
+}
+
+.input:focus-visible + .checkbox.withShadow {
+  box-shadow: 5px 5px 0px var(--brutal-black);
+}
+
+/* Animation for check */
+@keyframes checkAnimation {
+  0% {
+    transform: scale(0.8) rotate(-5deg);
+  }
+  50% {
+    transform: scale(1.1) rotate(5deg);
+  }
+  100% {
+    transform: scale(1) rotate(0);
+  }
+}
+
+.input:checked + .checkbox .checkmark {
+  animation: checkAnimation var(--brutal-transition-base);
+}

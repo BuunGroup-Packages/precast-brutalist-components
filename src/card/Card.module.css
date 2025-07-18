@@ -1,0 +1,203 @@
+@import '../../../styles/src/variables.css';
+
+.card {
+  /* Base styles */
+  font-family: var(--brutal-font-sans);
+  background-color: var(--brutal-white);
+  color: var(--brutal-black);
+  border: var(--brutal-border-width) var(--brutal-border-style) var(--brutal-black);
+  transition: var(--brutal-transition-base);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Variants */
+.elevated {
+  box-shadow: var(--brutal-shadow);
+}
+
+.flat {
+  box-shadow: none;
+}
+
+.outline {
+  background-color: transparent;
+  border: var(--brutal-border-width-thick) var(--brutal-border-style) var(--brutal-black);
+}
+
+/* Padding variants */
+.padding-none {
+  padding: 0;
+}
+
+.padding-sm {
+  padding: var(--brutal-space-3);
+}
+
+.padding-md {
+  padding: var(--brutal-space-4);
+}
+
+.padding-lg {
+  padding: var(--brutal-space-6);
+}
+
+/* Interactive states */
+.clickable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.clickable:focus {
+  outline: var(--brutal-border-width-thick) var(--brutal-border-style) var(--brutal-accent);
+  outline-offset: var(--brutal-space-1);
+}
+
+.hover:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px var(--brutal-black);
+}
+
+.clickable:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px var(--brutal-black);
+}
+
+.clickable:active {
+  transform: translate(1px, 1px);
+  box-shadow: 2px 2px 0px var(--brutal-black);
+}
+
+.elevated.hover:hover,
+.elevated.clickable:hover {
+  box-shadow: 
+    6px 6px 0px var(--brutal-black),
+    var(--brutal-shadow-lg);
+}
+
+.elevated.clickable:active {
+  box-shadow: 
+    2px 2px 0px var(--brutal-black),
+    var(--brutal-shadow-sm);
+}
+
+.outline.hover:hover,
+.outline.clickable:hover {
+  background-color: var(--brutal-gray-50);
+  border-color: var(--brutal-accent);
+}
+
+.flat.hover:hover,
+.flat.clickable:hover {
+  box-shadow: 6px 6px 0px var(--brutal-black);
+}
+
+/* Card sections */
+.header {
+  border-bottom: var(--brutal-border-width-thin) var(--brutal-border-style) var(--brutal-gray-200);
+  margin-bottom: var(--brutal-space-4);
+  padding-bottom: var(--brutal-space-3);
+  font-weight: var(--brutal-font-bold);
+  font-size: var(--brutal-text-lg);
+}
+
+.header:first-child {
+  margin-top: calc(-1 * var(--brutal-space-1));
+}
+
+.body {
+  flex: 1;
+  line-height: var(--brutal-leading-normal);
+}
+
+.footer {
+  border-top: var(--brutal-border-width-thin) var(--brutal-border-style) var(--brutal-gray-200);
+  margin-top: var(--brutal-space-4);
+  padding-top: var(--brutal-space-3);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--brutal-space-2);
+}
+
+.footer:last-child {
+  margin-bottom: calc(-1 * var(--brutal-space-1));
+}
+
+/* Adjust padding when sections are present */
+.card:has(.header) {
+  padding-top: var(--brutal-space-4);
+}
+
+.card:has(.footer) {
+  padding-bottom: var(--brutal-space-4);
+}
+
+/* Handle padding override when sections exist */
+.padding-none .header,
+.padding-none .body,
+.padding-none .footer {
+  padding-left: var(--brutal-space-4);
+  padding-right: var(--brutal-space-4);
+}
+
+.padding-sm .header,
+.padding-sm .body,
+.padding-sm .footer {
+  padding-left: var(--brutal-space-3);
+  padding-right: var(--brutal-space-3);
+}
+
+.padding-lg .header,
+.padding-lg .body,
+.padding-lg .footer {
+  padding-left: var(--brutal-space-6);
+  padding-right: var(--brutal-space-6);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .card {
+    margin: var(--brutal-space-2);
+  }
+  
+  .padding-lg {
+    padding: var(--brutal-space-4);
+  }
+  
+  .padding-lg .header,
+  .padding-lg .body,
+  .padding-lg .footer {
+    padding-left: var(--brutal-space-4);
+    padding-right: var(--brutal-space-4);
+  }
+  
+  .header {
+    font-size: var(--brutal-text-base);
+  }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition: none;
+  }
+  
+  .hover:hover,
+  .clickable:hover,
+  .clickable:active {
+    transform: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .card {
+    border-width: var(--brutal-border-width-thick);
+  }
+  
+  .header,
+  .footer {
+    border-width: var(--brutal-border-width);
+  }
+}

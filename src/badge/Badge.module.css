@@ -1,0 +1,351 @@
+@import '../../../styles/src/variables.css';
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--brutal-space-1);
+  font-family: var(--brutal-font-sans);
+  font-weight: var(--brutal-font-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  border: var(--brutal-border-width) var(--brutal-border-style) var(--brutal-black);
+  white-space: nowrap;
+  user-select: none;
+  transition: var(--brutal-transition-fast);
+  position: relative;
+  line-height: 1;
+}
+
+/* Size variants */
+.sm {
+  padding: var(--brutal-space-1) var(--brutal-space-2);
+  font-size: var(--brutal-text-xs);
+  min-height: 20px;
+}
+
+.md {
+  padding: var(--brutal-space-2) var(--brutal-space-3);
+  font-size: var(--brutal-text-sm);
+  min-height: 24px;
+}
+
+.lg {
+  padding: var(--brutal-space-3) var(--brutal-space-4);
+  font-size: var(--brutal-text-base);
+  min-height: 32px;
+}
+
+/* Variant: Solid */
+.solid {
+  color: var(--brutal-white);
+}
+
+.solid.accent {
+  background-color: var(--brutal-accent);
+  border-color: var(--brutal-accent-dark);
+}
+
+.solid.success {
+  background-color: var(--brutal-success);
+  border-color: #16A34A;
+}
+
+.solid.warning {
+  background-color: var(--brutal-warning);
+  border-color: #D97706;
+  color: var(--brutal-black);
+}
+
+.solid.error {
+  background-color: var(--brutal-error);
+  border-color: var(--brutal-accent-dark);
+}
+
+.solid.info {
+  background-color: var(--brutal-info);
+  border-color: #1D4ED8;
+}
+
+.solid.neutral {
+  background-color: var(--brutal-gray-700);
+  border-color: var(--brutal-gray-900);
+}
+
+/* Variant: Outline */
+.outline {
+  background-color: var(--brutal-white);
+}
+
+.outline.accent {
+  color: var(--brutal-accent);
+  border-color: var(--brutal-accent);
+}
+
+.outline.success {
+  color: var(--brutal-success);
+  border-color: var(--brutal-success);
+}
+
+.outline.warning {
+  color: #D97706;
+  border-color: var(--brutal-warning);
+}
+
+.outline.error {
+  color: var(--brutal-error);
+  border-color: var(--brutal-error);
+}
+
+.outline.info {
+  color: var(--brutal-info);
+  border-color: var(--brutal-info);
+}
+
+.outline.neutral {
+  color: var(--brutal-gray-700);
+  border-color: var(--brutal-gray-700);
+}
+
+/* Variant: Secondary */
+.secondary {
+  background-color: var(--brutal-gray-100);
+  color: var(--brutal-gray-700);
+  border-color: var(--brutal-gray-300);
+}
+
+.secondary.accent {
+  background-color: var(--brutal-accent-light, #EBF8FF);
+  color: var(--brutal-accent-dark);
+  border-color: var(--brutal-accent);
+}
+
+.secondary.success {
+  background-color: #F0FDF4;
+  color: #166534;
+  border-color: var(--brutal-success);
+}
+
+.secondary.warning {
+  background-color: #FFFBEB;
+  color: #92400E;
+  border-color: var(--brutal-warning);
+}
+
+.secondary.error {
+  background-color: #FEF2F2;
+  color: #991B1B;
+  border-color: var(--brutal-error);
+}
+
+.secondary.info {
+  background-color: #EFF6FF;
+  color: #1E40AF;
+  border-color: var(--brutal-info);
+}
+
+.secondary.neutral {
+  background-color: var(--brutal-gray-100);
+  color: var(--brutal-gray-700);
+  border-color: var(--brutal-gray-400);
+}
+
+/* Variant: Dot */
+.dot {
+  border-radius: 50%;
+  padding: 0;
+  min-height: auto;
+  aspect-ratio: 1;
+}
+
+.dot.sm {
+  width: 8px;
+  height: 8px;
+}
+
+.dot.md {
+  width: 12px;
+  height: 12px;
+}
+
+.dot.lg {
+  width: 16px;
+  height: 16px;
+}
+
+.dot.accent {
+  background-color: var(--brutal-accent);
+  border-color: var(--brutal-accent-dark);
+}
+
+.dot.success {
+  background-color: var(--brutal-success);
+  border-color: #16A34A;
+}
+
+.dot.warning {
+  background-color: var(--brutal-warning);
+  border-color: #D97706;
+}
+
+.dot.error {
+  background-color: var(--brutal-error);
+  border-color: var(--brutal-accent-dark);
+}
+
+.dot.info {
+  background-color: var(--brutal-info);
+  border-color: #1D4ED8;
+}
+
+.dot.neutral {
+  background-color: var(--brutal-gray-700);
+  border-color: var(--brutal-gray-900);
+}
+
+/* Clickable styles */
+.clickable {
+  cursor: pointer;
+}
+
+.clickable:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 2px 2px 0px var(--brutal-black);
+}
+
+.clickable:active {
+  transform: translate(0, 0);
+  box-shadow: 1px 1px 0px var(--brutal-black);
+}
+
+.clickable:focus {
+  outline: 2px solid var(--brutal-accent);
+  outline-offset: 2px;
+}
+
+/* Dismissible styles */
+.dismissible {
+  padding-right: var(--brutal-space-6);
+}
+
+.dismissButton {
+  position: absolute;
+  right: var(--brutal-space-1);
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  opacity: 0.7;
+  transition: opacity var(--brutal-transition-fast);
+}
+
+.dismissButton:hover {
+  opacity: 1;
+}
+
+.dismissButton:focus {
+  outline: 1px solid currentColor;
+  outline-offset: 1px;
+  opacity: 1;
+}
+
+.dismissIcon {
+  width: 12px;
+  height: 12px;
+}
+
+.sm .dismissIcon {
+  width: 10px;
+  height: 10px;
+}
+
+.lg .dismissIcon {
+  width: 14px;
+  height: 14px;
+}
+
+/* Adjust padding for dismissible dot variant */
+.dot.dismissible {
+  padding-right: 0;
+}
+
+.dot .dismissButton {
+  position: absolute;
+  right: -2px;
+  top: -2px;
+  width: 14px;
+  height: 14px;
+  background-color: var(--brutal-black);
+  color: var(--brutal-white);
+  border-radius: 50%;
+  border: 1px solid var(--brutal-white);
+}
+
+.dot.sm .dismissButton {
+  width: 12px;
+  height: 12px;
+  right: -1px;
+  top: -1px;
+}
+
+.dot.lg .dismissButton {
+  width: 16px;
+  height: 16px;
+  right: -3px;
+  top: -3px;
+}
+
+.dot .dismissIcon {
+  width: 8px;
+  height: 8px;
+}
+
+.dot.sm .dismissIcon {
+  width: 6px;
+  height: 6px;
+}
+
+.dot.lg .dismissIcon {
+  width: 10px;
+  height: 10px;
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .badge,
+  .clickable,
+  .dismissButton {
+    transition: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .badge {
+    border-width: var(--brutal-border-width-thick);
+  }
+  
+  .outline {
+    background-color: var(--brutal-white);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .clickable:hover {
+    transform: none;
+    box-shadow: none;
+  }
+  
+  /* Increase touch targets on mobile */
+  .dismissButton {
+    min-width: 20px;
+    min-height: 20px;
+  }
+}

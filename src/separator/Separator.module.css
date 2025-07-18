@@ -1,0 +1,195 @@
+@import '../../../styles/src/variables.css';
+
+.separator {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  color: var(--brutal-black);
+}
+
+/* Orientations */
+.horizontal {
+  height: auto;
+  width: 100%;
+  margin: var(--brutal-space-6) 0;
+}
+
+.vertical {
+  width: auto;
+  height: 100%;
+  margin: 0 var(--brutal-space-6);
+  flex-direction: column;
+}
+
+/* Base line styles for different orientations */
+.horizontal:not(.withLabel) {
+  border-bottom-width: 0;
+  border-top-width: var(--brutal-border-width);
+}
+
+.vertical:not(.withLabel) {
+  border-left-width: var(--brutal-border-width);
+  border-right-width: 0;
+}
+
+/* Thickness variants */
+.thin.horizontal:not(.withLabel) {
+  border-top-width: var(--brutal-border-width-thin);
+}
+
+.thin.vertical:not(.withLabel) {
+  border-left-width: var(--brutal-border-width-thin);
+}
+
+.medium.horizontal:not(.withLabel) {
+  border-top-width: var(--brutal-border-width);
+}
+
+.medium.vertical:not(.withLabel) {
+  border-left-width: var(--brutal-border-width);
+}
+
+.thick.horizontal:not(.withLabel) {
+  border-top-width: calc(var(--brutal-border-width) * 2);
+}
+
+.thick.vertical:not(.withLabel) {
+  border-left-width: calc(var(--brutal-border-width) * 2);
+}
+
+/* Style variants */
+.solid {
+  border-style: solid;
+  border-color: var(--brutal-black);
+}
+
+.dashed {
+  border-style: dashed;
+  border-color: var(--brutal-black);
+}
+
+.dotted {
+  border-style: dotted;
+  border-color: var(--brutal-black);
+}
+
+.double {
+  border-style: double;
+  border-color: var(--brutal-black);
+}
+
+/* With label styles */
+.withLabel {
+  display: flex;
+  align-items: center;
+  gap: var(--brutal-space-4);
+  border: none;
+}
+
+.line {
+  flex: 1;
+  height: var(--brutal-border-width);
+  background-color: var(--brutal-black);
+}
+
+.thin .line {
+  height: var(--brutal-border-width-thin);
+}
+
+.thick .line {
+  height: calc(var(--brutal-border-width) * 2);
+}
+
+.dashed .line {
+  background-image: repeating-linear-gradient(
+    to right,
+    var(--brutal-black) 0,
+    var(--brutal-black) 8px,
+    transparent 8px,
+    transparent 16px
+  );
+  background-size: 16px 100%;
+  background-color: transparent;
+}
+
+.dotted .line {
+  background-image: repeating-linear-gradient(
+    to right,
+    var(--brutal-black) 0,
+    var(--brutal-black) 4px,
+    transparent 4px,
+    transparent 8px
+  );
+  background-size: 8px 100%;
+  background-color: transparent;
+}
+
+.double .line {
+  position: relative;
+  height: calc(var(--brutal-border-width) * 3);
+  background-color: transparent;
+  border-top: var(--brutal-border-width) solid var(--brutal-black);
+  border-bottom: var(--brutal-border-width) solid var(--brutal-black);
+}
+
+.label {
+  flex-shrink: 0;
+  padding: 0 var(--brutal-space-2);
+  font-family: var(--brutal-font-mono);
+  font-size: var(--brutal-text-sm);
+  font-weight: var(--brutal-font-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Label position */
+.label-start {
+  flex-direction: row;
+}
+
+.label-start .line:first-of-type {
+  display: none;
+}
+
+.label-center {
+  flex-direction: row;
+}
+
+.label-end {
+  flex-direction: row;
+}
+
+.label-end .line:last-of-type {
+  display: none;
+}
+
+/* Vertical separator cannot have labels */
+.vertical .label,
+.vertical .line {
+  display: none;
+}
+
+/* Theme integration */
+.separator {
+  --separator-color: var(--brutal-black);
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .horizontal {
+    margin: var(--brutal-space-4) 0;
+  }
+  
+  .vertical {
+    margin: 0 var(--brutal-space-4);
+  }
+  
+  .withLabel {
+    gap: var(--brutal-space-3);
+  }
+  
+  .label {
+    font-size: var(--brutal-text-xs);
+  }
+}

@@ -1,0 +1,331 @@
+@import '../../../styles/src/variables.css';
+
+/* Animation keyframes */
+@keyframes alertEnter {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes alertExit {
+  from {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100px) scale(0.9);
+  }
+}
+
+@keyframes alertShake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-4px);
+  }
+  75% {
+    transform: translateX(4px);
+  }
+}
+
+.alert {
+  /* Base styles */
+  font-family: var(--brutal-font-sans);
+  border: var(--brutal-border-width) var(--brutal-border-style);
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--brutal-space-3);
+  border-radius: 0;
+  font-weight: var(--brutal-font-medium);
+  box-shadow: var(--brutal-shadow-sm);
+  transition: var(--brutal-transition-base);
+  /* Enter animation */
+  animation: alertEnter 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  transform-origin: top center;
+}
+
+/* Size variants */
+.sm {
+  padding: var(--brutal-space-3);
+  font-size: var(--brutal-text-sm);
+  line-height: var(--brutal-leading-tight);
+}
+
+.md {
+  padding: var(--brutal-space-4);
+  font-size: var(--brutal-text-base);
+  line-height: var(--brutal-leading-normal);
+}
+
+.lg {
+  padding: var(--brutal-space-6);
+  font-size: var(--brutal-text-lg);
+  line-height: var(--brutal-leading-normal);
+}
+
+/* Type variants - Filled */
+.info.filled {
+  background-color: var(--brutal-info);
+  border-color: var(--brutal-black);
+  color: var(--brutal-white);
+}
+
+.success.filled {
+  background-color: var(--brutal-success);
+  border-color: var(--brutal-black);
+  color: var(--brutal-white);
+}
+
+.warning.filled {
+  background-color: var(--brutal-warning);
+  border-color: var(--brutal-black);
+  color: var(--brutal-black);
+}
+
+.error.filled {
+  background-color: var(--brutal-error);
+  border-color: var(--brutal-black);
+  color: var(--brutal-white);
+}
+
+/* Type variants - Outline */
+.info.outline {
+  background-color: var(--brutal-white);
+  border-color: var(--brutal-info);
+  color: var(--brutal-info);
+  border-width: var(--brutal-border-width-thick);
+}
+
+.success.outline {
+  background-color: var(--brutal-white);
+  border-color: var(--brutal-success);
+  color: var(--brutal-success);
+  border-width: var(--brutal-border-width-thick);
+}
+
+.warning.outline {
+  background-color: var(--brutal-white);
+  border-color: var(--brutal-warning);
+  color: var(--brutal-warning);
+  border-width: var(--brutal-border-width-thick);
+}
+
+.error.outline {
+  background-color: var(--brutal-white);
+  border-color: var(--brutal-error);
+  color: var(--brutal-error);
+  border-width: var(--brutal-border-width-thick);
+}
+
+/* Alert sections */
+.icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: var(--brutal-space-1);
+}
+
+.sm .icon {
+  margin-top: 0;
+}
+
+.lg .icon {
+  margin-top: var(--brutal-space-2);
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+}
+
+.title {
+  font-family: var(--brutal-font-display);
+  font-weight: var(--brutal-font-bold);
+  font-size: inherit;
+  line-height: var(--brutal-leading-tight);
+  margin: 0 0 var(--brutal-space-1) 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.description {
+  margin: 0;
+  line-height: var(--brutal-leading-normal);
+  opacity: 0.9;
+}
+
+.title + .description {
+  margin-top: var(--brutal-space-2);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--brutal-space-2);
+  margin-top: var(--brutal-space-3);
+  flex-wrap: wrap;
+}
+
+/* Dismiss button */
+.dismissible {
+  padding-right: var(--brutal-space-12);
+}
+
+.dismissButton {
+  position: absolute;
+  top: var(--brutal-space-3);
+  right: var(--brutal-space-3);
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  padding: var(--brutal-space-1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0;
+  opacity: 0.7;
+  transition: var(--brutal-transition-fast);
+}
+
+.dismissButton:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.dismissButton:focus {
+  outline: var(--brutal-border-width-thin) var(--brutal-border-style) currentColor;
+  outline-offset: var(--brutal-space-1);
+}
+
+.dismissButton:active {
+  transform: scale(0.95);
+}
+
+.lg .dismissButton {
+  top: var(--brutal-space-4);
+  right: var(--brutal-space-4);
+}
+
+.sm .dismissButton {
+  top: var(--brutal-space-2);
+  right: var(--brutal-space-2);
+  padding: 2px;
+}
+
+.sm .dismissButton svg {
+  width: 14px;
+  height: 14px;
+}
+
+.lg .dismissButton svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Special color adjustments for outline variants */
+.outline .title {
+  color: inherit;
+}
+
+.outline .description {
+  color: var(--brutal-black);
+  opacity: 0.8;
+}
+
+.outline .dismissButton {
+  color: inherit;
+}
+
+/* Exit animation */
+.exiting {
+  animation: alertExit 0.3s cubic-bezier(0.55, 0.055, 0.675, 0.19) forwards;
+}
+
+/* Hover effects */
+.alert:hover:not(.exiting) {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px var(--brutal-black);
+}
+
+/* Error type alerts shake on hover */
+.error:hover:not(.exiting) {
+  animation: alertShake 0.15s ease-in-out;
+}
+
+/* Focus management for actions */
+.actions button,
+.actions a {
+  margin: 0;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .lg {
+    padding: var(--brutal-space-4);
+    font-size: var(--brutal-text-base);
+  }
+  
+  .alert {
+    margin: var(--brutal-space-2);
+  }
+  
+  .actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .actions button {
+    width: 100%;
+  }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .alert {
+    transition: none;
+    animation: none !important;
+  }
+  
+  .exiting {
+    animation: none !important;
+    opacity: 0;
+  }
+  
+  .alert:hover {
+    transform: none;
+  }
+  
+  .dismissButton:hover,
+  .dismissButton:active {
+    transform: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .alert {
+    border-width: var(--brutal-border-width-thick);
+  }
+  
+  .outline {
+    border-width: 4px;
+  }
+  
+  .filled {
+    color: var(--brutal-white);
+  }
+  
+  .warning.filled {
+    color: var(--brutal-black);
+  }
+}
