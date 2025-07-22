@@ -1,0 +1,17 @@
+{
+  "name": "@brutalist-ui/styles",
+  "version": "0.0.1",
+  "main": "./src/index.css",
+  "exports": {
+    ".": "./src/index.css",
+    "./variables": "./src/variables.css",
+    "./reset": "./src/reset.css"
+  },
+  "scripts": {
+    "lint": "stylelint \"**/*.css\""
+  },
+  "devDependencies": {
+    "stylelint": "^16.1.0",
+    "stylelint-config-standard": "^36.0.0"
+  }
+}

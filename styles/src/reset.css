@@ -1,0 +1,110 @@
+/* Brutalist Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  min-height: 100vh;
+  font-family: var(--brutal-font-sans);
+  font-size: var(--brutal-text-base);
+  line-height: var(--brutal-leading-normal);
+  color: var(--brutal-black);
+  background-color: var(--brutal-white);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--brutal-font-display);
+  font-weight: var(--brutal-font-black);
+  line-height: var(--brutal-leading-tight);
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+}
+
+h1 { font-size: var(--brutal-text-5xl); }
+h2 { font-size: var(--brutal-text-4xl); }
+h3 { font-size: var(--brutal-text-3xl); }
+h4 { font-size: var(--brutal-text-2xl); }
+h5 { font-size: var(--brutal-text-xl); }
+h6 { font-size: var(--brutal-text-lg); }
+
+p {
+  margin-bottom: var(--brutal-space-4);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: var(--brutal-border-width) var(--brutal-border-style) var(--brutal-black);
+  transition: var(--brutal-transition-fast);
+}
+
+a:hover {
+  background-color: var(--brutal-black);
+  color: var(--brutal-white);
+}
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+input, button, textarea, select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+code, kbd, samp, pre {
+  font-family: var(--brutal-font-mono);
+  font-size: 0.9em;
+}
+
+pre {
+  overflow-x: auto;
+  padding: var(--brutal-space-4);
+  background-color: var(--brutal-gray-100);
+  border: var(--brutal-border-width) var(--brutal-border-style) var(--brutal-black);
+}
+
+:focus-visible {
+  outline: var(--brutal-border-width) var(--brutal-border-style) var(--brutal-accent);
+  outline-offset: 2px;
+}
+
+::selection {
+  background-color: var(--brutal-black);
+  color: var(--brutal-white);
+}
+
+/* Utility classes */
+.brutal-no-select {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.brutal-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}

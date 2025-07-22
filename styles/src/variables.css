@@ -1,0 +1,198 @@
+/* Brutalist UI CSS Variables */
+:root {
+  /* Colors */
+  --brutal-black: #000000;
+  --brutal-white: #ffffff;
+  --brutal-accent: #ff0066;
+  --brutal-accent-dark: #cc0052;
+  --brutal-accent-light: #ff3385;
+  
+  /* Gray Scale */
+  --brutal-gray-50: #f9fafb;
+  --brutal-gray-100: #f3f4f6;
+  --brutal-gray-200: #e5e7eb;
+  --brutal-gray-300: #d1d5db;
+  --brutal-gray-400: #9ca3af;
+  --brutal-gray-500: #6b7280;
+  --brutal-gray-600: #4b5563;
+  --brutal-gray-700: #374151;
+  --brutal-gray-800: #1f2937;
+  --brutal-gray-900: #111827;
+  
+  /* Semantic Colors */
+  --brutal-error: #ef4444;
+  --brutal-success: #10b981;
+  --brutal-warning: #f59e0b;
+  --brutal-info: #3b82f6;
+  
+  /* Legacy color aliases */
+  --brutal-gray: #6b7280;
+  --brutal-gray-dark: #374151;
+  --brutal-gray-light: #f3f4f6;
+  --brutal-red: #ef4444;
+  --brutal-green: #10b981;
+  --brutal-yellow: #f59e0b;
+  --brutal-yellow-dark: #d97706;
+  --brutal-yellow-light: #fef3c7;
+  --brutal-success-dark: #059669;
+  
+  /* Theme Colors */
+  --brutal-background: var(--brutal-white);
+  --brutal-foreground: var(--brutal-black);
+  --brutal-muted: var(--brutal-gray-100);
+  --brutal-muted-foreground: var(--brutal-gray-600);
+  --brutal-border-color: var(--brutal-black);
+  
+  /* Typography */
+  --brutal-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --brutal-font-mono: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+  --brutal-font-serif: 'Playfair Display', Georgia, serif;
+  --brutal-font-display: 'Space Grotesk', sans-serif;
+  
+  /* Font Weights */
+  --brutal-font-normal: 400;
+  --brutal-font-medium: 500;
+  --brutal-font-semibold: 600;
+  --brutal-font-bold: 700;
+  --brutal-font-black: 900;
+  --brutal-font-weight-semibold: 600;
+  
+  /* Font Sizes */
+  --brutal-text-2xs: 0.625rem;
+  --brutal-text-xs: 0.75rem;
+  --brutal-text-sm: 0.875rem;
+  --brutal-text-base: 1rem;
+  --brutal-text-lg: 1.125rem;
+  --brutal-text-xl: 1.25rem;
+  --brutal-text-2xl: 1.5rem;
+  --brutal-text-3xl: 1.875rem;
+  --brutal-text-4xl: 2.25rem;
+  --brutal-text-5xl: 3rem;
+  --brutal-text-6xl: 3.75rem;
+  
+  /* Spacing */
+  --brutal-space-0: 0;
+  --brutal-space-1: 0.25rem;
+  --brutal-space-2: 0.5rem;
+  --brutal-space-3: 0.75rem;
+  --brutal-space-4: 1rem;
+  --brutal-space-5: 1.25rem;
+  --brutal-space-6: 1.5rem;
+  --brutal-space-7: 1.75rem;
+  --brutal-space-8: 2rem;
+  --brutal-space-10: 2.5rem;
+  
+  /* Legacy spacing aliases */
+  --brutal-spacing-xs: 0.25rem;
+  --brutal-spacing-sm: 0.5rem;
+  --brutal-spacing-md: 1rem;
+  --brutal-spacing-lg: 1.5rem;
+  --brutal-spacing-xl: 2rem;
+  
+  /* Borders */
+  --brutal-border-width: 2px;
+  --brutal-border-width-thin: 1px;
+  --brutal-border-width-thick: 3px;
+  --brutal-border-width-lg: 4px;
+  --brutal-border-style: solid;
+  
+  /* Shadows */
+  --brutal-shadow-xs: 1px 1px 0px var(--brutal-black);
+  --brutal-shadow-sm: 2px 2px 0px var(--brutal-black);
+  --brutal-shadow: 4px 4px 0px var(--brutal-black);
+  --brutal-shadow-md: 6px 6px 0px var(--brutal-black);
+  --brutal-shadow-lg: 8px 8px 0px var(--brutal-black);
+  --brutal-shadow-xl: 12px 12px 0px var(--brutal-black);
+  --brutal-shadow-size: 4px;
+  
+  /* Transitions */
+  --brutal-transition-fast: 0.15s;
+  --brutal-transition-base: 0.25s;
+  --brutal-transition-slow: 0.35s;
+  
+  /* Radius */
+  --brutal-radius: 4px;
+  
+  /* Chart-specific variables */
+  --brutal-chart-border: var(--brutal-black);
+  --brutal-chart-border-width: 2px;
+  --brutal-chart-bg: var(--brutal-white);
+  --brutal-chart-text: var(--brutal-black);
+  --brutal-chart-grid: var(--brutal-gray-200);
+  --brutal-chart-grid-color: var(--brutal-gray-200);
+  --brutal-chart-header-bg: var(--brutal-gray-100);
+  --brutal-chart-shadow: 4px 4px 0px var(--brutal-black);
+  --brutal-chart-accent: var(--brutal-accent);
+  --brutal-chart-title-size: var(--brutal-text-xl);
+  --brutal-chart-subtitle-size: var(--brutal-text-sm);
+  --brutal-chart-legend-gap: var(--brutal-space-2);
+  
+  /* Component-specific variables */
+  --brutal-combobox-bg: var(--brutal-white);
+  --brutal-combobox-text: var(--brutal-black);
+  --brutal-combobox-placeholder: var(--brutal-gray-500);
+  --brutal-combobox-border: var(--brutal-black);
+  --brutal-combobox-border-width: 2px;
+  --brutal-combobox-border-radius: var(--brutal-radius);
+  --brutal-combobox-shadow: 4px 4px 0px var(--brutal-black);
+  --brutal-combobox-text-size: var(--brutal-text-base);
+  --brutal-combobox-height: 2.5rem;
+  --brutal-combobox-font: var(--brutal-font-mono);
+  --brutal-combobox-dropdown-bg: var(--brutal-white);
+  --brutal-combobox-option-hover-bg: var(--brutal-gray-100);
+  --brutal-combobox-option-selected-bg: var(--brutal-accent-light);
+  --brutal-combobox-empty-bg: var(--brutal-gray-50);
+  --brutal-combobox-separator-width: var(--brutal-border-width);
+  
+  /* Pagination variables */
+  --brutal-pagination-bg: var(--brutal-white);
+  --brutal-pagination-border: var(--brutal-black);
+  --brutal-pagination-active-bg: var(--brutal-black);
+  --brutal-pagination-active-color: var(--brutal-white);
+  --brutal-pagination-hover-bg: var(--brutal-accent);
+  --brutal-pagination-hover-color: var(--brutal-white);
+  --brutal-pagination-disabled-bg: var(--brutal-gray-100);
+  --brutal-pagination-disabled-color: var(--brutal-gray-400);
+  --brutal-pagination-radius: var(--brutal-radius);
+  --brutal-pagination-gap: var(--brutal-space-1);
+  
+  /* Command variables */
+  --brutal-command-bg: var(--brutal-white);
+  --brutal-command-text: var(--brutal-black);
+  --brutal-command-border: var(--brutal-black);
+  --brutal-command-muted: var(--brutal-gray-600);
+  --brutal-command-accent: var(--brutal-accent);
+  --brutal-command-shadow: 4px 4px 0px var(--brutal-black);
+  --brutal-command-radius: var(--brutal-radius);
+  
+  /* Drawer variables */
+  --brutal-drawer-bg: var(--brutal-white);
+  --brutal-drawer-text: var(--brutal-black);
+  --brutal-drawer-border: var(--brutal-black);
+  --brutal-drawer-border-width: 2px;
+  --brutal-drawer-shadow: 8px 8px 0px var(--brutal-black);
+  
+  /* Sheet variables */
+  --brutal-sheet-bg: var(--brutal-white);
+  --brutal-sheet-text: var(--brutal-black);
+  --brutal-sheet-border: var(--brutal-black);
+  --brutal-sheet-border-width: 2px;
+  --brutal-sheet-shadow: 8px 8px 0px var(--brutal-black);
+  --brutal-sheet-size: 400px;
+  
+  /* Carousel variables */
+  --brutal-carousel-bg: var(--brutal-white);
+  --brutal-carousel-border: var(--brutal-black);
+  --brutal-carousel-border-width: 2px;
+  --brutal-carousel-shadow: 4px 4px 0px var(--brutal-black);
+  --brutal-carousel-button-bg: var(--brutal-white);
+  --brutal-carousel-button-hover-bg: var(--brutal-gray-100);
+  --brutal-carousel-button-disabled-bg: var(--brutal-gray-200);
+  --brutal-carousel-indicator-bg: var(--brutal-gray-400);
+  --brutal-carousel-indicator-active-bg: var(--brutal-black);
+  
+  /* Aspect ratio variables */
+  --brutal-aspect-ratio-bg: var(--brutal-gray-100);
+  --brutal-aspect-ratio-border: var(--brutal-black);
+  --brutal-aspect-ratio-radius: var(--brutal-radius);
+}
