@@ -8,7 +8,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
-### Documentation
+### Added
+
+- docs: add professional contribution documentation and CI/CD (2d49c510)
+
+### Changed
+
+- fixed breaking changes (a48fd66b)
+
+### Documenta
+- fixed breaking changes (a48fd66b)
+- fixed breaking changes (a48fd66b)
+- fixed breaking changes (a48fd66b)
+- fixed breaking changes (a48fd66b)
+- fixed breaking changes (a48fd66b)
+- fixed breaking changes (a48fd66b)
+- fixed breaking changes (a48fd66b)
+- fixed breaking changes (a48fd66b)
+- fixed breaking changes (a48fd66b)
+- fixed breaking changes (a48fd66b)
+- fixed breaking changes (a48fd66b)
+- fixed breaking changes (a48fd66b)
+- fixed breaking changes (a48fd66b)
+- fixed breaking changes (a48fd66b)
+- fixed breaking changes (a48fd66b)
+- fixed breaking changes (a48fd66b)
+- fixed breaking changes (a48fd66b)
+- fixed breaking changes (a48fd66b)
+- fixed breaking changes (a48fd66b)tion
 
 - spelling mistakes (3f4076bd)
 

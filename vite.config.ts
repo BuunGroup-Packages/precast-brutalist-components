@@ -35,7 +35,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@brutalist-ui/styles': resolve(__dirname, './src/styles-bundle.css')
+      '@brutalist-ui/styles': resolve(__dirname, './src/react/styles-bundle.css')
     }
   }
 })

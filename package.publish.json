@@ -1,7 +1,7 @@
 {
   "name": "@buun_group/brutalist-ui",
   "type": "module",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "private": false,
   "publishConfig": {
     "access": "public"
