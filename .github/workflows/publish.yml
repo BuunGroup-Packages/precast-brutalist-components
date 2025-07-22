@@ -44,15 +44,50 @@ jobs:
       - name: Update version
         if: github.event_name == 'workflow_dispatch'
         run: |
-          npm version ${{ github.event.inputs.version }} --no-git-tag-version
-          echo "VERSION=${{ github.event.inputs.version }}" >> $GITHUB_ENV
+          CURRENT_VERSION=$(node -p "require('./package.json').version")
+          NEW_VERSION=${{ github.event.inputs.version }}
+          echo "Current version: $CURRENT_VERSION"
+          echo "Requested version: $NEW_VERSION"
+          
+          # Only update if different from current version
+          if [ "$CURRENT_VERSION" != "$NEW_VERSION" ]; then
+            npm version $NEW_VERSION --no-git-tag-version
+            echo "VERSION=$NEW_VERSION" >> $GITHUB_ENV
+          else
+            echo "Version $NEW_VERSION already set in package.json"
+            echo "VERSION=$CURRENT_VERSION" >> $GITHUB_ENV
+          fi
 
       - name: Get version from release
         if: github.event_name == 'release'
         run: |
-          VERSION=${GITHUB_REF_NAME#v}
-          npm version $VERSION --no-git-tag-version
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          CURRENT_VERSION=$(node -p "require('./package.json').version")
+          RELEASE_VERSION=${GITHUB_REF_NAME#v}
+          echo "Current version: $CURRENT_VERSION"
+          echo "Release version: $RELEASE_VERSION"
+          
+          # Only update if different from current version
+          if [ "$CURRENT_VERSION" != "$RELEASE_VERSION" ]; then
+            npm version $RELEASE_VERSION --no-git-tag-version
+            echo "VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
+          else
+            echo "Version $RELEASE_VERSION already set in package.json"
+            echo "VERSION=$CURRENT_VERSION" >> $GITHUB_ENV
+          fi
+
+      - name: Check if version exists on npm
+        run: |
+          PACKAGE_NAME=$(node -p "require('./package.json').name")
+          VERSION=$(node -p "require('./package.json').version")
+          echo "Checking if $PACKAGE_NAME@$VERSION exists on npm..."
+          
+          if npm view $PACKAGE_NAME@$VERSION version 2>/dev/null; then
+            echo "❌ Version $VERSION already exists on npm!"
+            echo "Please increment the version before publishing."
+            exit 1
+          else
+            echo "✅ Version $VERSION is available for publishing"
+          fi
 
       - name: Publish to npm
         run: npm publish --access public
