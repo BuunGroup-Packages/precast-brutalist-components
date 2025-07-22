@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+### Added
+
+- added testing framwork to components (8efb32c7)
+
 ### Documentation
 
 - reformatted (e7b37282)

@@ -27,7 +27,6 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@brutalist-ui/styles": "workspace:*",
     "clsx": "^2.1.0"
   },
   "peerDependencies": {
