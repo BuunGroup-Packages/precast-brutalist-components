@@ -1,3 +1,6 @@
+// Import CSS variables to bundle them
+import '../styles/src/variables.css'
+
 // Export all React components (default export)
 export * from './react'
 

@@ -142,6 +142,15 @@ jobs:
           cat > test.js << 'EOF'
           import { Button } from '@buun_group/brutalist-ui';
           console.log('Import successful:', typeof Button === 'function');
+          
+          // Test CSS import
+          try {
+            // This should not throw an error
+            await import('@buun_group/brutalist-ui/styles');
+            console.log('CSS import successful');
+          } catch (error) {
+            console.error('CSS import failed:', error.message);
+          }
           EOF
           
           # Try to run the test
