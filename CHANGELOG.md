@@ -8,35 +8,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
-### Added
+### Documentation
 
-- docs: add professional contribution documentation and CI/CD (2d49c510)
+- reformatted (e7b37282)
 
-### Changed
-
-- fixed breaking changes (a48fd66b)
-
-### Documenta
-- fixed breaking changes (a48fd66b)
-- fixed breaking changes (a48fd66b)
-- fixed breaking changes (a48fd66b)
-- fixed breaking changes (a48fd66b)
-- fixed breaking changes (a48fd66b)
-- fixed breaking changes (a48fd66b)
-- fixed breaking changes (a48fd66b)
-- fixed breaking changes (a48fd66b)
-- fixed breaking changes (a48fd66b)
-- fixed breaking changes (a48fd66b)
-- fixed breaking changes (a48fd66b)
-- fixed breaking changes (a48fd66b)
-- fixed breaking changes (a48fd66b)
-- fixed breaking changes (a48fd66b)
-- fixed breaking changes (a48fd66b)
-- fixed breaking changes (a48fd66b)
-- fixed breaking changes (a48fd66b)
-- fixed breaking changes (a48fd66b)
-- fixed breaking changes (a48fd66b)tion
-
-- spelling mistakes (3f4076bd)
-
-- spelling mistakes (3f4076bd)
+- reformatted (e7b37282)
+- reformatted (e7b37282)
+- reformatted (e7b37282)
+- reformatted (e7b37282)
+- reformatted (e7b37282)
+- reformatted (e7b37282)
+- reformatted (e7b37282)
+- reformatted (e7b37282)
+- reformatted (e7b37282)
+- reformatted (e7b37282)
+- reformatted (e7b37282)
+- reformatted (e7b37282)
+- reformatted (e7b37282)
+- reformatted (e7b37282)
+- reformatted (e7b37282)
+- reformatted (e7b37282)
+- reformatted (e7b37282)
+- reformatted (e7b37282)
+- reformatted (e7b37282)
+- reformatted (e7b37282)
+- reformatted (e7b37282)
+- reformatted (e7b37282)
+- reformatted (e7b37282)
+- reformatted (e7b37282)
+- reformatted (e7b37282)
+- reformatted (e7b37282)
+- reformatted (e7b37282)
+- reformatted (e7b37282)
+- reformatted (e7b37282)
+- reformatted (e7b37282)
+- reformatted (e7b37282)
+- reformatted (e7b37282)
+- reformatted (e7b37282)
+- reformatted (e7b37282)

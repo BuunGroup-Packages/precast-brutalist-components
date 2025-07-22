@@ -1,12 +1,16 @@
-# @brutalist-ui/components
-
 <div align="center">
+  <img src="public/precast/logo.png" alt="Precast" width="120" height="120" />
+  
+  # Brutalist UI Components
+  
   <h3>A brutalist-styled React component library that embraces raw, unpolished aesthetics</h3>
   <p>Bold typography • Stark contrasts • Geometric shapes • Raw functionality</p>
   
-  [![npm version](https://img.shields.io/npm/v/@brutalist-ui/components.svg)](https://www.npmjs.com/package/@brutalist-ui/components)
+  [![npm version](https://img.shields.io/npm/v/@buun_group/brutalist-ui.svg)](https://www.npmjs.com/package/@buun_group/brutalist-ui)
   [![License: MIT](https://img.shields.io/badge/License-MIT-black.svg)](LICENSE)
   [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-black.svg)](CONTRIBUTING.md)
+  
+  **[📚 Documentation](https://brutalist.precast.dev)** | **[🎨 Live Examples](https://brutalist.precast.dev/components)**
 </div>
 
 ---
@@ -14,20 +18,20 @@
 ## 📦 Installation
 
 ```bash
-npm install @brutalist-ui/components
+npm install @buun_group/brutalist-ui
 # or
-yarn add @brutalist-ui/components
+yarn add @buun_group/brutalist-ui
 # or
-pnpm add @brutalist-ui/components
+pnpm add @buun_group/brutalist-ui
 # or
-bun add @brutalist-ui/components
+bun add @buun_group/brutalist-ui
 ```
 
 ## 🚀 Quick Start
 
 ```jsx
-import { Button, Card, Input } from '@brutalist-ui/components';
-import '@brutalist-ui/components/dist/brutalist-ui.css'; // Import the CSS
+import { Button, Card, Input } from '@buun_group/brutalist-ui';
+import '@buun_group/brutalist-ui/styles'; // Import the CSS
 
 function App() {
   return (

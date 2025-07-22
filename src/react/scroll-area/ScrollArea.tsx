@@ -3,7 +3,7 @@
  * @description A custom scrollable area component with brutalist-styled scrollbars. Provides consistent cross-browser scrolling with customizable scrollbar appearance.
  */
 
-import React, { forwardRef, useRef, useState, useEffect } from 'react'
+import React, { forwardRef, useRef, useState, useEffect, useCallback } from 'react'
 import { clsx } from 'clsx'
 import styles from './ScrollArea.module.css'
 
@@ -109,21 +109,19 @@ export const ScrollArea = forwardRef<HTMLDivElement, ScrollAreaProps>(
     const [verticalThumbTop, setVerticalThumbTop] = useState(0)
     const [horizontalThumbLeft, setHorizontalThumbLeft] = useState(0)
     
-    // Combine refs
-    const combinedRef = (node: HTMLDivElement | null) => {
-      scrollRef.current = node
+    // Use useEffect to update external ref
+    useEffect(() => {
       if (ref) {
         if (typeof ref === 'function') {
-          ref(node)
-        } else {
-          // Use type assertion for mutable ref
-          (ref as React.MutableRefObject<HTMLDivElement | null>).current = node
+          ref(scrollRef.current)
+        } else if ('current' in ref) {
+          (ref as React.MutableRefObject<HTMLDivElement | null>).current = scrollRef.current
         }
       }
-    }
+    }, [ref])
     
     // Calculate scrollbar visibility and thumb sizes
-    const updateScrollbars = () => {
+    const updateScrollbars = useCallback(() => {
       if (!scrollRef.current) return
       
       const element = scrollRef.current
@@ -158,7 +156,7 @@ export const ScrollArea = forwardRef<HTMLDivElement, ScrollAreaProps>(
           setHorizontalThumbLeft(thumbLeft)
         }
       }
-    }
+    }, [vertical, horizontal])
     
     // Handle scroll
     const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
@@ -243,7 +241,7 @@ export const ScrollArea = forwardRef<HTMLDivElement, ScrollAreaProps>(
           resizeObserver.disconnect()
         }
       }
-    }, [])
+    }, [updateScrollbars])
     
     const scrollAreaStyle: React.CSSProperties = {
       ...style,
@@ -269,7 +267,7 @@ export const ScrollArea = forwardRef<HTMLDivElement, ScrollAreaProps>(
         {...props}
       >
         <div
-          ref={combinedRef}
+          ref={scrollRef}
           className={styles.viewport}
           onScroll={handleScroll}
           style={{

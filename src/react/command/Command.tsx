@@ -3,7 +3,7 @@
  * @description A command palette component for building searchable, keyboard-navigable menus. Inspired by command palettes in modern applications with compound components for flexible composition.
  */
 
-import React, { forwardRef, useState, useRef, useEffect, ReactNode, KeyboardEvent } from 'react'
+import React, { forwardRef, useState, useRef, useEffect, ReactNode, KeyboardEvent, useMemo, useCallback } from 'react'
 import { clsx } from 'clsx'
 import styles from './Command.module.css'
 
@@ -130,31 +130,31 @@ export const Command: React.FC<CommandProps> & {
 
   const currentSearch = isControlled ? controlledValue : search
 
-  const handleSearchChange = (newSearch: string) => {
+  const handleSearchChange = useCallback((newSearch: string) => {
     if (!isControlled) {
       setSearch(newSearch)
     }
     onValueChange?.(newSearch)
     setSelectedIndex(0)
-  }
+  }, [isControlled, onValueChange])
 
   // Default filter function and custom filter are available for future use
   // They can be implemented when needed for custom filtering logic
 
+  const contextValue = useMemo(() => ({
+    search: currentSearch,
+    setSearch: handleSearchChange,
+    selectedIndex,
+    setSelectedIndex,
+    items,
+    setItems,
+    onSelect,
+    visibleCount,
+    setVisibleCount
+  }), [currentSearch, handleSearchChange, selectedIndex, items, onSelect, visibleCount])
+
   return (
-    <CommandContext.Provider 
-      value={{
-        search: currentSearch,
-        setSearch: handleSearchChange,
-        selectedIndex,
-        setSelectedIndex,
-        items,
-        setItems,
-        onSelect,
-        visibleCount,
-        setVisibleCount
-      }}
-    >
+    <CommandContext.Provider value={contextValue}>
       <div
         className={clsx(styles.command, className)}
         {...props}
@@ -390,9 +390,11 @@ const CommandItem = forwardRef<HTMLDivElement, CommandItemProps>(
   ({ children, value, keywords = [], disabled = false, className, onSelect: onItemSelect, ...props }, ref) => {
     const { search, selectedIndex, setItems, onSelect, setVisibleCount } = useCommand()
     const itemIndex = useRef<number>(-1)
+    const isMounted = useRef(false)
 
     // Register item with command context
     useEffect(() => {
+      isMounted.current = true
       const item: CommandItemData = { value, keywords, disabled }
       setItems((prev: CommandItemData[]) => {
         const newItems = [...prev, item]
@@ -401,9 +403,15 @@ const CommandItem = forwardRef<HTMLDivElement, CommandItemProps>(
       })
 
       return () => {
-        setItems((prev: CommandItemData[]) => prev.filter((prevItem: CommandItemData) => prevItem.value !== value))
+        isMounted.current = false
+        // Use setTimeout to avoid state update during render
+        setTimeout(() => {
+          if (!isMounted.current) {
+            setItems((prev: CommandItemData[]) => prev.filter((prevItem: CommandItemData) => prevItem.value !== value))
+          }
+        }, 0)
       }
-    }, [value, keywords, disabled, setItems])
+    }, [value, keywords, disabled])
 
     const isSelected = itemIndex.current === selectedIndex
 
@@ -440,7 +448,7 @@ const CommandItem = forwardRef<HTMLDivElement, CommandItemProps>(
         setVisibleCount(prev => prev + 1)
         return () => setVisibleCount(prev => prev - 1)
       }
-    }, [shouldShow, setVisibleCount])
+    }, [shouldShow])
 
     if (!shouldShow) return null
 
