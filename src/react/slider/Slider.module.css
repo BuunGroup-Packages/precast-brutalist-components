@@ -1,0 +1,302 @@
+@import '../../../../styles/src/variables.css';
+
+.container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--brutal-space-4);
+  font-family: var(--brutal-font-mono);
+}
+
+/* Orientation */
+.horizontal {
+  flex-direction: row;
+  width: 100%;
+}
+
+.vertical {
+  flex-direction: column-reverse;
+  width: auto;
+  height: 100%;
+}
+
+/* Track */
+.track {
+  position: relative;
+  background-color: var(--brutal-gray-200);
+  border: var(--brutal-border-width) var(--brutal-border-style) var(--brutal-black);
+  box-shadow: var(--brutal-shadow-sm);
+  overflow: visible;
+}
+
+.horizontal .track {
+  width: 100%;
+  height: var(--track-height);
+}
+
+.vertical .track {
+  width: var(--track-height);
+  height: 100%;
+  min-height: 200px;
+}
+
+/* Progress fill */
+.progress {
+  position: absolute;
+  background-color: var(--brutal-black);
+  transition: var(--brutal-transition-base);
+}
+
+.horizontal .progress {
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: var(--slider-percentage);
+}
+
+.vertical .progress {
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: var(--slider-percentage);
+}
+
+/* Native input (hidden but functional) */
+.input {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 3;
+}
+
+.vertical .input {
+  writing-mode: bt-lr; /* For Firefox */
+  -webkit-appearance: slider-vertical; /* For Chrome/Safari */
+  width: 100%;
+  height: 100%;
+}
+
+/* Thumb */
+.thumb {
+  position: absolute;
+  background-color: var(--brutal-white);
+  border: var(--brutal-border-width-lg) var(--brutal-border-style) var(--brutal-black);
+  box-shadow: var(--brutal-shadow);
+  pointer-events: none;
+  transition: var(--brutal-transition-base);
+  z-index: 2;
+}
+
+.horizontal .thumb {
+  top: 50%;
+  left: var(--slider-percentage);
+  transform: translate(-50%, -50%);
+  width: var(--thumb-size);
+  height: var(--thumb-size);
+}
+
+.vertical .thumb {
+  left: 50%;
+  bottom: var(--slider-percentage);
+  transform: translate(-50%, 50%);
+  width: var(--thumb-size);
+  height: var(--thumb-size);
+}
+
+/* Hover effects */
+.container:not(.disabled):hover .thumb {
+  background-color: var(--brutal-gray-100);
+  border-width: calc(var(--brutal-border-width-lg) + 1px);
+  box-shadow: var(--brutal-shadow-lg);
+}
+
+.container:not(.disabled):hover .progress {
+  background-color: var(--brutal-accent);
+}
+
+/* Active state */
+.input:active ~ .thumb {
+  background-color: var(--brutal-accent);
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+.vertical .input:active ~ .thumb {
+  transform: translate(-50%, 50%) scale(1.1);
+}
+
+/* Focus */
+.input:focus-visible ~ .thumb {
+  outline: var(--brutal-border-width) var(--brutal-border-style) var(--brutal-accent);
+  outline-offset: 2px;
+}
+
+/* Sizes */
+.sm {
+  --track-height: 8px;
+  --thumb-size: 20px;
+  font-size: var(--brutal-text-xs);
+}
+
+.md {
+  --track-height: 12px;
+  --thumb-size: 28px;
+  font-size: var(--brutal-text-sm);
+}
+
+.lg {
+  --track-height: 16px;
+  --thumb-size: 36px;
+  font-size: var(--brutal-text-base);
+}
+
+/* Value display */
+.value {
+  background-color: var(--brutal-black);
+  color: var(--brutal-white);
+  padding: var(--brutal-space-2) var(--brutal-space-3);
+  border: var(--brutal-border-width) var(--brutal-border-style) var(--brutal-black);
+  font-weight: var(--brutal-font-bold);
+  text-align: center;
+  min-width: 3em;
+}
+
+.withValue .track {
+  flex: 1;
+}
+
+/* Marks */
+.marks {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.mark {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.horizontal .mark {
+  top: 50%;
+  transform: translateX(-50%);
+  flex-direction: column;
+  gap: var(--brutal-space-2);
+}
+
+.vertical .mark {
+  left: 50%;
+  transform: translateY(50%);
+  flex-direction: row;
+  gap: var(--brutal-space-2);
+}
+
+.markTick {
+  background-color: var(--brutal-black);
+  transition: var(--brutal-transition-base);
+}
+
+.horizontal .markTick {
+  width: var(--brutal-border-width-lg);
+  height: calc(var(--track-height) + 8px);
+}
+
+.vertical .markTick {
+  height: var(--brutal-border-width-lg);
+  width: calc(var(--track-height) + 8px);
+}
+
+.markActive .markTick {
+  background-color: var(--brutal-accent);
+}
+
+.markLabel {
+  font-size: var(--brutal-text-xs);
+  font-weight: var(--brutal-font-bold);
+  color: var(--brutal-gray-700);
+  white-space: nowrap;
+}
+
+.horizontal .markLabel {
+  position: absolute;
+  top: calc(100% + var(--brutal-space-3));
+}
+
+.vertical .markLabel {
+  position: absolute;
+  left: calc(100% + var(--brutal-space-3));
+}
+
+/* Disabled state */
+.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.disabled .input {
+  cursor: not-allowed;
+}
+
+.disabled .thumb {
+  background-color: var(--brutal-gray-300);
+}
+
+.disabled .progress {
+  background-color: var(--brutal-gray-500);
+}
+
+/* Remove default browser styles */
+.input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: transparent;
+  outline: none;
+  margin: 0;
+  padding: 0;
+}
+
+.input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: var(--thumb-size);
+  height: var(--thumb-size);
+  background: transparent;
+  cursor: pointer;
+  border: none;
+  /* Make the entire thumb area clickable */
+  border-radius: 50%;
+}
+
+.input::-moz-range-thumb {
+  border: none;
+  background: transparent;
+  width: var(--thumb-size);
+  height: var(--thumb-size);
+  cursor: pointer;
+  /* Make the entire thumb area clickable */
+  border-radius: 50%;
+}
+
+.input::-ms-thumb {
+  width: var(--thumb-size);
+  height: var(--thumb-size);
+  background: transparent;
+  cursor: pointer;
+  border: none;
+  /* Make the entire thumb area clickable */
+  border-radius: 50%;
+}
+
+/* Firefox specific fixes */
+.input::-moz-range-progress {
+  background: transparent;
+}
+
+.input::-moz-range-track {
+  background: transparent;
+}

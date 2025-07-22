@@ -1,0 +1,164 @@
+@import '../../../../styles/src/variables.css';
+
+.scrollArea {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--brutal-white);
+}
+
+.showBorder {
+  border: var(--brutal-border-width-thick) var(--brutal-border-style) var(--brutal-black);
+}
+
+/* Viewport */
+.viewport {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+}
+
+/* Hide native scrollbars */
+.viewport {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.viewport::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+/* Custom scrollbar */
+.scrollbar {
+  position: absolute;
+  background-color: var(--brutal-gray-200);
+  transition: opacity 0.3s ease;
+  user-select: none;
+}
+
+.scrollbar.vertical {
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: var(--scrollbar-width);
+  border-left: var(--brutal-border-width) var(--brutal-border-style) var(--brutal-black);
+}
+
+.scrollbar.horizontal {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--scrollbar-width);
+  border-top: var(--brutal-border-width) var(--brutal-border-style) var(--brutal-black);
+}
+
+/* Scrollbar thumb */
+.thumb {
+  position: absolute;
+  background-color: var(--brutal-black);
+  cursor: grab;
+  transition: transform 0.1s ease;
+}
+
+.thumb:active {
+  cursor: grabbing;
+}
+
+.vertical .thumb {
+  width: 100%;
+  min-height: 30px;
+}
+
+.horizontal .thumb {
+  height: 100%;
+  min-width: 30px;
+}
+
+/* Corner */
+.corner {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: var(--scrollbar-width);
+  height: var(--scrollbar-width);
+  background-color: var(--brutal-gray-200);
+  border-left: var(--brutal-border-width) var(--brutal-border-style) var(--brutal-black);
+  border-top: var(--brutal-border-width) var(--brutal-border-style) var(--brutal-black);
+}
+
+/* Size variants */
+.size-sm {
+  --scrollbar-width: 12px;
+}
+
+.size-md {
+  --scrollbar-width: 16px;
+}
+
+.size-lg {
+  --scrollbar-width: 20px;
+}
+
+/* Variant styles */
+.default .thumb {
+  box-shadow: var(--brutal-shadow-xs);
+}
+
+.default .thumb:hover {
+  box-shadow: var(--brutal-shadow-sm);
+}
+
+.minimal .scrollbar {
+  background-color: transparent;
+  border: none;
+}
+
+.minimal .thumb {
+  background-color: var(--brutal-gray-600);
+  margin: 2px;
+}
+
+.minimal .corner {
+  background-color: transparent;
+  border: none;
+}
+
+.brutal .scrollbar {
+  background-color: var(--brutal-accent);
+  border-width: var(--brutal-border-width-thick);
+}
+
+.brutal .thumb {
+  background-color: var(--brutal-black);
+  box-shadow: var(--brutal-shadow-md);
+}
+
+.brutal .thumb:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: var(--brutal-shadow-lg);
+}
+
+.brutal .corner {
+  background-color: var(--brutal-accent);
+  border-width: var(--brutal-border-width-thick);
+}
+
+/* Auto-hide behavior */
+.autoHide .scrollbar {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.autoHide:hover .scrollbar,
+.autoHide.isScrolling .scrollbar {
+  opacity: 1;
+}
+
+/* Hover effects */
+.default .thumb:hover,
+.brutal .thumb:hover {
+  background-color: var(--brutal-gray-900);
+}
+
+.minimal .thumb:hover {
+  background-color: var(--brutal-gray-800);
+}

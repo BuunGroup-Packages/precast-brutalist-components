@@ -1,0 +1,541 @@
+/* Combobox Component Styles */
+.combobox {
+  /* Base Colors */
+  --brutal-combobox-bg: var(--brutal-white);
+  --brutal-combobox-border: var(--brutal-black);
+  --brutal-combobox-text: var(--brutal-black);
+  --brutal-combobox-placeholder: var(--brutal-gray-500);
+  
+  /* Layout */
+  --brutal-combobox-border-width: 3px;
+  --brutal-combobox-border-radius: 0px;
+  --brutal-combobox-shadow: 4px 4px 0px var(--brutal-black);
+  --brutal-combobox-font: var(--brutal-font-mono);
+  
+  /* Dropdown Customization */
+  --brutal-combobox-dropdown-bg: var(--brutal-white);
+  --brutal-combobox-separator-style: solid;
+  --brutal-combobox-separator-width: var(--brutal-combobox-border-width);
+  --brutal-combobox-option-hover-bg: var(--brutal-gray-100);
+  --brutal-combobox-option-selected-bg: var(--brutal-yellow);
+  --brutal-combobox-scrollbar-width: 12px;
+  --brutal-combobox-empty-bg: var(--brutal-gray-50);
+  
+  /* Animation */
+  --brutal-combobox-hover-transform: translate(-2px, -2px);
+  --brutal-combobox-active-transform: translate(-1px, -1px);
+  
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
+/* Size Variants */
+.combobox--sm {
+  --brutal-combobox-height: 32px;
+  --brutal-combobox-text-size: var(--brutal-text-sm);
+  --brutal-combobox-padding: 0 8px;
+}
+
+.combobox--md {
+  --brutal-combobox-height: 40px;
+  --brutal-combobox-text-size: var(--brutal-text-base);
+  --brutal-combobox-padding: 0 12px;
+}
+
+.combobox--lg {
+  --brutal-combobox-height: 48px;
+  --brutal-combobox-text-size: var(--brutal-text-lg);
+  --brutal-combobox-padding: 0 16px;
+}
+
+/* Style Variants */
+.combobox--default {
+  --brutal-combobox-bg: var(--brutal-white);
+  --brutal-combobox-border: var(--brutal-black);
+}
+
+.combobox--brutal {
+  --brutal-combobox-bg: var(--brutal-yellow);
+  --brutal-combobox-border: var(--brutal-black);
+  --brutal-combobox-shadow: 6px 6px 0px var(--brutal-black);
+  --brutal-combobox-border-width: 4px;
+}
+
+.combobox--outline {
+  --brutal-combobox-bg: transparent;
+  --brutal-combobox-border: var(--brutal-black);
+  --brutal-combobox-shadow: none;
+}
+
+.combobox--info {
+  --brutal-combobox-bg: var(--brutal-white);
+  --brutal-combobox-border: #007acc;
+  --brutal-combobox-shadow: 4px 4px 0px #007acc;
+  --brutal-combobox-text: #007acc;
+}
+
+.combobox--system {
+  --brutal-combobox-bg: var(--brutal-gray-900);
+  --brutal-combobox-border: #00ff00;
+  --brutal-combobox-shadow: 4px 4px 0px #00ff00;
+  --brutal-combobox-text: #00ff00;
+}
+
+.combobox--destructive {
+  --brutal-combobox-bg: var(--brutal-white);
+  --brutal-combobox-border: #dc2626;
+  --brutal-combobox-shadow: 4px 4px 0px #dc2626;
+  --brutal-combobox-text: #dc2626;
+}
+
+.combobox--success {
+  --brutal-combobox-bg: var(--brutal-white);
+  --brutal-combobox-border: #16a34a;
+  --brutal-combobox-shadow: 4px 4px 0px #16a34a;
+  --brutal-combobox-text: #16a34a;
+}
+
+.combobox--warning {
+  --brutal-combobox-bg: var(--brutal-warning);
+  --brutal-combobox-border: #d97706;
+  --brutal-combobox-shadow: 4px 4px 0px #d97706;
+  --brutal-combobox-text: var(--brutal-black);
+}
+
+.combobox--ghost {
+  --brutal-combobox-bg: transparent;
+  --brutal-combobox-border: transparent;
+  --brutal-combobox-shadow: none;
+  --brutal-combobox-text: var(--brutal-black);
+}
+
+.combobox--neon {
+  --brutal-combobox-bg: var(--brutal-black);
+  --brutal-combobox-border: #ff00ff;
+  --brutal-combobox-shadow: 0 0 20px #ff00ff, 4px 4px 0px #ff00ff;
+  --brutal-combobox-text: #ff00ff;
+}
+
+.combobox--retro {
+  --brutal-combobox-bg: #2d2d2d;
+  --brutal-combobox-border: #ffa500;
+  --brutal-combobox-shadow: 4px 4px 0px #ffa500;
+  --brutal-combobox-text: #ffa500;
+}
+
+/* Trigger Button */
+.trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: var(--brutal-combobox-height);
+  padding: var(--brutal-combobox-padding);
+  background-color: var(--brutal-combobox-bg);
+  border: var(--brutal-combobox-border-width) solid var(--brutal-combobox-border);
+  border-radius: var(--brutal-combobox-border-radius);
+  box-shadow: var(--brutal-combobox-shadow);
+  color: var(--brutal-combobox-text);
+  font-size: var(--brutal-combobox-text-size);
+  font-weight: var(--brutal-font-medium);
+  font-family: var(--brutal-combobox-font);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  outline: none;
+}
+
+.trigger:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px var(--brutal-combobox-border);
+}
+
+/* Special hover effects for variants */
+.combobox--info .trigger:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 7px 7px 0px #007acc, 0 0 20px rgba(0, 122, 204, 0.3);
+  animation: subtlePulse 0.3s ease-in-out;
+}
+
+.combobox--system .trigger:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px #00ff00, 0 0 15px rgba(0, 255, 0, 0.4);
+  animation: subtleGlow 0.4s ease-in-out;
+}
+
+.combobox--destructive .trigger:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 7px 7px 0px #dc2626, 0 0 15px rgba(220, 38, 38, 0.3);
+  animation: destructivePulse 0.3s ease-in-out;
+}
+
+.combobox--success .trigger:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px #16a34a, 0 0 10px rgba(22, 163, 74, 0.3);
+  animation: successGlow 0.3s ease-in-out;
+}
+
+.combobox--warning .trigger:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px #d97706;
+  animation: warningShake 0.2s ease-in-out;
+}
+
+.combobox--ghost .trigger:hover {
+  background-color: var(--brutal-gray-100);
+  border-color: var(--brutal-black);
+  box-shadow: 2px 2px 0px var(--brutal-black);
+}
+
+.combobox--neon .trigger:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 0 0 30px #ff00ff, 6px 6px 0px #ff00ff, 0 0 60px rgba(255, 0, 255, 0.5);
+  animation: neonPulse 0.4s ease-in-out infinite alternate;
+}
+
+.combobox--retro .trigger:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px #ffa500, 0 0 10px rgba(255, 165, 0, 0.3);
+  animation: retroGlow 0.3s ease-in-out;
+}
+
+@keyframes subtlePulse {
+  0%, 100% { transform: translate(-3px, -3px) scale(1); }
+  50% { transform: translate(-3px, -3px) scale(1.02); }
+}
+
+@keyframes subtleGlow {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.1); }
+}
+
+@keyframes destructivePulse {
+  0%, 100% { transform: translate(-3px, -3px) scale(1); }
+  50% { transform: translate(-3px, -3px) scale(1.03); }
+}
+
+@keyframes successGlow {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.15); }
+}
+
+@keyframes warningShake {
+  0%, 100% { transform: translate(-2px, -2px); }
+  25% { transform: translate(-1px, -2px); }
+  75% { transform: translate(-3px, -2px); }
+}
+
+@keyframes neonPulse {
+  0% { filter: brightness(1) saturate(1); }
+  100% { filter: brightness(1.2) saturate(1.3); }
+}
+
+@keyframes retroGlow {
+  0%, 100% { filter: brightness(1) sepia(0); }
+  50% { filter: brightness(1.1) sepia(0.2); }
+}
+
+.trigger:focus {
+  outline: 2px solid var(--brutal-focus-color, var(--brutal-blue));
+  outline-offset: 2px;
+}
+
+.trigger:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0px var(--brutal-combobox-border);
+}
+
+.trigger:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: var(--brutal-combobox-shadow);
+}
+
+.triggerText {
+  flex: 1;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.triggerIcon {
+  margin-right: 8px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  color: var(--brutal-combobox-text);
+}
+
+.triggerArrow {
+  margin-left: 8px;
+  transition: transform all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.triggerArrowOpen {
+  transform: rotate(180deg);
+}
+
+/* Content Dropdown */
+.content {
+  background-color: var(--brutal-white) !important;
+  border: 4px solid var(--brutal-combobox-border);
+  border-radius: var(--brutal-combobox-border-radius);
+  box-shadow: 8px 8px 0px var(--brutal-combobox-border);
+  max-height: 300px;
+  overflow: hidden;
+  animation: comboboxSlideDown 0.2s ease-out;
+  position: fixed !important;
+  z-index: 1000;
+}
+
+@keyframes comboboxSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Search Container */
+.searchContainer {
+  padding: 12px;
+  border-bottom: var(--brutal-combobox-border-width) solid var(--brutal-combobox-border);
+  background-color: var(--brutal-white) !important;
+  position: relative;
+}
+
+.searchContainer::after {
+  content: '';
+  position: absolute;
+  bottom: calc(var(--brutal-combobox-border-width) * -1);
+  left: 0;
+  right: 0;
+  height: var(--brutal-combobox-border-width);
+  background: var(--brutal-combobox-border);
+  box-shadow: 0 2px 0 var(--brutal-combobox-border);
+}
+
+.searchInput {
+  width: 100%;
+  height: 40px;
+  padding: 0 12px;
+  background-color: var(--brutal-white) !important;
+  border: 3px solid var(--brutal-combobox-border);
+  border-radius: var(--brutal-combobox-border-radius);
+  color: var(--brutal-combobox-text);
+  font-size: var(--brutal-text-base);
+  font-family: var(--brutal-combobox-font);
+  font-weight: var(--brutal-font-medium);
+  outline: none;
+  box-shadow: 4px 4px 0px var(--brutal-combobox-border);
+  transition: all 0.15s ease;
+}
+
+.searchInput:focus {
+  outline: none;
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px var(--brutal-combobox-border);
+}
+
+.searchInput:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0px var(--brutal-combobox-border);
+}
+
+.searchInput::placeholder {
+  color: var(--brutal-combobox-placeholder);
+}
+
+/* Options List */
+.optionsList {
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 8px;
+  background-color: var(--brutal-white) !important;
+  position: relative;
+}
+
+.optionsList::-webkit-scrollbar {
+  width: var(--brutal-combobox-scrollbar-width);
+}
+
+.optionsList::-webkit-scrollbar-track {
+  background: var(--brutal-white);
+  border-left: 3px solid var(--brutal-combobox-border);
+}
+
+.optionsList::-webkit-scrollbar-thumb {
+  background: var(--brutal-combobox-border);
+  border-radius: 0;
+  border: none;
+}
+
+.optionsList::-webkit-scrollbar-thumb:hover {
+  background: var(--brutal-combobox-text);
+}
+
+/* Option Item */
+.option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  margin: 4px 0;
+  background-color: var(--brutal-white) !important;
+  border: 3px solid transparent;
+  border-radius: var(--brutal-combobox-border-radius);
+  color: var(--brutal-combobox-text);
+  font-size: var(--brutal-combobox-text-size);
+  font-family: var(--brutal-combobox-font);
+  font-weight: var(--brutal-font-medium);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  outline: none;
+  position: relative;
+}
+
+.option:hover,
+.optionHighlighted {
+  background-color: var(--brutal-gray-100);
+  border-color: var(--brutal-combobox-border);
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0px var(--brutal-combobox-border);
+}
+
+.optionSelected {
+  background-color: var(--brutal-yellow);
+  border-color: var(--brutal-combobox-border);
+  font-weight: var(--brutal-font-weight-semibold, 600);
+  box-shadow: 3px 3px 0px var(--brutal-combobox-border);
+  transform: translate(-1px, -1px);
+}
+
+.optionSelected:hover,
+.optionSelected.optionHighlighted {
+  background-color: var(--brutal-yellow);
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0px var(--brutal-combobox-border);
+}
+
+.optionSelected::before {
+  content: '';
+  position: absolute;
+  left: -2px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 60%;
+  background: var(--brutal-combobox-border);
+  border-radius: 0;
+}
+
+.optionDisabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.checkIcon {
+  margin-left: 8px;
+  flex-shrink: 0;
+  color: var(--brutal-combobox-text);
+}
+
+/* Empty Message */
+.emptyMessage {
+  padding: 20px 12px;
+  text-align: center;
+  color: var(--brutal-combobox-placeholder);
+  font-size: var(--brutal-text-sm);
+  font-style: italic;
+  background-color: var(--brutal-combobox-empty-bg) !important;
+  font-family: var(--brutal-combobox-font);
+  font-weight: var(--brutal-font-medium);
+  border: 2px dashed var(--brutal-combobox-border);
+  margin: 8px;
+  border-radius: var(--brutal-combobox-border-radius);
+  position: relative;
+}
+
+.emptyMessage::before {
+  content: '¯\\_(ツ)_/¯';
+  display: block;
+  font-size: var(--brutal-text-lg);
+  margin-bottom: 8px;
+  font-style: normal;
+  color: var(--brutal-combobox-border);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .content {
+    left: 8px !important;
+    right: 8px;
+    width: auto !important;
+    min-width: auto !important;
+  }
+  
+  .option {
+    padding: 12px;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .combobox {
+    --brutal-combobox-bg: var(--brutal-gray-900);
+    --brutal-combobox-text: var(--brutal-white);
+    --brutal-combobox-placeholder: var(--brutal-gray-400);
+  }
+  
+  .searchInput {
+    background-color: var(--brutal-gray-800);
+    color: var(--brutal-white);
+  }
+  
+  .option:hover,
+  .optionHighlighted {
+    background-color: var(--brutal-gray-800);
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .combobox {
+    --brutal-combobox-border-width: 4px;
+    --brutal-combobox-shadow: 6px 6px 0px var(--brutal-black);
+  }
+  
+  .trigger:focus {
+    outline-width: 3px;
+  }
+  
+  .searchInput:focus {
+    outline-width: 3px;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .trigger,
+  .option,
+  .triggerIcon {
+    transition: none;
+  }
+  
+  .content {
+    animation: none;
+  }
+  
+  .trigger:hover,
+  .option:hover,
+  .optionHighlighted {
+    transform: none;
+  }
+}

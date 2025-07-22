@@ -1,89 +1,212 @@
-# @buun_group/brutalist-ui
+# @brutalist-ui/components
 
-A brutalist-styled React component library that embraces raw, unpolished aesthetics with bold typography and stark contrasts.
+<div align="center">
+  <h3>A brutalist-styled React component library that embraces raw, unpolished aesthetics</h3>
+  <p>Bold typography • Stark contrasts • Geometric shapes • Raw functionality</p>
+  
+  [![npm version](https://img.shields.io/npm/v/@brutalist-ui/components.svg)](https://www.npmjs.com/package/@brutalist-ui/components)
+  [![License: MIT](https://img.shields.io/badge/License-MIT-black.svg)](LICENSE)
+  [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-black.svg)](CONTRIBUTING.md)
+</div>
 
-## Installation
+---
+
+## 📦 Installation
 
 ```bash
-npm install @buun_group/brutalist-ui
+npm install @brutalist-ui/components
 # or
-yarn add @buun_group/brutalist-ui
+yarn add @brutalist-ui/components
 # or
-pnpm add@buun_group/brutalist-ui
+pnpm add @brutalist-ui/components
+# or
+bun add @brutalist-ui/components
 ```
 
-## Usage
+## 🚀 Quick Start
 
 ```jsx
 import { Button, Card, Input } from '@brutalist-ui/components';
-import '@brutalist-ui/components/styles'; // Import the CSS
-  
+import '@brutalist-ui/components/dist/brutalist-ui.css'; // Import the CSS
+
 function App() {
   return (
-    <Card>
-      <h1>Welcome to Brutalist UI</h1>
-      <Input placeholder="Enter text" />
-      <Button variant="primary">Click me</Button>
+    <Card variant="brutal">
+      <Card.Header>
+        <h1>Welcome to Brutalist UI</h1>
+      </Card.Header>
+      <Card.Content>
+        <Input placeholder="Enter text" variant="brutal" />
+        <Button variant="brutal">Click me</Button>
+      </Card.Content>
     </Card>
   );
 }
 ```
 
-## Available Components
+## 🎨 Design Principles
 
-- Accordion
-- Alert
-- AreaChart
-- AspectRatio
-- Avatar
-- Badge
-- BarChart
-- Breadcrumb
-- Button
-- Card
-- Carousel
-- Chart
-- Checkbox
-- Combobox
-- Command
-- Container
-- ContextMenu
-- Dialog
-- Drawer
-- Dropdown
-- HoverCard
-- Input
-- InputOTP
-- LineChart
-- Navigation
-- Pagination
-- PieChart
-- Popover
-- Progress
-- Radio
-- Select
-- Separator
-- Shapes
-- Sheet
-- Sidebar
-- Skeleton
-- Slider
-- Spinner
-- Stack
-- Switch
-- Table
-- TableOfContents
-- Tabs
-- Textarea
-- Toast
-- Toggle
-- Tooltip
-- Typography
+| Principle | Description |
+|-----------|-------------|
+| **Raw Aesthetics** | Unpolished, honest design that shows the structure |
+| **Bold Typography** | Strong, impactful text that commands attention |
+| **High Contrast** | Stark black and white with accent colors |
+| **Geometric Shapes** | Simple, bold shapes with thick borders |
+| **Functional Focus** | Utility over decoration, form follows function |
 
-## Documentation
+## 📚 Components
 
-For full documentation and examples, visit [our documentation site](https://brutalist.precast.dev).
+### Layout Components
 
-## License
+| Component | Description | Variants |
+|-----------|-------------|----------|
+| `Container` | Responsive container with max-width | `default`, `fluid`, `tight` |
+| `Stack` | Flexible stack layout with spacing | `horizontal`, `vertical` |
+| `AspectRatio` | Maintains aspect ratio for content | - |
+| `Separator` | Visual divider between content | `horizontal`, `vertical` |
 
-MIT
+### Form Components
+
+| Component | Description | Features |
+|-----------|-------------|----------|
+| `Button` | Interactive button element | Variants, sizes, loading state |
+| `Input` | Text input field | Variants, sizes, validation |
+| `InputOTP` | One-time password input | Auto-focus, paste support |
+| `Textarea` | Multi-line text input | Auto-resize, character count |
+| `Select` | Dropdown selection | Native & custom variants |
+| `Checkbox` | Toggle selection | Indeterminate state |
+| `Radio` | Single selection from group | Custom styling |
+| `Switch` | Toggle switch | Accessible labels |
+| `Slider` | Range slider input | Steps, marks |
+| `Toggle` | Toggle button group | Multiple selection |
+| `Combobox` | Searchable select | Filtering, async loading |
+
+### Data Display
+
+| Component | Description | Features |
+|-----------|-------------|----------|
+| `Table` | Data table | Sorting, selection, pagination |
+| `Card` | Content container | Header, content, footer sections |
+| `Badge` | Status indicator | Variants, sizes |
+| `Avatar` | User representation | Image, fallback, status |
+| `Typography` | Text styling | Headings, paragraphs, links |
+| `Alert` | Notification message | Types, dismissible |
+| `Toast` | Temporary notification | Auto-dismiss, actions |
+
+### Navigation
+
+| Component | Description | Features |
+|-----------|-------------|----------|
+| `Navigation` | Site navigation | Responsive, dropdowns |
+| `Sidebar` | Side navigation | Collapsible, fixed |
+| `Breadcrumb` | Location indicator | Separators, truncation |
+| `Tabs` | Tabbed interface | Lazy loading, keyboard nav |
+| `Pagination` | Page navigation | Page size, jump to page |
+| `TableOfContents` | Document outline | Smooth scroll, active tracking |
+
+### Overlay Components
+
+| Component | Description | Features |
+|-----------|-------------|----------|
+| `Dialog` | Modal dialog | Sizes, close on outside click |
+| `Drawer` | Slide-out panel | Positions, overlay |
+| `Popover` | Floating content | Positioning, triggers |
+| `Tooltip` | Helpful hints | Delay, positions |
+| `HoverCard` | Rich hover content | Delay, interactive |
+| `ContextMenu` | Right-click menu | Nested menus, shortcuts |
+| `Sheet` | Bottom sheet | Swipe to dismiss, snap points |
+| `Dropdown` | Dropdown menu | Nested items, dividers |
+| `Command` | Command palette | Search, shortcuts |
+
+### Feedback Components
+
+| Component | Description | Features |
+|-----------|-------------|----------|
+| `Progress` | Progress indicator | Determinate, indeterminate |
+| `Spinner` | Loading spinner | Sizes, custom animation |
+| `Skeleton` | Loading placeholder | Shapes, animation |
+
+### Data Visualization
+
+| Component | Description | Features |
+|-----------|-------------|----------|
+| `BarChart` | Bar chart visualization | Responsive, tooltips |
+| `LineChart` | Line chart visualization | Multiple series, interpolation |
+| `PieChart` | Pie chart visualization | Labels, animations |
+| `AreaChart` | Area chart visualization | Stacked, gradients |
+| `Chart` | Base chart component | Customizable, plugins |
+
+### Interactive Components
+
+| Component | Description | Features |
+|-----------|-------------|----------|
+| `Accordion` | Collapsible content | Single/multiple, animations |
+| `Carousel` | Content slider | Touch support, indicators |
+| `ScrollArea` | Custom scrollbar | Horizontal/vertical scroll |
+
+### Utilities
+
+| Component | Description |
+|-----------|-------------|
+| `Theme` | Theme provider and utilities |
+| `Shapes` | Brutalist SVG shapes collection |
+
+## 🛠️ Development
+
+### Prerequisites
+
+- Node.js 18+ or Bun 1.0+
+- Git
+
+### Setup
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/brutalist-components.git
+cd brutalist-components/packages/components
+
+# Install dependencies
+bun install
+
+# Start development
+bun run dev
+```
+
+### Scripts
+
+| Script | Description |
+|--------|-------------|
+| `bun run dev` | Start development mode with watch |
+| `bun run build` | Build the library |
+| `bun run test` | Run tests |
+| `bun run lint` | Run linter |
+| `bun run type-check` | Check TypeScript types |
+
+## 🤝 Contributing
+
+We love contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+
+### Quick Links
+
+- 📋 [Contributing Guidelines](CONTRIBUTING.md)
+- 🐛 [Report a Bug](.github/ISSUE_TEMPLATE/bug_report.md)
+- 💡 [Request a Feature](.github/ISSUE_TEMPLATE/feature_request.md)
+- 📜 [Code of Conduct](CODE_OF_CONDUCT.md)
+
+## 📄 License
+
+MIT © [Brutalist UI Contributors](LICENSE)
+
+## 🙏 Acknowledgments
+
+Built with:
+- [React](https://react.dev)
+- [TypeScript](https://www.typescriptlang.org)
+- [Vite](https://vitejs.dev)
+- [CSS Modules](https://github.com/css-modules/css-modules)
+
+---
+
+<div align="center">
+  <strong>Making the web bold, raw, and beautiful.</strong>
+</div>

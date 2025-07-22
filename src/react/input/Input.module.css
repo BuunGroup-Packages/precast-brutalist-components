@@ -1,0 +1,290 @@
+@import '../../../../styles/src/variables.css';
+
+/* Base Input Styles */
+.input {
+  font-family: var(--brutal-font-mono);
+  font-weight: var(--brutal-font-medium);
+  background-color: var(--brutal-white);
+  color: var(--brutal-black);
+  border: var(--brutal-border-width) var(--brutal-border-style) var(--brutal-black);
+  outline: none;
+  transition: var(--brutal-transition-base);
+  width: 100%;
+  display: block;
+}
+
+/* Remove default styling */
+.input::-webkit-search-decoration,
+.input::-webkit-search-cancel-button,
+.input::-webkit-search-results-button,
+.input::-webkit-search-results-decoration {
+  -webkit-appearance: none;
+}
+
+/* Sizes */
+.sm {
+  padding: var(--brutal-space-2) var(--brutal-space-3);
+  font-size: var(--brutal-text-sm);
+  line-height: var(--brutal-leading-tight);
+}
+
+.md {
+  padding: var(--brutal-space-3) var(--brutal-space-4);
+  font-size: var(--brutal-text-base);
+  line-height: var(--brutal-leading-normal);
+}
+
+.lg {
+  padding: var(--brutal-space-4) var(--brutal-space-5);
+  font-size: var(--brutal-text-lg);
+  line-height: var(--brutal-leading-normal);
+}
+
+/* Icon padding adjustments */
+.input.withLeftIcon.sm {
+  padding-left: calc(var(--brutal-space-8) + var(--brutal-space-1));
+}
+
+.input.withLeftIcon.md {
+  padding-left: calc(var(--brutal-space-10) + var(--brutal-space-1));
+}
+
+.input.withLeftIcon.lg {
+  padding-left: calc(var(--brutal-space-12) + var(--brutal-space-1));
+}
+
+.input.withRightIcon.sm {
+  padding-right: calc(var(--brutal-space-8) + var(--brutal-space-1));
+}
+
+.input.withRightIcon.md {
+  padding-right: calc(var(--brutal-space-10) + var(--brutal-space-1));
+}
+
+.input.withRightIcon.lg {
+  padding-right: calc(var(--brutal-space-12) + var(--brutal-space-1));
+}
+
+/* Variants */
+.default {
+  border-color: var(--brutal-black);
+}
+
+.error {
+  border-color: var(--brutal-error);
+  background-color: rgba(255, 0, 0, 0.05);
+}
+
+.success {
+  border-color: var(--brutal-success);
+  background-color: rgba(0, 255, 0, 0.05);
+}
+
+/* Focus states */
+.input:focus {
+  border-color: var(--brutal-black);
+}
+
+.input.withShadow:focus {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px var(--brutal-black);
+}
+
+.input.error:focus {
+  border-color: var(--brutal-error);
+}
+
+.input.error.withShadow:focus {
+  box-shadow: 6px 6px 0px var(--brutal-error);
+}
+
+.input.success:focus {
+  border-color: var(--brutal-success);
+}
+
+.input.success.withShadow:focus {
+  box-shadow: 6px 6px 0px var(--brutal-success);
+}
+
+/* Hover states */
+.input:hover:not(:disabled):not(.readOnly) {
+  border-color: var(--brutal-gray-700);
+}
+
+.input.error:hover:not(:disabled):not(.readOnly) {
+  border-color: var(--brutal-accent-dark);
+}
+
+.input.success:hover:not(:disabled):not(.readOnly) {
+  border-color: var(--brutal-success);
+}
+
+/* Shadow effect */
+.withShadow {
+  box-shadow: var(--brutal-shadow-sm);
+}
+
+/* Disabled state */
+.disabled,
+.input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: var(--brutal-gray-100);
+}
+
+/* Read-only state */
+.readOnly,
+.input:read-only {
+  cursor: default;
+  background-color: var(--brutal-gray-100);
+}
+
+/* Placeholder styling */
+.input::placeholder {
+  color: var(--brutal-gray-500);
+  opacity: 1;
+}
+
+/* Input wrapper for icons */
+.inputWrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+}
+
+.inputWrapper.fullWidth {
+  width: 100%;
+}
+
+.inputWrapper .input {
+  flex: 1;
+  border: none;
+  box-shadow: none;
+  transform: none;
+}
+
+.inputWrapper .input:focus {
+  transform: none;
+  box-shadow: none;
+}
+
+/* Wrapper takes the border and shadow */
+.inputWrapper.default {
+  border: var(--brutal-border-width) var(--brutal-border-style) var(--brutal-black);
+  background-color: var(--brutal-white);
+}
+
+.inputWrapper.error {
+  border: var(--brutal-border-width) var(--brutal-border-style) var(--brutal-error);
+  background-color: rgba(255, 0, 0, 0.05);
+}
+
+.inputWrapper.success {
+  border: var(--brutal-border-width) var(--brutal-border-style) var(--brutal-success);
+  background-color: rgba(0, 255, 0, 0.05);
+}
+
+.inputWrapper.withShadow {
+  box-shadow: var(--brutal-shadow-sm);
+  transition: var(--brutal-transition-base);
+}
+
+.inputWrapper.withShadow:focus-within {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px var(--brutal-black);
+}
+
+.inputWrapper.error.withShadow:focus-within {
+  box-shadow: 6px 6px 0px var(--brutal-error);
+}
+
+.inputWrapper.success.withShadow:focus-within {
+  box-shadow: 6px 6px 0px var(--brutal-success);
+}
+
+.inputWrapper.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.inputWrapper.readOnly {
+  cursor: default;
+}
+
+/* Icon styles */
+.icon {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--brutal-gray-700);
+  pointer-events: none;
+}
+
+.inputWrapper.error .icon {
+  color: var(--brutal-error);
+}
+
+.inputWrapper.success .icon {
+  color: var(--brutal-success);
+}
+
+.leftIcon {
+  left: var(--brutal-space-3);
+}
+
+.rightIcon {
+  right: var(--brutal-space-3);
+}
+
+/* Icon sizes */
+.sm .leftIcon,
+.sm .rightIcon {
+  width: var(--brutal-text-sm);
+  height: var(--brutal-text-sm);
+}
+
+.md .leftIcon,
+.md .rightIcon {
+  width: var(--brutal-text-base);
+  height: var(--brutal-text-base);
+}
+
+.lg .leftIcon,
+.lg .rightIcon {
+  width: var(--brutal-text-lg);
+  height: var(--brutal-text-lg);
+}
+
+/* Number input spinner buttons */
+.input[type="number"]::-webkit-inner-spin-button,
+.input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* Autofill styles */
+.input:-webkit-autofill,
+.input:-webkit-autofill:hover,
+.input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--brutal-black);
+  -webkit-box-shadow: 0 0 0px 1000px var(--brutal-white) inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.input.error:-webkit-autofill,
+.input.error:-webkit-autofill:hover,
+.input.error:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px rgba(255, 0, 0, 0.05) inset;
+}
+
+.input.success:-webkit-autofill,
+.input.success:-webkit-autofill:hover,
+.input.success:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px rgba(0, 255, 0, 0.05) inset;
+}

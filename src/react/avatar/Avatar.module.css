@@ -1,0 +1,215 @@
+@import '../../../../styles/src/variables.css';
+
+.container {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--brutal-white);
+  border: var(--brutal-border-width) var(--brutal-border-style) var(--brutal-black);
+  color: var(--brutal-black);
+  font-family: var(--brutal-font-sans);
+  font-weight: var(--brutal-font-bold);
+  overflow: hidden;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+/* Size variants */
+.xs .avatar {
+  width: 24px;
+  height: 24px;
+  font-size: var(--brutal-text-xs);
+}
+
+.sm .avatar {
+  width: 32px;
+  height: 32px;
+  font-size: var(--brutal-text-sm);
+}
+
+.md .avatar {
+  width: 40px;
+  height: 40px;
+  font-size: var(--brutal-text-base);
+}
+
+.lg .avatar {
+  width: 56px;
+  height: 56px;
+  font-size: var(--brutal-text-lg);
+}
+
+.xl .avatar {
+  width: 80px;
+  height: 80px;
+  font-size: var(--brutal-text-xl);
+}
+
+/* Image styles */
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity var(--brutal-transition-base);
+}
+
+.image.loaded {
+  opacity: 1;
+}
+
+/* Initials styles */
+.initials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-color: var(--brutal-gray-100);
+  color: var(--brutal-black);
+  font-weight: var(--brutal-font-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+/* Icon wrapper */
+.iconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-color: var(--brutal-gray-100);
+  color: var(--brutal-gray-500);
+}
+
+.iconWrapper svg {
+  width: 60%;
+  height: 60%;
+}
+
+.defaultIcon {
+  width: 60%;
+  height: 60%;
+}
+
+/* Status indicator */
+.status {
+  position: absolute;
+  border: var(--brutal-border-width-thin) var(--brutal-border-style) var(--brutal-white);
+  border-radius: 50%;
+}
+
+/* Status sizes based on avatar size */
+.xs .status {
+  width: 8px;
+  height: 8px;
+  bottom: -2px;
+  right: -2px;
+}
+
+.sm .status {
+  width: 10px;
+  height: 10px;
+  bottom: -2px;
+  right: -2px;
+}
+
+.md .status {
+  width: 12px;
+  height: 12px;
+  bottom: -3px;
+  right: -3px;
+}
+
+.lg .status {
+  width: 16px;
+  height: 16px;
+  bottom: -3px;
+  right: -3px;
+}
+
+.xl .status {
+  width: 20px;
+  height: 20px;
+  bottom: -4px;
+  right: -4px;
+}
+
+/* Status colors */
+.status.online {
+  background-color: var(--brutal-success);
+}
+
+.status.offline {
+  background-color: var(--brutal-gray-400);
+}
+
+.status.busy {
+  background-color: var(--brutal-error);
+}
+
+.status.away {
+  background-color: var(--brutal-warning);
+}
+
+/* Clickable styles */
+.clickable {
+  cursor: pointer;
+  transition: var(--brutal-transition-fast);
+}
+
+.clickable:hover .avatar {
+  transform: translate(-2px, -2px);
+  box-shadow: var(--brutal-shadow-sm);
+}
+
+.clickable:active .avatar {
+  transform: translate(0, 0);
+  box-shadow: 2px 2px 0px var(--brutal-black);
+}
+
+.clickable:focus {
+  outline: none;
+}
+
+.clickable:focus .avatar {
+  outline: 2px solid var(--brutal-accent);
+  outline-offset: 2px;
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .image,
+  .clickable,
+  .clickable .avatar {
+    transition: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .avatar {
+    border-width: var(--brutal-border-width-thick);
+  }
+  
+  .status {
+    border-width: var(--brutal-border-width);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .clickable:hover .avatar {
+    transform: none;
+    box-shadow: none;
+  }
+}

@@ -1,0 +1,314 @@
+@import '../../../../styles/src/variables.css';
+
+/* Accordion root */
+.accordion {
+  font-family: var(--brutal-font-sans);
+  width: 100%;
+}
+
+/* Size variants */
+.sm {
+  font-size: var(--brutal-text-sm);
+  line-height: var(--brutal-leading-tight);
+}
+
+.md {
+  font-size: var(--brutal-text-base);
+  line-height: var(--brutal-leading-normal);
+}
+
+.lg {
+  font-size: var(--brutal-text-lg);
+  line-height: var(--brutal-leading-relaxed);
+}
+
+/* Accordion item */
+.item {
+  position: relative;
+  border: var(--brutal-border-width) var(--brutal-border-style) var(--brutal-black);
+  background-color: var(--brutal-white);
+  transition: var(--brutal-transition-base);
+  margin-bottom: -1px; /* Prevent double borders */
+}
+
+.item:first-child {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.item:last-child {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  margin-bottom: 0;
+}
+
+/* Variant styles */
+.default .item {
+  background-color: var(--brutal-white);
+  border-color: var(--brutal-black);
+}
+
+.brutal .item {
+  background-color: var(--brutal-black);
+  color: var(--brutal-white);
+  border-color: var(--brutal-black);
+  box-shadow: var(--brutal-shadow-sm);
+}
+
+.outline .item {
+  background-color: transparent;
+  border-color: var(--brutal-black);
+  border-width: var(--brutal-border-width-thick);
+}
+
+/* Open state styling */
+.item.open {
+  z-index: 1;
+}
+
+.default .item.open {
+  border-color: var(--brutal-accent);
+  box-shadow: var(--brutal-shadow);
+}
+
+.brutal .item.open {
+  background-color: var(--brutal-accent);
+  transform: translate(-2px, -2px);
+  box-shadow: var(--brutal-shadow-lg);
+}
+
+.outline .item.open {
+  border-color: var(--brutal-accent);
+  background-color: var(--brutal-accent-light);
+}
+
+/* Accordion trigger */
+.trigger {
+  width: 100%;
+  padding: var(--brutal-space-4);
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: var(--brutal-font-medium);
+  color: inherit;
+  transition: var(--brutal-transition-fast);
+  min-height: 48px; /* Accessibility: minimum touch target */
+}
+
+/* Size-specific trigger padding */
+.sm .trigger {
+  padding: var(--brutal-space-3);
+  min-height: 40px;
+}
+
+.lg .trigger {
+  padding: var(--brutal-space-6);
+  min-height: 56px;
+}
+
+.trigger:hover:not(.disabled) {
+  background-color: var(--brutal-gray-50);
+}
+
+.brutal .trigger:hover:not(.disabled) {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.outline .trigger:hover:not(.disabled) {
+  background-color: var(--brutal-gray-50);
+}
+
+.trigger:focus {
+  outline: var(--brutal-border-width-thin) var(--brutal-border-style) var(--brutal-accent);
+  outline-offset: -2px;
+  z-index: 2;
+}
+
+.trigger:active:not(.disabled) {
+  transform: scale(0.98);
+}
+
+/* Trigger text */
+.triggerText {
+  flex: 1;
+  font-weight: var(--brutal-font-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Trigger icon */
+.triggerIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: var(--brutal-space-2);
+  transition: transform var(--brutal-transition-fast);
+  flex-shrink: 0;
+}
+
+.triggerIcon.rotated {
+  transform: rotate(180deg);
+}
+
+.brutal .triggerIcon {
+  color: var(--brutal-white);
+}
+
+/* Content area */
+.content {
+  overflow: hidden;
+  transition: all var(--brutal-transition-base);
+  border-top: var(--brutal-border-width) var(--brutal-border-style) var(--brutal-gray-200);
+}
+
+.brutal .content {
+  border-top-color: rgba(255, 255, 255, 0.2);
+}
+
+.outline .content {
+  border-top-color: var(--brutal-black);
+}
+
+/* Content animation states */
+.content:not(.open) {
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.content.open {
+  max-height: 1000px; /* Large enough for most content */
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Content inner wrapper */
+.contentInner {
+  padding: var(--brutal-space-4);
+  color: var(--brutal-gray-700);
+  line-height: var(--brutal-leading-relaxed);
+}
+
+/* Size-specific content padding */
+.sm .contentInner {
+  padding: var(--brutal-space-3);
+}
+
+.lg .contentInner {
+  padding: var(--brutal-space-6);
+}
+
+.brutal .contentInner {
+  color: var(--brutal-gray-200);
+}
+
+.outline .contentInner {
+  color: var(--brutal-black);
+}
+
+/* Disabled state */
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.disabled .trigger {
+  cursor: not-allowed;
+}
+
+/* Brutal variant specific effects */
+.brutal .item:hover:not(.disabled):not(.open) {
+  transform: translate(-1px, -1px);
+  box-shadow: 2px 2px 0px var(--brutal-black);
+}
+
+/* Focus management */
+.trigger:focus-visible {
+  outline: var(--brutal-border-width-thick) var(--brutal-border-style) var(--brutal-accent);
+  outline-offset: 2px;
+  z-index: 3;
+}
+
+/* Animation timing improvements */
+@media (prefers-reduced-motion: reduce) {
+  .content,
+  .triggerIcon,
+  .trigger,
+  .item {
+    transition: none !important;
+  }
+  
+  .content:not(.open) {
+    transform: none;
+  }
+  
+  .content.open {
+    transform: none;
+  }
+  
+  .brutal .item:hover:not(.disabled):not(.open) {
+    transform: none;
+  }
+  
+  .item.open {
+    transform: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .item {
+    border-width: var(--brutal-border-width-thick);
+  }
+  
+  .trigger:focus {
+    outline-width: 3px;
+  }
+  
+  .content {
+    border-top-width: var(--brutal-border-width-thick);
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .lg .trigger {
+    padding: var(--brutal-space-4);
+    min-height: 48px;
+  }
+  
+  .lg .contentInner {
+    padding: var(--brutal-space-4);
+  }
+  
+  .triggerText {
+    font-size: var(--brutal-text-sm);
+  }
+}
+
+/* Dark mode support (if theme system supports it) */
+@media (prefers-color-scheme: dark) {
+  .default .item {
+    background-color: var(--brutal-gray-900);
+    color: var(--brutal-white);
+    border-color: var(--brutal-gray-700);
+  }
+  
+  .default .trigger:hover:not(.disabled) {
+    background-color: var(--brutal-gray-800);
+  }
+  
+  .default .contentInner {
+    color: var(--brutal-gray-300);
+  }
+  
+  .content {
+    border-top-color: var(--brutal-gray-700);
+  }
+}
