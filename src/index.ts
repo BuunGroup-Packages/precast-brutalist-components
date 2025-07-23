@@ -1,5 +1,4 @@
-// Import the built CSS bundle
-import '../dist/brutalist-ui.css'
+// This is the no-styles version - CSS handled by auto.ts for default import
 
 // Export all React components (default export)
 export * from './react'
