@@ -8,9 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+### Changed
+
+- removed version from package, since its managed in github action workflow input and some jsx-runtime changes for internal playground (d5e7ecf1)
+
 ### Fixed
 
-- fixes to publish workflow (979a3f8e)
+- 
+- removed version from package, since its managed in github action workflow input and some jsx-runtime changes for internal playground (d5e7ecf1)
+- removed version from package, since its managed in github action workflow input and some jsx-runtime changes for internal playground (d5e7ecf1)
+- removed version from package, since its managed in github action workflow input and some jsx-runtime changes for internal playground (d5e7ecf1)
+- removed version from package, since its managed in github action workflow input and some jsx-runtime changes for internal playground (d5e7ecf1)fixes to publish workflow (979a3f8e)
 
 ### Added
 
