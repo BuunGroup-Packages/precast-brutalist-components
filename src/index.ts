@@ -1,5 +1,5 @@
-// Import CSS bundle for styles
-import './react/styles-bundle.css'
+// Import the built CSS bundle
+import '../dist/brutalist-ui.css'
 
 // Export all React components (default export)
 export * from './react'

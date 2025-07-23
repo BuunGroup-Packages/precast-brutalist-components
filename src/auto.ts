@@ -2,7 +2,7 @@
 // This is the main entry point for users who want styles included automatically
 
 // Import CSS as string and inject it
-import cssText from './react/styles-bundle.css?inline'
+import cssText from '../dist/brutalist-ui.css?inline'
 
 // Auto-inject styles on import
 if (typeof document !== 'undefined') {

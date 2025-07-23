@@ -1,6 +1,3 @@
-// Import base styles with CSS variables
-import './styles-bundle.css'
-
 // Export all React components
 export * from './button'
 export * from './input'
