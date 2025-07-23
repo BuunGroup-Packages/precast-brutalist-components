@@ -9,11 +9,12 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'BrutalistUI',
-      formats: ['es', 'cjs'],
-      fileName: (format, entryName) => {
-        if (format === 'es') return `${entryName}.js`
-        if (format === 'cjs') return `${entryName}.cjs`
-        return `${entryName}.${format}.js`
+      formats: ['es', 'cjs', 'umd'],
+      fileName: (format) => {
+        if (format === 'es') return 'index.js'
+        if (format === 'cjs') return 'index.cjs'
+        if (format === 'umd') return 'umd.js'
+        return `index.${format}.js`
       }
     },
     rollupOptions: {
