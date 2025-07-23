@@ -31,21 +31,23 @@
   },
   "license": "MIT",
   "author": "Sacha Roussakis-Notter",
-  "sideEffects": false,
+  "sideEffects": ["**/*.css"],
   "publishConfig": {
     "access": "public"
   },
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/auto.js",
+  "module": "./dist/auto.js",
+  "types": "./dist/auto.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/auto.d.ts",
+      "import": "./dist/auto.js",
+      "require": "./dist/auto.cjs"
+    },
+    "./no-styles": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
-    },
-    "./umd": {
-      "default": "./dist/index.umd.js"
     },
     "./styles": {
       "import": "./dist/brutalist-ui.css",

@@ -6,14 +6,16 @@ export default defineConfig({
   plugins: [react()],
   build: {
     lib: {
-      entry: resolve(__dirname, 'src/index.ts'),
+      entry: {
+        index: resolve(__dirname, 'src/index.ts'),
+        auto: resolve(__dirname, 'src/auto.ts')
+      },
       name: 'BrutalistUI',
-      formats: ['es', 'cjs', 'umd'],
-      fileName: (format) => {
-        if (format === 'es') return 'index.js'
-        if (format === 'cjs') return 'index.cjs'
-        if (format === 'umd') return 'index.umd.js'
-        return `index.${format}.js`
+      formats: ['es', 'cjs'],
+      fileName: (format, entryName) => {
+        if (format === 'es') return `${entryName}.js`
+        if (format === 'cjs') return `${entryName}.cjs`
+        return `${entryName}.${format}.js`
       }
     },
     rollupOptions: {
@@ -39,6 +41,16 @@ export default defineConfig({
     minify: true
   },
   css: {
+    modules: {
+      // Use localsConvention to export both camelCase and kebab-case
+      localsConvention: 'camelCaseOnly',
+      // Generate stable class names for library builds
+      generateScopedName: (name, filename) => {
+        // Use a hash of the filename + class name for consistency
+        const hash = Buffer.from(filename + name).toString('base64').substring(0, 5).replace(/[^a-zA-Z0-9]/g, 'x')
+        return `_${name}_${hash}`
+      }
+    },
     postcss: {
       plugins: []
     }
