@@ -56,7 +56,7 @@
   ],
   "scripts": {
     "dev": "vite build --watch",
-    "build": "vite build && tsc --emitDeclarationOnly --declaration --declarationDir dist --noEmit false && node scripts/fix-declarations.js",
+    "build": "vite build && tsc --emitDeclarationOnly --declaration --declarationDir dist --noEmit false && node scripts/fix-declarations.cjs",
     "prepublishOnly": "bun run build",
     "test": "npx jest",
     "test:watch": "npx jest --watch",
