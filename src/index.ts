@@ -1,4 +1,4 @@
-// Import styles - this gets extracted to brutalist-ui.css during build
+// Import styles - this gets bundled into the output
 import './react/styles-bundle.css'
 
 // Export all React components (default export)
