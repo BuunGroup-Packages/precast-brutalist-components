@@ -48,6 +48,37 @@ function App() {
 }
 ```
 
+## 🎨 Styling & Theming
+
+### CSS Import Options
+
+```javascript
+// Option 1: Automatic import (styles included with components)
+import { Button } from '@buun_group/brutalist-ui';
+
+// Option 2: Manual CSS import
+import '@buun_group/brutalist-ui/styles';
+
+// Option 3: CSS file import
+// In your CSS file:
+// @import '@buun_group/brutalist-ui/styles';
+```
+
+### Custom Theming
+
+Override CSS variables to customize the look:
+
+```css
+:root {
+  --brutal-accent: #ff0066;          /* Change accent color */
+  --brutal-border-width: 3px;        /* Thicker borders */
+  --brutal-shadow: 6px 6px 0px #000; /* Bigger shadows */
+  --brutal-font-display: 'Bebas Neue', cursive;
+}
+```
+
+**📖 [Complete Styling Guide](STYLES.md)** - Detailed documentation on theming, CSS variables, and customization.
+
 ## 🎨 Design Principles
 
 | Principle | Description |
