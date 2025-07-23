@@ -31,7 +31,7 @@ bun add @buun_group/brutalist-ui
 
 ```jsx
 import { Button, Card, Input } from '@buun_group/brutalist-ui';
-// Styles are automatically included! No need to import CSS
+// Styles are included with the components
 
 function App() {
   return (
@@ -50,20 +50,7 @@ function App() {
 
 ## 🎨 Styling & Theming
 
-### CSS Import Options
-
-```javascript
-// Option 1: Automatic styles (default, recommended)
-import { Button } from '@buun_group/brutalist-ui';
-// ✅ Styles are automatically injected on import
-
-// Option 2: Components without styles (for custom styling)
-import { Button } from '@buun_group/brutalist-ui/no-styles';
-import '@buun_group/brutalist-ui/styles'; // Import CSS separately
-
-// Option 3: Direct CSS import in your CSS file
-// @import '@buun_group/brutalist-ui/styles';
-```
+The library includes all necessary CSS styles. Just import the components and use them!
 
 ### Custom Theming
 

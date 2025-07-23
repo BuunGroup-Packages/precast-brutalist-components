@@ -35,16 +35,11 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "./dist/auto.js",
-  "module": "./dist/auto.js",
-  "types": "./dist/auto.d.ts",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/auto.d.ts",
-      "import": "./dist/auto.js",
-      "require": "./dist/auto.cjs"
-    },
-    "./no-styles": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"

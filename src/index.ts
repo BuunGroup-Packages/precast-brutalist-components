@@ -1,4 +1,5 @@
-// This is the no-styles version - CSS handled by auto.ts for default import
+// Import styles
+import './react/styles-bundle.css'
 
 // Export all React components (default export)
 export * from './react'

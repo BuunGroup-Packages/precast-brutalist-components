@@ -6,10 +6,7 @@ export default defineConfig({
   plugins: [react()],
   build: {
     lib: {
-      entry: {
-        index: resolve(__dirname, 'src/index.ts'),
-        auto: resolve(__dirname, 'src/auto.ts')
-      },
+      entry: resolve(__dirname, 'src/index.ts'),
       name: 'BrutalistUI',
       formats: ['es', 'cjs'],
       fileName: (format, entryName) => {
