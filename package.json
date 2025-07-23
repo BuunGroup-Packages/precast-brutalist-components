@@ -45,6 +45,9 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     },
+    "./umd": {
+      "default": "./dist/index.umd.js"
+    },
     "./styles": {
       "import": "./dist/brutalist-ui.css",
       "require": "./dist/brutalist-ui.css"

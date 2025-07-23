@@ -8,8 +8,13 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'BrutalistUI',
-      formats: ['es', 'cjs'],
-      fileName: (format) => `index.${format === 'es' ? 'js' : 'cjs'}`
+      formats: ['es', 'cjs', 'umd'],
+      fileName: (format) => {
+        if (format === 'es') return 'index.js'
+        if (format === 'cjs') return 'index.cjs'
+        if (format === 'umd') return 'index.umd.js'
+        return `index.${format}.js`
+      }
     },
     rollupOptions: {
       external: ['react', 'react-dom', 'react/jsx-runtime'],
@@ -20,7 +25,7 @@ export default defineConfig({
           'react/jsx-runtime': 'react/jsx-runtime'
         },
         assetFileNames: (assetInfo) => {
-          if (assetInfo.name === 'style.css') return 'brutalist-ui.css'
+          if (assetInfo.name?.endsWith('style.css')) return 'brutalist-ui.css'
           return assetInfo.name || 'asset'
         }
       }
@@ -31,11 +36,6 @@ export default defineConfig({
   css: {
     postcss: {
       plugins: []
-    }
-  },
-  resolve: {
-    alias: {
-      '@brutalist-ui/styles': resolve(__dirname, './src/react/styles-bundle.css')
     }
   }
 })
