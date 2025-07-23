@@ -17,12 +17,17 @@ export default defineConfig({
       }
     },
     rollupOptions: {
-      external: ['react', 'react-dom', 'react/jsx-runtime'],
+      external: (id) => {
+        if (id === 'react' || id === 'react-dom') return true
+        if (id === 'react/jsx-runtime') {
+          return false
+        }
+        return false
+      },
       output: {
         globals: {
           react: 'React',
-          'react-dom': 'ReactDOM',
-          'react/jsx-runtime': 'react/jsx-runtime'
+          'react-dom': 'ReactDOM'
         },
         assetFileNames: (assetInfo) => {
           if (assetInfo.name?.endsWith('style.css')) return 'brutalist-ui.css'

@@ -1,6 +1,5 @@
 {
   "name": "@buun_group/brutalist-ui",
-  "version": "0.0.3",
   "type": "module",
   "private": false,
   "description": "A brutalist-styled component library",
