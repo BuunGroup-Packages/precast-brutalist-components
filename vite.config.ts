@@ -42,12 +42,10 @@ export default defineConfig({
     modules: {
       // Use localsConvention to export both camelCase and kebab-case
       localsConvention: 'camelCaseOnly',
-      // Generate stable class names for library builds
-      generateScopedName: (name, filename) => {
-        // Use a hash of the filename + class name for consistency
-        const hash = Buffer.from(filename + name).toString('base64').substring(0, 5).replace(/[^a-zA-Z0-9]/g, 'x')
-        return `_${name}_${hash}`
-      }
+      // Use a deterministic pattern for class names
+      generateScopedName: '[name]__[local]___[hash:base64:5]',
+      // Ensure hash is included in both CSS and JS
+      exportGlobals: true
     },
     postcss: {
       plugins: []

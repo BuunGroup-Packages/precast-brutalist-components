@@ -1,3 +1,5 @@
+import './styles-bundle.css'
+
 // Export all React components
 export * from './button'
 export * from './input'
