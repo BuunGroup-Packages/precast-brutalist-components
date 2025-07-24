@@ -59,7 +59,9 @@
   ],
   "scripts": {
     "dev": "vite build --watch",
+    "dev:playground": "vite build --watch & nodemon --watch dist -e js,css --exec 'node scripts/copy-to-website.mjs'",
     "build": "vite build && tsc --emitDeclarationOnly --declaration --declarationDir dist --noEmit false && node scripts/fix-declarations.cjs && node scripts/inject-css-import.cjs",
+    "build:playground": "bun run build && node scripts/copy-to-website.mjs",
     "prepublishOnly": "bun run build",
     "test": "npx jest",
     "test:watch": "npx jest --watch",
