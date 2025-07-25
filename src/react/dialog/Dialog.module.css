@@ -10,6 +10,11 @@
   transition: background-color 0.3s ease;
 }
 
+/* Ensure dialog appears above dropdowns */
+.backdrop {
+  z-index: 1000;
+}
+
 .backdrop.visible {
   background-color: rgba(0, 0, 0, 0.5);
 }
