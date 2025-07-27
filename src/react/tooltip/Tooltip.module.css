@@ -30,7 +30,7 @@
 
 /* Top positioning */
 .tooltip.top {
-  transform: translateX(-50%);
+  /* Transform removed - positioning handled by JavaScript */
 }
 
 .tooltip.top.withArrow .arrow {
@@ -44,7 +44,7 @@
 
 /* Bottom positioning */
 .tooltip.bottom {
-  transform: translateX(-50%);
+  /* Transform removed - positioning handled by JavaScript */
 }
 
 .tooltip.bottom.withArrow .arrow {
@@ -58,7 +58,7 @@
 
 /* Left positioning */
 .tooltip.left {
-  transform: translateY(-50%);
+  /* Transform removed - positioning handled by JavaScript */
 }
 
 .tooltip.left.withArrow .arrow {
@@ -72,7 +72,7 @@
 
 /* Right positioning */
 .tooltip.right {
-  transform: translateY(-50%);
+  /* Transform removed - positioning handled by JavaScript */
 }
 
 .tooltip.right.withArrow .arrow {
