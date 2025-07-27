@@ -3,8 +3,9 @@
  * @description A button component that can be toggled between pressed and unpressed states. Supports both controlled and uncontrolled usage patterns with accessibility features.
  */
 
-import React, { forwardRef, ButtonHTMLAttributes, useState, useCallback } from 'react'
+import React, { forwardRef, ButtonHTMLAttributes, useState, useCallback, CSSProperties } from 'react'
 import { clsx } from 'clsx'
+import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
 import styles from './Toggle.module.css'
 
 /**
@@ -50,12 +51,18 @@ export interface ToggleProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement
    * @default false
    */
   asChild?: boolean
+
+  /**
+   * Custom styles to apply to the toggle
+   */
+  style?: CSSProperties
 }
 
 export const Toggle = forwardRef<HTMLButtonElement, ToggleProps>(
   (
     {
       className,
+      style,
       variant = 'default',
       size = 'md',
       pressed: controlledPressed,
@@ -74,6 +81,22 @@ export const Toggle = forwardRef<HTMLButtonElement, ToggleProps>(
     const [internalPressed, setInternalPressed] = useState(defaultPressed)
     const isControlled = controlledPressed !== undefined
     const isPressed = isControlled ? controlledPressed : internalPressed
+
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.toggle,
+        styles[variant],
+        styles[size],
+        {
+          [styles.pressed]: isPressed,
+          [styles.disabled]: disabled,
+          [styles.withShadow]: brutalistShadow && !disabled,
+        }
+      )
+    })
 
     const handleClick = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
       if (disabled) return
@@ -99,17 +122,8 @@ export const Toggle = forwardRef<HTMLButtonElement, ToggleProps>(
         role="button"
         aria-pressed={isPressed}
         data-state={isPressed ? 'on' : 'off'}
-        className={clsx(
-          styles.toggle,
-          styles[variant],
-          styles[size],
-          {
-            [styles.pressed]: isPressed,
-            [styles.disabled]: disabled,
-            [styles.withShadow]: brutalistShadow && !disabled,
-          },
-          className
-        )}
+        className={processedClassName}
+        style={processedStyle}
         onClick={handleClick}
         disabled={disabled}
         {...props}

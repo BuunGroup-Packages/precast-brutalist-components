@@ -6,6 +6,7 @@
 import { forwardRef, HTMLAttributes } from 'react'
 import { clsx } from 'clsx'
 import styles from './Spinner.module.css'
+import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
 
 export interface SpinnerProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
   /** Size of the spinner */
@@ -31,6 +32,7 @@ export const Spinner = forwardRef<HTMLDivElement, SpinnerProps>(
       speed = 'normal',
       label = 'Loading',
       className,
+      style,
       ...props
     },
     ref
@@ -69,17 +71,24 @@ export const Spinner = forwardRef<HTMLDivElement, SpinnerProps>(
       }
     }
 
+    // Process spinner utilities
+    const { className: spinnerClassName, style: spinnerStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.spinner,
+        styles[size],
+        styles[color],
+        styles[variant],
+        styles[`speed-${speed}`]
+      )
+    })
+
     return (
       <div
         ref={ref}
-        className={clsx(
-          styles.spinner,
-          styles[size],
-          styles[color],
-          styles[variant],
-          styles[`speed-${speed}`],
-          className
-        )}
+        className={spinnerClassName}
+        style={spinnerStyle}
         role="status"
         aria-label={label}
         {...props}

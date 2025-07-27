@@ -3,8 +3,9 @@
  * @description A container component that maintains a specific width-to-height ratio for responsive content. Perfect for images, videos, embeds, and any content requiring consistent proportions across different screen sizes.
  */
 
-import React, { forwardRef } from 'react'
+import React, { forwardRef, CSSProperties } from 'react'
 import { clsx } from 'clsx'
+import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
 import styles from './AspectRatio.module.css'
 
 export interface AspectRatioProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -14,6 +15,8 @@ export interface AspectRatioProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode
   /** Additional CSS classes */
   className?: string
+  /** Custom inline styles (supports utility classes) */
+  style?: CSSProperties
   /** Whether to apply object-fit to child images/videos */
   objectFit?: 'contain' | 'cover' | 'fill' | 'none' | 'scale-down'
   /** Background color when content doesn't fill the container */
@@ -35,13 +38,20 @@ export const AspectRatio = forwardRef<HTMLDivElement, AspectRatioProps>(
     ...props 
   }, ref) => {
     const paddingBottom = `${(1 / ratio) * 100}%`
+    
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.container
+    })
 
     return (
       <div
         ref={ref}
-        className={clsx(styles.container, className)}
+        className={processedClassName}
         style={{
-          ...style,
+          ...processedStyle,
           backgroundColor
         }}
         data-object-fit={objectFit}

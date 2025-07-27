@@ -3,9 +3,10 @@
  * @description A tooltip component for displaying contextual information on hover or focus. Automatically positions itself to stay within viewport bounds.
  */
 
-import React, { useState, useRef, useEffect, useCallback } from 'react'
+import React, { useState, useRef, useEffect, useCallback, CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
 import { clsx } from 'clsx'
+import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
 import styles from './Tooltip.module.css'
 
 export type TooltipPosition = 'top' | 'bottom' | 'left' | 'right' | 'auto'
@@ -32,6 +33,8 @@ export interface TooltipProps {
   showArrow?: boolean
   /** Additional CSS classes */
   className?: string
+  /** Custom styles to apply to the tooltip */
+  style?: CSSProperties
   /** Whether the tooltip is disabled */
   disabled?: boolean
   /** Maximum width of the tooltip */
@@ -49,12 +52,13 @@ export const Tooltip: React.FC<TooltipProps> = ({
   onVisibilityChange,
   showArrow = true,
   className,
+  style,
   disabled = false,
   maxWidth = 300,
 }) => {
   const [visible, setVisible] = useState(false)
   const [actualPosition, setActualPosition] = useState<TooltipPosition>(position)
-  const [coords, setCoords] = useState({ x: 0, y: 0 })
+  const [coords, setCoords] = useState({ x: -9999, y: -9999 })
   const triggerRef = useRef<HTMLElement>(null)
   const tooltipRef = useRef<HTMLDivElement>(null)
   const showTimeoutRef = useRef<NodeJS.Timeout>()
@@ -184,7 +188,10 @@ export const Tooltip: React.FC<TooltipProps> = ({
   // Effect to handle position calculation
   useEffect(() => {
     if (isVisible && triggerRef.current) {
-      calculatePosition()
+      // Use requestAnimationFrame to ensure the tooltip is rendered first
+      const frame = requestAnimationFrame(() => {
+        calculatePosition()
+      })
       
       const handleResize = () => calculatePosition()
       const handleScroll = () => calculatePosition()
@@ -194,12 +201,24 @@ export const Tooltip: React.FC<TooltipProps> = ({
       document.addEventListener('keydown', handleKeyDown)
       
       return () => {
+        cancelAnimationFrame(frame)
         window.removeEventListener('resize', handleResize)
         window.removeEventListener('scroll', handleScroll)
         document.removeEventListener('keydown', handleKeyDown)
       }
     }
   }, [isVisible, calculatePosition, handleKeyDown])
+
+  // Additional effect to recalculate position when tooltip ref becomes available
+  useEffect(() => {
+    if (isVisible && tooltipRef.current && triggerRef.current) {
+      const timeout = setTimeout(() => {
+        calculatePosition()
+      }, 0)
+      
+      return () => clearTimeout(timeout)
+    }
+  }, [isVisible, calculatePosition])
 
   // Cleanup timeouts on unmount
   useEffect(() => {
@@ -250,24 +269,33 @@ export const Tooltip: React.FC<TooltipProps> = ({
     'aria-describedby': isVisible ? 'tooltip' : undefined,
   })
 
+  // Process utility classes
+  const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+    className,
+    style,
+    componentClasses: clsx(
+      styles.tooltip,
+      styles[actualPosition],
+      {
+        [styles.withArrow]: showArrow,
+      }
+    )
+  })
+
   // Render tooltip portal
   const tooltipPortal = isVisible ? createPortal(
     <div
       ref={tooltipRef}
-      className={clsx(
-        styles.tooltip,
-        styles[actualPosition],
-        {
-          [styles.withArrow]: showArrow,
-        },
-        className
-      )}
+      className={processedClassName}
       style={{
         position: 'absolute',
         left: coords.x,
         top: coords.y,
         maxWidth,
         zIndex: 'var(--brutal-z-tooltip)',
+        opacity: coords.x === -9999 ? 0 : 1,
+        transition: 'opacity 0.15s ease-in-out',
+        ...processedStyle
       }}
       role="tooltip"
       id="tooltip"

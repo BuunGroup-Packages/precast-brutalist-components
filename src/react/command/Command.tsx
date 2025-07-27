@@ -3,8 +3,9 @@
  * @description A command palette component for building searchable, keyboard-navigable menus. Inspired by command palettes in modern applications with compound components for flexible composition.
  */
 
-import React, { forwardRef, useState, useRef, useEffect, ReactNode, KeyboardEvent, useMemo, useCallback } from 'react'
+import React, { forwardRef, useState, useRef, useEffect, ReactNode, KeyboardEvent, useMemo, useCallback, CSSProperties } from 'react'
 import { clsx } from 'clsx'
+import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
 import styles from './Command.module.css'
 
 // Context for compound components
@@ -47,6 +48,11 @@ export interface CommandProps extends Omit<React.HTMLAttributes<HTMLDivElement>,
    * Additional CSS class name for styling
    */
   className?: string
+  
+  /**
+   * Custom inline styles (supports utility classes)
+   */
+  style?: CSSProperties
   
   /**
    * Callback fired when an item is selected
@@ -114,6 +120,7 @@ export const Command: React.FC<CommandProps> & {
 } = ({
   children,
   className,
+  style,
   onSelect,
   defaultValue = '',
   value: controlledValue,
@@ -127,6 +134,13 @@ export const Command: React.FC<CommandProps> & {
   const [items, setItems] = useState<CommandItemData[]>([])
   const [visibleCount, setVisibleCount] = useState(0)
   const isControlled = controlledValue !== undefined
+  
+  // Process utility classes
+  const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+    className,
+    style,
+    componentClasses: styles.command
+  })
 
   const currentSearch = isControlled ? controlledValue : search
 
@@ -156,7 +170,8 @@ export const Command: React.FC<CommandProps> & {
   return (
     <CommandContext.Provider value={contextValue}>
       <div
-        className={clsx(styles.command, className)}
+        className={processedClassName}
+        style={processedStyle}
         {...props}
       >
         {children}
@@ -173,6 +188,11 @@ export interface CommandInputProps extends React.InputHTMLAttributes<HTMLInputEl
    * Additional CSS class name for styling
    */
   className?: string
+  
+  /**
+   * Custom inline styles (supports utility classes)
+   */
+  style?: CSSProperties
 }
 
 /**
@@ -180,8 +200,15 @@ export interface CommandInputProps extends React.InputHTMLAttributes<HTMLInputEl
  * Handles keyboard navigation and filtering of command items.
  */
 const CommandInput = forwardRef<HTMLInputElement, CommandInputProps>(
-  ({ className, ...props }, ref) => {
+  ({ className, style, ...props }, ref) => {
     const { search, setSearch, selectedIndex, setSelectedIndex, items, onSelect } = useCommand()
+    
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.input
+    })
 
     const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
       switch (e.key) {
@@ -211,7 +238,8 @@ const CommandInput = forwardRef<HTMLInputElement, CommandInputProps>(
       <div className={styles.inputWrapper}>
         <input
           ref={ref}
-          className={clsx(styles.input, className)}
+          className={processedClassName}
+          style={processedStyle}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           onKeyDown={handleKeyDown}

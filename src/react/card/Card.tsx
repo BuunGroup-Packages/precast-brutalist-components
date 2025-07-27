@@ -6,6 +6,7 @@
 import { forwardRef, HTMLAttributes } from 'react'
 import { clsx } from 'clsx'
 import styles from './Card.module.css'
+import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
 
 /**
  * Props for the Card component
@@ -75,6 +76,7 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
     {
       children,
       className,
+      style,
       variant = 'elevated',
       padding = 'md',
       clickable = false,
@@ -83,19 +85,25 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
     },
     ref
   ) => {
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.card,
+        styles[variant],
+        styles[`padding-${padding}`],
+        {
+          [styles.clickable]: clickable,
+          [styles.hover]: hover && !clickable,
+        }
+      )
+    })
+
     return (
       <div
         ref={ref}
-        className={clsx(
-          styles.card,
-          styles[variant],
-          styles[`padding-${padding}`],
-          {
-            [styles.clickable]: clickable,
-            [styles.hover]: hover && !clickable,
-          },
-          className
-        )}
+        className={processedClassName}
+        style={processedStyle}
         role={clickable ? 'button' : undefined}
         tabIndex={clickable ? 0 : undefined}
         {...props}
@@ -111,11 +119,18 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
  * Typically contains the title and optional actions.
  */
 const CardHeader = forwardRef<HTMLDivElement, CardHeaderProps>(
-  ({ children, className, ...props }, ref) => {
+  ({ children, className, style, ...props }, ref) => {
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.header
+    })
+
     return (
       <div
         ref={ref}
-        className={clsx(styles.header, className)}
+        className={processedClassName}
+        style={processedStyle}
         {...props}
       >
         {children}
@@ -129,11 +144,18 @@ const CardHeader = forwardRef<HTMLDivElement, CardHeaderProps>(
  * Contains the primary content of the card.
  */
 const CardBody = forwardRef<HTMLDivElement, CardBodyProps>(
-  ({ children, className, ...props }, ref) => {
+  ({ children, className, style, ...props }, ref) => {
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.body
+    })
+
     return (
       <div
         ref={ref}
-        className={clsx(styles.body, className)}
+        className={processedClassName}
+        style={processedStyle}
         {...props}
       >
         {children}
@@ -147,11 +169,18 @@ const CardBody = forwardRef<HTMLDivElement, CardBodyProps>(
  * Typically contains actions or additional information.
  */
 const CardFooter = forwardRef<HTMLDivElement, CardFooterProps>(
-  ({ children, className, ...props }, ref) => {
+  ({ children, className, style, ...props }, ref) => {
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.footer
+    })
+
     return (
       <div
         ref={ref}
-        className={clsx(styles.footer, className)}
+        className={processedClassName}
+        style={processedStyle}
         {...props}
       >
         {children}

@@ -3,9 +3,10 @@
  * @description A slide-out panel component that displays content in an overlay from any side of the screen. Features backdrop blur, focus management, and smooth animations with multiple size variants.
  */
 
-import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react'
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef, CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
 import clsx from 'clsx'
+import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
 import styles from './Sheet.module.css'
 
 /**
@@ -37,6 +38,11 @@ interface SheetProps {
    * Additional CSS classes to apply to the sheet container
    */
   className?: string
+  
+  /**
+   * Custom inline styles (supports utility classes)
+   */
+  style?: CSSProperties
 }
 
 /**
@@ -63,10 +69,17 @@ const Sheet = React.forwardRef<HTMLDivElement, SheetProps>(
     defaultOpen = false, 
     onOpenChange, 
     className, 
+    style,
     children, 
     ...props 
   }, ref) => {
     const [isOpen, setIsOpen] = useState(open ?? defaultOpen)
+
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style
+    })
 
     // Handle controlled state
     useEffect(() => {
@@ -87,7 +100,7 @@ const Sheet = React.forwardRef<HTMLDivElement, SheetProps>(
 
     return (
       <SheetContext.Provider value={contextValue}>
-        <div ref={ref} className={className} {...props}>
+        <div ref={ref} className={processedClassName} style={processedStyle} {...props}>
           {children}
         </div>
       </SheetContext.Provider>
@@ -110,6 +123,11 @@ interface SheetTriggerProps {
   className?: string
   
   /**
+   * Custom inline styles (supports utility classes)
+   */
+  style?: CSSProperties
+  
+  /**
    * Whether to use the child element as the trigger instead of a button
    * @default false
    */
@@ -117,12 +135,21 @@ interface SheetTriggerProps {
 }
 
 const SheetTrigger = React.forwardRef<HTMLButtonElement, SheetTriggerProps>(
-  ({ children, className, asChild = false, ...props }, ref) => {
+  ({ children, className, style, asChild = false, ...props }, ref) => {
     const { setOpen } = useSheet()
+
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.trigger
+    })
 
     if (asChild) {
       return React.cloneElement(children as React.ReactElement, {
         onClick: () => setOpen(true),
+        className: processedClassName,
+        style: processedStyle,
         ...props
       })
     }
@@ -130,7 +157,8 @@ const SheetTrigger = React.forwardRef<HTMLButtonElement, SheetTriggerProps>(
     return (
       <button
         ref={ref}
-        className={clsx(styles.trigger, className)}
+        className={processedClassName}
+        style={processedStyle}
         onClick={() => setOpen(true)}
         {...props}
       >
@@ -153,6 +181,11 @@ interface SheetContentProps {
    * Additional CSS classes to apply to the sheet content
    */
   className?: string
+  
+  /**
+   * Custom inline styles (supports utility classes)
+   */
+  style?: CSSProperties
   
   /**
    * Side of the screen from which the sheet should slide out
@@ -225,6 +258,7 @@ const SheetContent = React.forwardRef<HTMLDivElement, SheetContentProps>(
   ({ 
     children, 
     className,
+    style,
     side = 'right',
     size = 'md',
     variant = 'default',
@@ -242,6 +276,18 @@ const SheetContent = React.forwardRef<HTMLDivElement, SheetContentProps>(
     const { open, setOpen } = useSheet()
     const contentRef = useRef<HTMLDivElement>(null)
     const overlayRef = useRef<HTMLDivElement>(null)
+    
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.content,
+        styles[`side-${side}`],
+        styles[`size-${size}`],
+        styles[`variant-${variant}`]
+      )
+    })
 
     const sheetRefCallback = useCallback((node: HTMLDivElement | null) => {
       if (contentRef && contentRef.current !== node) {
@@ -358,13 +404,8 @@ const SheetContent = React.forwardRef<HTMLDivElement, SheetContentProps>(
         )}
         <div
           ref={sheetRefCallback}
-          className={clsx(
-            styles.content,
-            styles[`side-${side}`],
-            styles[`size-${size}`],
-            styles[`variant-${variant}`],
-            className
-          )}
+          className={processedClassName}
+          style={processedStyle}
           role="dialog"
           aria-modal="true"
           tabIndex={-1}
@@ -396,14 +437,27 @@ interface SheetHeaderProps {
    * Additional CSS classes to apply to the header
    */
   className?: string
+  
+  /**
+   * Custom inline styles (supports utility classes)
+   */
+  style?: CSSProperties
 }
 
 const SheetHeader = React.forwardRef<HTMLDivElement, SheetHeaderProps>(
-  ({ children, className, ...props }, ref) => {
+  ({ children, className, style, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.header
+    })
+
     return (
       <div
         ref={ref}
-        className={clsx(styles.header, className)}
+        className={processedClassName}
+        style={processedStyle}
         {...props}
       >
         {children}
@@ -425,14 +479,27 @@ interface SheetTitleProps {
    * Additional CSS classes to apply to the title
    */
   className?: string
+  
+  /**
+   * Custom inline styles (supports utility classes)
+   */
+  style?: CSSProperties
 }
 
 const SheetTitle = React.forwardRef<HTMLHeadingElement, SheetTitleProps>(
-  ({ children, className, ...props }, ref) => {
+  ({ children, className, style, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.title
+    })
+
     return (
       <h2
         ref={ref}
-        className={clsx(styles.title, className)}
+        className={processedClassName}
+        style={processedStyle}
         {...props}
       >
         {children}
@@ -454,14 +521,27 @@ interface SheetDescriptionProps {
    * Additional CSS classes to apply to the description
    */
   className?: string
+  
+  /**
+   * Custom inline styles (supports utility classes)
+   */
+  style?: CSSProperties
 }
 
 const SheetDescription = React.forwardRef<HTMLParagraphElement, SheetDescriptionProps>(
-  ({ children, className, ...props }, ref) => {
+  ({ children, className, style, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.description
+    })
+
     return (
       <p
         ref={ref}
-        className={clsx(styles.description, className)}
+        className={processedClassName}
+        style={processedStyle}
         {...props}
       >
         {children}
@@ -483,14 +563,27 @@ interface SheetFooterProps {
    * Additional CSS classes to apply to the footer
    */
   className?: string
+  
+  /**
+   * Custom inline styles (supports utility classes)
+   */
+  style?: CSSProperties
 }
 
 const SheetFooter = React.forwardRef<HTMLDivElement, SheetFooterProps>(
-  ({ children, className, ...props }, ref) => {
+  ({ children, className, style, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.footer
+    })
+
     return (
       <div
         ref={ref}
-        className={clsx(styles.footer, className)}
+        className={processedClassName}
+        style={processedStyle}
         {...props}
       >
         {children}
@@ -514,6 +607,11 @@ interface SheetCloseProps {
   className?: string
   
   /**
+   * Custom inline styles (supports utility classes)
+   */
+  style?: CSSProperties
+  
+  /**
    * Whether to use the child element as the close trigger instead of a button
    * @default false
    */
@@ -521,12 +619,21 @@ interface SheetCloseProps {
 }
 
 const SheetClose = React.forwardRef<HTMLButtonElement, SheetCloseProps>(
-  ({ children, className, asChild = false, ...props }, ref) => {
+  ({ children, className, style, asChild = false, ...props }, ref) => {
     const { setOpen } = useSheet()
+
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.close
+    })
 
     if (asChild) {
       return React.cloneElement(children as React.ReactElement, {
         onClick: () => setOpen(false),
+        className: processedClassName,
+        style: processedStyle,
         ...props
       })
     }
@@ -534,7 +641,8 @@ const SheetClose = React.forwardRef<HTMLButtonElement, SheetCloseProps>(
     return (
       <button
         ref={ref}
-        className={clsx(styles.close, className)}
+        className={processedClassName}
+        style={processedStyle}
         onClick={() => setOpen(false)}
         aria-label="Close sheet"
         {...props}

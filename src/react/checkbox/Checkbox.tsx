@@ -6,6 +6,7 @@
 import React, { forwardRef, InputHTMLAttributes, useRef, useEffect } from 'react'
 import { clsx } from 'clsx'
 import styles from './Checkbox.module.css'
+import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
 
 export interface CheckboxProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'size'> {
   size?: 'sm' | 'md' | 'lg'
@@ -19,6 +20,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
   (
     {
       className,
+      style,
       size = 'md',
       label,
       indeterminate = false,
@@ -43,17 +45,24 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
 
     const checkboxId = id || `checkbox-${Math.random().toString(36).substr(2, 9)}`
 
+    // Process container utilities
+    const { className: containerClassName, style: containerStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.container,
+        styles[size],
+        {
+          [styles.disabled]: disabled,
+          [styles.error]: error,
+        }
+      )
+    })
+
     return (
       <div 
-        className={clsx(
-          styles.container,
-          styles[size],
-          {
-            [styles.disabled]: disabled,
-            [styles.error]: error,
-          },
-          className
-        )}
+        className={containerClassName}
+        style={containerStyle}
       >
         <div className={styles.checkboxWrapper}>
           <input

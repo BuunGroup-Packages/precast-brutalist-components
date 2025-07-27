@@ -3,9 +3,10 @@
  * @description A component for displaying important messages to users. Supports different severity levels and optional dismiss functionality.
  */
 
-import { forwardRef, HTMLAttributes, useState } from 'react'
+import { forwardRef, HTMLAttributes, useState, CSSProperties } from 'react'
 import { clsx } from 'clsx'
 import styles from './Alert.module.css'
+import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
 
 export interface AlertProps extends HTMLAttributes<HTMLDivElement> {
   /** Type of alert */
@@ -20,17 +21,72 @@ export interface AlertProps extends HTMLAttributes<HTMLDivElement> {
   onDismiss?: () => void
 }
 
-export interface AlertIconProps extends HTMLAttributes<HTMLDivElement> {}
-export interface AlertContentProps extends HTMLAttributes<HTMLDivElement> {}
-export interface AlertTitleProps extends HTMLAttributes<HTMLHeadingElement> {}
-export interface AlertDescriptionProps extends HTMLAttributes<HTMLParagraphElement> {}
-export interface AlertActionsProps extends HTMLAttributes<HTMLDivElement> {}
+export interface AlertIconProps extends HTMLAttributes<HTMLDivElement> {
+  /**
+   * Additional CSS classes to apply to the icon wrapper
+   */
+  className?: string
+  
+  /**
+   * Custom inline styles (supports utility classes)
+   */
+  style?: CSSProperties
+}
+
+export interface AlertContentProps extends HTMLAttributes<HTMLDivElement> {
+  /**
+   * Additional CSS classes to apply to the content wrapper
+   */
+  className?: string
+  
+  /**
+   * Custom inline styles (supports utility classes)
+   */
+  style?: CSSProperties
+}
+
+export interface AlertTitleProps extends HTMLAttributes<HTMLHeadingElement> {
+  /**
+   * Additional CSS classes to apply to the title
+   */
+  className?: string
+  
+  /**
+   * Custom inline styles (supports utility classes)
+   */
+  style?: CSSProperties
+}
+
+export interface AlertDescriptionProps extends HTMLAttributes<HTMLParagraphElement> {
+  /**
+   * Additional CSS classes to apply to the description
+   */
+  className?: string
+  
+  /**
+   * Custom inline styles (supports utility classes)
+   */
+  style?: CSSProperties
+}
+
+export interface AlertActionsProps extends HTMLAttributes<HTMLDivElement> {
+  /**
+   * Additional CSS classes to apply to the actions container
+   */
+  className?: string
+  
+  /**
+   * Custom inline styles (supports utility classes)
+   */
+  style?: CSSProperties
+}
 
 const Alert = forwardRef<HTMLDivElement, AlertProps>(
   (
     {
       children,
       className,
+      style,
       type = 'info',
       variant = 'filled',
       size = 'md',
@@ -52,6 +108,21 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(
       }, 300) // Match animation duration
     }
 
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.alert,
+        styles[type],
+        styles[variant],
+        styles[size],
+        {
+          [styles.dismissible]: dismissible,
+          [styles.exiting]: isExiting,
+        }
+      )
+    })
+
     if (dismissed) {
       return null
     }
@@ -59,17 +130,8 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(
     return (
       <div
         ref={ref}
-        className={clsx(
-          styles.alert,
-          styles[type],
-          styles[variant],
-          styles[size],
-          {
-            [styles.dismissible]: dismissible,
-            [styles.exiting]: isExiting,
-          },
-          className
-        )}
+        className={processedClassName}
+        style={processedStyle}
         role="alert"
         aria-live="polite"
         {...props}
@@ -104,11 +166,19 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(
 )
 
 const AlertIcon = forwardRef<HTMLDivElement, AlertIconProps>(
-  ({ children, className, ...props }, ref) => {
+  ({ children, className, style, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.icon
+    })
+    
     return (
       <div
         ref={ref}
-        className={clsx(styles.icon, className)}
+        className={processedClassName}
+        style={processedStyle}
         {...props}
       >
         {children || <DefaultIcon />}
@@ -118,11 +188,19 @@ const AlertIcon = forwardRef<HTMLDivElement, AlertIconProps>(
 )
 
 const AlertContent = forwardRef<HTMLDivElement, AlertContentProps>(
-  ({ children, className, ...props }, ref) => {
+  ({ children, className, style, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.content
+    })
+    
     return (
       <div
         ref={ref}
-        className={clsx(styles.content, className)}
+        className={processedClassName}
+        style={processedStyle}
         {...props}
       >
         {children}
@@ -132,11 +210,19 @@ const AlertContent = forwardRef<HTMLDivElement, AlertContentProps>(
 )
 
 const AlertTitle = forwardRef<HTMLHeadingElement, AlertTitleProps>(
-  ({ children, className, ...props }, ref) => {
+  ({ children, className, style, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.title
+    })
+    
     return (
       <h4
         ref={ref}
-        className={clsx(styles.title, className)}
+        className={processedClassName}
+        style={processedStyle}
         {...props}
       >
         {children}
@@ -146,11 +232,19 @@ const AlertTitle = forwardRef<HTMLHeadingElement, AlertTitleProps>(
 )
 
 const AlertDescription = forwardRef<HTMLParagraphElement, AlertDescriptionProps>(
-  ({ children, className, ...props }, ref) => {
+  ({ children, className, style, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.description
+    })
+    
     return (
       <p
         ref={ref}
-        className={clsx(styles.description, className)}
+        className={processedClassName}
+        style={processedStyle}
         {...props}
       >
         {children}
@@ -160,11 +254,19 @@ const AlertDescription = forwardRef<HTMLParagraphElement, AlertDescriptionProps>
 )
 
 const AlertActions = forwardRef<HTMLDivElement, AlertActionsProps>(
-  ({ children, className, ...props }, ref) => {
+  ({ children, className, style, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.actions
+    })
+    
     return (
       <div
         ref={ref}
-        className={clsx(styles.actions, className)}
+        className={processedClassName}
+        style={processedStyle}
         {...props}
       >
         {children}

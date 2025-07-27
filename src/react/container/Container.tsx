@@ -3,8 +3,9 @@
  * @description A responsive container component that provides consistent max-width constraints and padding. Essential for creating well-structured page layouts with proper content alignment.
  */
 
-import { forwardRef, HTMLAttributes } from 'react'
+import { forwardRef, HTMLAttributes, CSSProperties } from 'react'
 import { clsx } from 'clsx'
+import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
 import styles from './Container.module.css'
 
 /**
@@ -33,6 +34,11 @@ export interface ContainerProps extends HTMLAttributes<HTMLDivElement> {
    * Additional CSS class name for styling
    */
   className?: string
+  
+  /**
+   * Custom CSS styles (supports utility classes)
+   */
+  style?: CSSProperties
 }
 
 /**
@@ -54,23 +60,31 @@ export const Container = forwardRef<HTMLDivElement, ContainerProps>(
       centered = true,
       padding = 'md',
       className,
+      style,
       children,
       ...props
     },
     ref
   ) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.container,
+        styles[size],
+        styles[`padding-${padding}`],
+        {
+          [styles.centered]: centered,
+        }
+      )
+    })
+
     return (
       <div
         ref={ref}
-        className={clsx(
-          styles.container,
-          styles[size],
-          styles[`padding-${padding}`],
-          {
-            [styles.centered]: centered,
-          },
-          className
-        )}
+        className={processedClassName}
+        style={processedStyle}
         {...props}
       >
         {children}

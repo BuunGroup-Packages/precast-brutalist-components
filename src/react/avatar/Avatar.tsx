@@ -3,8 +3,9 @@
  * @description A component for displaying user profile images or initials. Includes fallback support for missing images.
  */
 
-import React, { useState, forwardRef, ImgHTMLAttributes } from 'react'
+import React, { useState, forwardRef, ImgHTMLAttributes, CSSProperties } from 'react'
 import { clsx } from 'clsx'
+import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
 import styles from './Avatar.module.css'
 
 export interface AvatarProps extends Omit<ImgHTMLAttributes<HTMLImageElement>, 'size' | 'children'> {
@@ -22,6 +23,8 @@ export interface AvatarProps extends Omit<ImgHTMLAttributes<HTMLImageElement>, '
   status?: 'online' | 'offline' | 'busy' | 'away'
   /** Additional CSS classes */
   className?: string
+  /** Custom CSS styles (supports utility classes) */
+  style?: CSSProperties
   /** Custom click handler */
   onClick?: () => void
   /** Whether the avatar is clickable */
@@ -38,6 +41,7 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
       size = 'md',
       status,
       className,
+      style,
       onClick,
       clickable = false,
       ...props
@@ -81,18 +85,25 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
 
     const isClickable = clickable || !!onClick
 
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.container,
+        styles[size],
+        {
+          [styles.clickable]: isClickable,
+          [styles.hasStatus]: !!status,
+        }
+      )
+    })
+
     return (
       <div
         ref={ref}
-        className={clsx(
-          styles.container,
-          styles[size],
-          {
-            [styles.clickable]: isClickable,
-            [styles.hasStatus]: !!status,
-          },
-          className
-        )}
+        className={processedClassName}
+        style={processedStyle}
         onClick={isClickable ? onClick : undefined}
         role={isClickable ? 'button' : undefined}
         tabIndex={isClickable ? 0 : undefined}

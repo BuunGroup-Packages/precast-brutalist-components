@@ -3,8 +3,9 @@
  * @description A navigational component that displays a hierarchical list of page sections with support for active states and multiple positioning options. Perfect for documentation and long-form content.
  */
 
-import React, { forwardRef, HTMLAttributes } from 'react'
+import React, { forwardRef, HTMLAttributes, CSSProperties } from 'react'
 import { clsx } from 'clsx'
+import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
 import styles from './TableOfContents.module.css'
 
 /**
@@ -39,6 +40,11 @@ export interface TableOfContentsProps extends HTMLAttributes<HTMLElement> {
    * Additional CSS classes to apply to the component
    */
   className?: string
+  
+  /**
+   * Custom inline styles (supports utility classes)
+   */
+  style?: CSSProperties
 }
 
 /**
@@ -113,19 +119,27 @@ export const TableOfContents = forwardRef<HTMLElement, TableOfContentsProps>(
     showTitle = true, 
     size = 'md', 
     position = 'default',
-    className, 
+    className,
+    style,
     children, 
     ...props 
   }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.tableOfContents,
+        styles[size],
+        styles[position]
+      )
+    })
+    
     return (
       <nav
         ref={ref}
-        className={clsx(
-          styles.tableOfContents,
-          styles[size],
-          styles[position],
-          className
-        )}
+        className={processedClassName}
+        style={processedStyle}
         aria-label="Table of contents"
         {...props}
       >
@@ -176,19 +190,26 @@ export const TableOfContentsItem = forwardRef<HTMLLIElement, TableOfContentsItem
 )
 
 export const TableOfContentsLink = forwardRef<HTMLAnchorElement, TableOfContentsLinkProps>(
-  ({ href, isActive, level = 1, className, children, ...props }, ref) => {
+  ({ href, isActive, level = 1, className, style, children, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.link,
+        styles[`linkLevel${level}`],
+        {
+          [styles.activeLink]: isActive,
+        }
+      )
+    })
+    
     return (
       <a
         ref={ref}
         href={href}
-        className={clsx(
-          styles.link,
-          styles[`linkLevel${level}`],
-          {
-            [styles.activeLink]: isActive,
-          },
-          className
-        )}
+        className={processedClassName}
+        style={processedStyle}
         aria-current={isActive ? 'location' : undefined}
         {...props}
       >

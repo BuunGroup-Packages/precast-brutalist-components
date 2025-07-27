@@ -3,9 +3,10 @@
  * @description A floating content component that displays rich content in a portal overlay. Features intelligent positioning, focus management, and keyboard navigation with customizable trigger behaviors.
  */
 
-import React, { useState, useRef, useEffect, useCallback, useContext, createContext } from 'react'
+import React, { useState, useRef, useEffect, useCallback, useContext, createContext, CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
 import { clsx } from 'clsx'
+import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
 import styles from './Popover.module.css'
 
 /**
@@ -83,6 +84,11 @@ export interface PopoverProps {
   className?: string
   
   /**
+   * Custom styles to apply to the popover
+   */
+  style?: CSSProperties
+  
+  /**
    * Whether the popover trigger is disabled
    * @default false
    */
@@ -128,6 +134,7 @@ export const Popover: React.FC<PopoverProps> & {
   closeOnEscape = true,
   showArrow = true,
   className,
+  style,
   disabled = false,
   maxWidth = 400,
   autoFocus = true,
@@ -387,25 +394,32 @@ export const Popover: React.FC<PopoverProps> & {
     close: closePopover,
   }
 
+  // Process utility classes
+  const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+    className,
+    style,
+    componentClasses: clsx(
+      styles.popover,
+      styles[actualPosition.split('-')[0]],
+      {
+        [styles.withArrow]: showArrow,
+      }
+    )
+  })
+
   // Render popover portal
   const popoverPortal = isOpen ? createPortal(
     <PopoverContext.Provider value={contextValue}>
       <div
         ref={popoverRef}
-        className={clsx(
-          styles.popover,
-          styles[actualPosition.split('-')[0]],
-          {
-            [styles.withArrow]: showArrow,
-          },
-          className
-        )}
+        className={processedClassName}
         style={{
           position: 'absolute',
           left: coords.x,
           top: coords.y,
           maxWidth,
           zIndex: 'var(--brutal-z-popover)',
+          ...processedStyle
         }}
         role="dialog"
         aria-modal="true"
@@ -413,7 +427,7 @@ export const Popover: React.FC<PopoverProps> & {
       >
         {showArrow && <div className={styles.arrow} />}
         <div className={styles.content}>
-          {content || children.props.children}
+          {content}
         </div>
       </div>
     </PopoverContext.Provider>,
@@ -429,45 +443,77 @@ export const Popover: React.FC<PopoverProps> & {
 }
 
 // Subcomponents
-export const PopoverContent: React.FC<{ children: React.ReactNode; className?: string }> = ({
+export const PopoverContent: React.FC<{ children: React.ReactNode; className?: string; style?: CSSProperties }> = ({
   children,
   className,
+  style,
 }) => {
+  // Process utility classes
+  const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+    className,
+    style,
+    componentClasses: styles.contentWrapper
+  })
+
   return (
-    <div className={clsx(styles.contentWrapper, className)}>
+    <div className={processedClassName} style={processedStyle}>
       {children}
     </div>
   )
 }
 
-export const PopoverHeader: React.FC<{ children: React.ReactNode; className?: string }> = ({
+export const PopoverHeader: React.FC<{ children: React.ReactNode; className?: string; style?: CSSProperties }> = ({
   children,
   className,
+  style,
 }) => {
+  // Process utility classes
+  const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+    className,
+    style,
+    componentClasses: styles.header
+  })
+
   return (
-    <div className={clsx(styles.header, className)}>
+    <div className={processedClassName} style={processedStyle}>
       {children}
     </div>
   )
 }
 
-export const PopoverBody: React.FC<{ children: React.ReactNode; className?: string }> = ({
+export const PopoverBody: React.FC<{ children: React.ReactNode; className?: string; style?: CSSProperties }> = ({
   children,
   className,
+  style,
 }) => {
+  // Process utility classes
+  const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+    className,
+    style,
+    componentClasses: styles.body
+  })
+
   return (
-    <div className={clsx(styles.body, className)}>
+    <div className={processedClassName} style={processedStyle}>
       {children}
     </div>
   )
 }
 
-export const PopoverFooter: React.FC<{ children: React.ReactNode; className?: string }> = ({
+export const PopoverFooter: React.FC<{ children: React.ReactNode; className?: string; style?: CSSProperties }> = ({
   children,
   className,
+  style,
 }) => {
+  // Process utility classes
+  const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+    className,
+    style,
+    componentClasses: styles.footer
+  })
+
   return (
-    <div className={clsx(styles.footer, className)}>
+    <div className={processedClassName} style={processedStyle}>
       {children}
     </div>
   )

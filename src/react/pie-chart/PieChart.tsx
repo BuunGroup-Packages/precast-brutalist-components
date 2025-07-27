@@ -3,7 +3,9 @@
  * @description A brutalist-styled pie chart component for data visualization with customizable segments, animations, and interactive tooltips. Features stark visual design with bold borders and high contrast colors.
  */
 
-import React from 'react'
+import React, { CSSProperties } from 'react'
+import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
+import { clsx } from 'clsx'
 import styles from './PieChart.module.css'
 import { Tooltip } from '../tooltip'
 
@@ -100,9 +102,9 @@ interface PieChartProps {
   className?: string
   
   /**
-   * Inline styles to apply to the chart container
+   * Inline styles to apply to the chart container (supports utility classes)
    */
-  style?: React.CSSProperties
+  style?: CSSProperties
 }
 
 const PieChart = React.forwardRef<HTMLDivElement, PieChartProps>(
@@ -123,13 +125,20 @@ const PieChart = React.forwardRef<HTMLDivElement, PieChartProps>(
     ...props 
   }, ref) => {
     
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.pieChart
+    })
+    
     if (!data || data.length === 0) {
       return (
         <div 
           ref={ref} 
-          className={`${styles.pieChart} ${styles.empty} ${className || ''}`}
+          className={clsx(processedClassName, styles.empty)}
           data-variant={variant}
-          style={style}
+          style={processedStyle}
           {...props}
         >
           <div className={styles.emptyState}>
@@ -197,11 +206,11 @@ const PieChart = React.forwardRef<HTMLDivElement, PieChartProps>(
     return (
       <div 
         ref={ref} 
-        className={`${styles.pieChart} ${className || ''}`}
+        className={processedClassName}
         data-variant={variant}
         data-animated={animated}
         data-show-container={showContainer}
-        style={style}
+        style={processedStyle}
         {...props}
       >
         {/* Chart Header */}

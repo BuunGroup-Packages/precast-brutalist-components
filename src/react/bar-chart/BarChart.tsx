@@ -3,7 +3,9 @@
  * @description A data visualization component for displaying bar charts with interactive tooltips, animations, and customizable styling. Ideal for comparing values across categories.
  */
 
-import React from 'react'
+import React, { CSSProperties } from 'react'
+import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
+import { clsx } from 'clsx'
 import styles from './BarChart.module.css'
 import { Tooltip } from '../tooltip'
 
@@ -63,8 +65,8 @@ interface BarChartProps {
   borderStyle?: 'solid' | 'dashed' | 'dotted' | 'double'
   /** Additional CSS class names */
   className?: string
-  /** Additional inline styles */
-  style?: React.CSSProperties
+  /** Additional inline styles (supports utility classes) */
+  style?: CSSProperties
 }
 
 const BarChart = React.forwardRef<HTMLDivElement, BarChartProps>(
@@ -85,14 +87,21 @@ const BarChart = React.forwardRef<HTMLDivElement, BarChartProps>(
     ...props 
   }, ref) => {
     
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.barChart
+    })
+    
     if (!data || data.length === 0) {
       return (
         <div 
           ref={ref} 
-          className={`${styles.barChart} ${styles.empty} ${className || ''}`}
+          className={clsx(processedClassName, styles.empty)}
           data-size={size}
           data-variant={variant}
-          style={style}
+          style={processedStyle}
           {...props}
         >
           <div className={styles.emptyState}>
@@ -129,13 +138,13 @@ const BarChart = React.forwardRef<HTMLDivElement, BarChartProps>(
     return (
       <div 
         ref={ref} 
-        className={`${styles.barChart} ${className || ''}`}
+        className={processedClassName}
         data-size={size}
         data-variant={variant}
         data-animated={animated}
         data-show-grid={showGrid}
         data-show-container={showContainer}
-        style={style}
+        style={processedStyle}
         {...props}
       >
         {/* Chart Header */}

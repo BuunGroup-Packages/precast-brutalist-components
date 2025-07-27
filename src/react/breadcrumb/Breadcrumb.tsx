@@ -3,8 +3,9 @@
  * @description A navigation component that shows the current page location within a hierarchical structure. Helps users understand their location and navigate back.
  */
 
-import React, { forwardRef, HTMLAttributes, AnchorHTMLAttributes } from 'react'
+import React, { forwardRef, HTMLAttributes, AnchorHTMLAttributes, CSSProperties } from 'react'
 import { clsx } from 'clsx'
+import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
 import styles from './Breadcrumb.module.css'
 
 export interface BreadcrumbProps extends HTMLAttributes<HTMLElement> {
@@ -12,6 +13,8 @@ export interface BreadcrumbProps extends HTMLAttributes<HTMLElement> {
   separator?: React.ReactNode
   /** Additional CSS classes */
   className?: string
+  /** Custom CSS styles (supports utility classes) */
+  style?: CSSProperties
 }
 
 export interface BreadcrumbItemProps extends HTMLAttributes<HTMLLIElement> {
@@ -19,20 +22,32 @@ export interface BreadcrumbItemProps extends HTMLAttributes<HTMLLIElement> {
   isCurrentPage?: boolean
   /** Additional CSS classes */
   className?: string
+  /** Custom CSS styles (supports utility classes) */
+  style?: CSSProperties
 }
 
 export interface BreadcrumbLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
   /** Additional CSS classes */
   className?: string
+  /** Custom CSS styles (supports utility classes) */
+  style?: CSSProperties
 }
 
 export const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
-  ({ separator = '/', className, children, ...props }, ref) => {
+  ({ separator = '/', className, style, children, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.breadcrumb
+    })
+
     return (
       <nav
         ref={ref}
         aria-label="Breadcrumb"
-        className={clsx(styles.breadcrumb, className)}
+        className={processedClassName}
+        style={processedStyle}
         {...props}
       >
         <ol className={styles.list}>
@@ -59,17 +74,24 @@ export const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
 )
 
 export const BreadcrumbItem = forwardRef<HTMLLIElement, BreadcrumbItemProps>(
-  ({ isCurrentPage = false, className, children, ...props }, ref) => {
+  ({ isCurrentPage = false, className, style, children, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.item,
+        {
+          [styles.current]: isCurrentPage,
+        }
+      )
+    })
+
     return (
       <li
         ref={ref}
-        className={clsx(
-          styles.item,
-          {
-            [styles.current]: isCurrentPage,
-          },
-          className
-        )}
+        className={processedClassName}
+        style={processedStyle}
         aria-current={isCurrentPage ? 'page' : undefined}
         {...props}
       >
@@ -80,11 +102,19 @@ export const BreadcrumbItem = forwardRef<HTMLLIElement, BreadcrumbItemProps>(
 )
 
 export const BreadcrumbLink = forwardRef<HTMLAnchorElement, BreadcrumbLinkProps>(
-  ({ className, children, ...props }, ref) => {
+  ({ className, style, children, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.link
+    })
+
     return (
       <a
         ref={ref}
-        className={clsx(styles.link, className)}
+        className={processedClassName}
+        style={processedStyle}
         {...props}
       >
         {children}
@@ -93,12 +123,27 @@ export const BreadcrumbLink = forwardRef<HTMLAnchorElement, BreadcrumbLinkProps>
   }
 )
 
-export const BreadcrumbPage = forwardRef<HTMLSpanElement, HTMLAttributes<HTMLSpanElement>>(
-  ({ className, children, ...props }, ref) => {
+export interface BreadcrumbPageProps extends HTMLAttributes<HTMLSpanElement> {
+  /** Additional CSS classes */
+  className?: string
+  /** Custom CSS styles (supports utility classes) */
+  style?: CSSProperties
+}
+
+export const BreadcrumbPage = forwardRef<HTMLSpanElement, BreadcrumbPageProps>(
+  ({ className, style, children, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.page
+    })
+
     return (
       <span
         ref={ref}
-        className={clsx(styles.page, className)}
+        className={processedClassName}
+        style={processedStyle}
         {...props}
       >
         {children}

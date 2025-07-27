@@ -6,6 +6,7 @@
 import React, { forwardRef, InputHTMLAttributes, createContext, useContext, useState } from 'react'
 import { clsx } from 'clsx'
 import styles from './Radio.module.css'
+import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
 
 /**
  * Context value interface for RadioGroup
@@ -85,6 +86,11 @@ export interface RadioGroupProps {
    * Additional CSS classes to apply to the group container
    */
   className?: string
+  
+  /**
+   * Additional inline styles to apply to the group container
+   */
+  style?: React.CSSProperties
 }
 
 export const RadioGroup: React.FC<RadioGroupProps> = ({
@@ -99,6 +105,7 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
   error = false,
   brutalistShadow = true,
   className,
+  style,
 }) => {
   const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue)
   const isControlled = controlledValue !== undefined
@@ -110,6 +117,20 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
     }
     onChange?.(newValue)
   }
+
+  // Process group utilities
+  const { className: groupClassName, style: groupStyle } = useResponsiveUtilities({
+    className,
+    style,
+    componentClasses: clsx(
+      styles.group,
+      styles[direction],
+      {
+        [styles.disabled]: disabled,
+        [styles.error]: error,
+      }
+    )
+  })
 
   return (
     <RadioGroupContext.Provider 
@@ -124,15 +145,8 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
       }}
     >
       <div 
-        className={clsx(
-          styles.group,
-          styles[direction],
-          {
-            [styles.disabled]: disabled,
-            [styles.error]: error,
-          },
-          className
-        )}
+        className={groupClassName}
+        style={groupStyle}
         role="radiogroup"
         aria-invalid={error}
       >
@@ -181,6 +195,7 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
   (
     {
       className,
+      style,
       value,
       label,
       size: propSize,
@@ -221,18 +236,25 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
       }
     }
 
+    // Process container utilities
+    const { className: containerClassName, style: containerStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.container,
+        styles[size],
+        {
+          [styles.disabled]: disabled,
+          [styles.error]: error,
+          [styles.checked]: isChecked,
+        }
+      )
+    })
+
     return (
       <div 
-        className={clsx(
-          styles.container,
-          styles[size],
-          {
-            [styles.disabled]: disabled,
-            [styles.error]: error,
-            [styles.checked]: isChecked,
-          },
-          className
-        )}
+        className={containerClassName}
+        style={containerStyle}
       >
         <div className={styles.radioWrapper}>
           <input

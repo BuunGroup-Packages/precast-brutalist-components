@@ -3,8 +3,9 @@
  * @description A card component that appears on hover to display additional information. Features automatic positioning, customizable delays, and support for rich content.
  */
 
-import React, { forwardRef, useState, useRef, useEffect, ReactNode } from 'react'
+import React, { forwardRef, useState, useRef, useEffect, ReactNode, CSSProperties } from 'react'
 import { clsx } from 'clsx'
+import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
 import styles from './HoverCard.module.css'
 
 // Context for compound components
@@ -30,6 +31,16 @@ export interface HoverCardProps {
    * The trigger and content elements
    */
   children: ReactNode
+  
+  /**
+   * Additional CSS class name for styling
+   */
+  className?: string
+  
+  /**
+   * Custom styles to apply to the hover card
+   */
+  style?: CSSProperties
   
   /**
    * Default open state when uncontrolled
@@ -84,6 +95,8 @@ export const HoverCard: React.FC<HoverCardProps> & {
   Content: typeof HoverCardContent
 } = ({
   children,
+  className,
+  style,
   defaultOpen = false,
   open: controlledOpen,
   onOpenChange,
@@ -126,9 +139,16 @@ export const HoverCard: React.FC<HoverCardProps> & {
     }
   }, [])
 
+  // Process utility classes
+  const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+    className,
+    style,
+    componentClasses: styles.root
+  })
+
   return (
     <HoverCardContext.Provider value={{ open, setOpen, triggerRef }}>
-      <div className={styles.root}>
+      <div className={processedClassName} style={processedStyle}>
         {children}
       </div>
     </HoverCardContext.Provider>
@@ -154,6 +174,11 @@ export interface HoverCardTriggerProps {
    * Additional CSS class name for styling
    */
   className?: string
+  
+  /**
+   * Custom styles to apply to the trigger
+   */
+  style?: CSSProperties
 }
 
 /**
@@ -161,8 +186,15 @@ export interface HoverCardTriggerProps {
  * Shows the card content on hover or focus.
  */
 const HoverCardTrigger = forwardRef<HTMLDivElement, HoverCardTriggerProps>(
-  ({ children, asChild = false, className }, _ref) => {
+  ({ children, asChild = false, className, style }, _ref) => {
     const { setOpen, triggerRef } = useHoverCard()
+
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.trigger
+    })
 
     const handleMouseEnter = () => setOpen(true)
     const handleMouseLeave = () => setOpen(false)
@@ -175,7 +207,8 @@ const HoverCardTrigger = forwardRef<HTMLDivElement, HoverCardTriggerProps>(
       onMouseLeave: handleMouseLeave,
       onFocus: handleFocus,
       onBlur: handleBlur,
-      className: clsx(styles.trigger, className)
+      className: processedClassName,
+      style: processedStyle
     }
 
     if (asChild && React.isValidElement(children)) {
@@ -205,6 +238,11 @@ export interface HoverCardContentProps {
    * Additional CSS class name for styling
    */
   className?: string
+  
+  /**
+   * Custom styles to apply to the content
+   */
+  style?: CSSProperties
   
   /**
    * The preferred side to position the card
@@ -257,6 +295,7 @@ const HoverCardContent = forwardRef<HTMLDivElement, HoverCardContentProps>(
   ({
     children,
     className,
+    style,
     side = 'bottom',
     align = 'center',
     sideOffset = 8,
@@ -271,6 +310,17 @@ const HoverCardContent = forwardRef<HTMLDivElement, HoverCardContentProps>(
     const contentRef = (ref as React.RefObject<HTMLDivElement>) || internalRef
     const [position, setPosition] = useState({ top: 0, left: 0 })
     const [actualSide, setActualSide] = useState(side)
+    
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.content,
+        brutalistShadow && styles.shadow,
+        styles[actualSide]
+      )
+    })
 
     // Handle mouse events on content
     const handleMouseEnter = () => setOpen(true)
@@ -370,19 +420,13 @@ const HoverCardContent = forwardRef<HTMLDivElement, HoverCardContentProps>(
     return (
       <div
         ref={contentRef}
-        className={clsx(
-          styles.content,
-          styles[actualSide],
-          {
-            [styles.withShadow]: brutalistShadow
-          },
-          className
-        )}
+        className={processedClassName}
         style={{
           position: 'fixed',
           top: `${position.top}px`,
           left: `${position.left}px`,
-          zIndex: 50
+          zIndex: 50,
+          ...processedStyle
         }}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}

@@ -3,8 +3,9 @@
  * @description A flexible typography component that supports multiple text variants, styling options, and semantic HTML elements. Provides consistent text styling across the application.
  */
 
-import React, { forwardRef, HTMLAttributes, ReactNode } from 'react'
+import React, { forwardRef, HTMLAttributes, ReactNode, CSSProperties } from 'react'
 import { clsx } from 'clsx'
+import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
 import styles from './Typography.module.css'
 
 /**
@@ -64,6 +65,11 @@ export interface TypographyProps extends HTMLAttributes<HTMLElement> {
    * @default false
    */
   asChild?: boolean
+
+  /**
+   * Custom styles to apply to the typography
+   */
+  style?: CSSProperties
 }
 
 const variantElementMap = {
@@ -94,61 +100,66 @@ export const Typography = forwardRef<HTMLElement, TypographyProps>(
     family,
     truncate = false,
     className,
+    style,
     children,
     asChild = false,
     ...props
   }, ref) => {
     const Component = asChild ? 'span' : variantElementMap[variant] as keyof JSX.IntrinsicElements
 
-    const classNames = clsx(
-      styles.typography,
-      styles[variant],
-      size && styles[`size-${size}`],
-      weight && styles[`weight-${weight}`],
-      align && styles[`align-${align}`],
-      transform && styles[`transform-${transform}`],
-      color && styles[`color-${color}`],
-      family && styles[`family-${family}`],
-      {
-        [styles.truncate]: truncate
-      },
-      className
-    )
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.typography,
+        styles[variant],
+        size && styles[`size-${size}`],
+        weight && styles[`weight-${weight}`],
+        align && styles[`align-${align}`],
+        transform && styles[`transform-${transform}`],
+        color && styles[`color-${color}`],
+        family && styles[`family-${family}`],
+        {
+          [styles.truncate]: truncate
+        }
+      )
+    })
 
     // Handle different component types manually to avoid type conflicts
     if (Component === 'h1') {
-      return <h1 ref={ref as React.ForwardedRef<HTMLHeadingElement>} className={classNames} {...props}>{children}</h1>
+      return <h1 ref={ref as React.ForwardedRef<HTMLHeadingElement>} className={processedClassName} style={processedStyle} {...props}>{children}</h1>
     }
     if (Component === 'h2') {
-      return <h2 ref={ref as React.ForwardedRef<HTMLHeadingElement>} className={classNames} {...props}>{children}</h2>
+      return <h2 ref={ref as React.ForwardedRef<HTMLHeadingElement>} className={processedClassName} style={processedStyle} {...props}>{children}</h2>
     }
     if (Component === 'h3') {
-      return <h3 ref={ref as React.ForwardedRef<HTMLHeadingElement>} className={classNames} {...props}>{children}</h3>
+      return <h3 ref={ref as React.ForwardedRef<HTMLHeadingElement>} className={processedClassName} style={processedStyle} {...props}>{children}</h3>
     }
     if (Component === 'h4') {
-      return <h4 ref={ref as React.ForwardedRef<HTMLHeadingElement>} className={classNames} {...props}>{children}</h4>
+      return <h4 ref={ref as React.ForwardedRef<HTMLHeadingElement>} className={processedClassName} style={processedStyle} {...props}>{children}</h4>
     }
     if (Component === 'h5') {
-      return <h5 ref={ref as React.ForwardedRef<HTMLHeadingElement>} className={classNames} {...props}>{children}</h5>
+      return <h5 ref={ref as React.ForwardedRef<HTMLHeadingElement>} className={processedClassName} style={processedStyle} {...props}>{children}</h5>
     }
     if (Component === 'h6') {
-      return <h6 ref={ref as React.ForwardedRef<HTMLHeadingElement>} className={classNames} {...props}>{children}</h6>
+      return <h6 ref={ref as React.ForwardedRef<HTMLHeadingElement>} className={processedClassName} style={processedStyle} {...props}>{children}</h6>
     }
     if (Component === 'blockquote') {
-      return <blockquote ref={ref as React.ForwardedRef<HTMLQuoteElement>} className={classNames} {...props}>{children}</blockquote>
+      return <blockquote ref={ref as React.ForwardedRef<HTMLQuoteElement>} className={processedClassName} style={processedStyle} {...props}>{children}</blockquote>
     }
     if (Component === 'code') {
-      return <code ref={ref as React.ForwardedRef<HTMLElement>} className={classNames} {...props}>{children}</code>
+      return <code ref={ref as React.ForwardedRef<HTMLElement>} className={processedClassName} style={processedStyle} {...props}>{children}</code>
     }
     if (Component === 'ul') {
-      return <ul ref={ref as React.ForwardedRef<HTMLUListElement>} className={classNames} {...props}>{children}</ul>
+      return <ul ref={ref as React.ForwardedRef<HTMLUListElement>} className={processedClassName} style={processedStyle} {...props}>{children}</ul>
     }
     if (Component === 'span') {
-      return <span ref={ref as React.ForwardedRef<HTMLSpanElement>} className={classNames} {...props}>{children}</span>
+      return <span ref={ref as React.ForwardedRef<HTMLSpanElement>} className={processedClassName} style={processedStyle} {...props}>{children}</span>
     }
     
     // Default to paragraph
-    return <p ref={ref as React.ForwardedRef<HTMLParagraphElement>} className={classNames} {...props}>{children}</p>
+    return <p ref={ref as React.ForwardedRef<HTMLParagraphElement>} className={processedClassName} style={processedStyle} {...props}>{children}</p>
   }
 )
 

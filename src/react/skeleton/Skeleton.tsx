@@ -3,8 +3,9 @@
  * @description A placeholder component used while content is loading. Provides a subtle animation to indicate loading state.
  */
 
-import React, { forwardRef, HTMLAttributes } from 'react'
+import React, { forwardRef, HTMLAttributes, CSSProperties } from 'react'
 import { clsx } from 'clsx'
+import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
 import styles from './Skeleton.module.css'
 
 export interface SkeletonProps extends HTMLAttributes<HTMLDivElement> {
@@ -22,6 +23,8 @@ export interface SkeletonProps extends HTMLAttributes<HTMLDivElement> {
   variant?: 'default' | 'rounded'
   /** Additional CSS classes */
   className?: string
+  /** Custom CSS styles (supports utility classes) */
+  style?: CSSProperties
 }
 
 export const Skeleton = forwardRef<HTMLDivElement, SkeletonProps>(
@@ -54,13 +57,17 @@ export const Skeleton = forwardRef<HTMLDivElement, SkeletonProps>(
       dimensionStyles.height = dimensionStyles.width
     }
 
-    const baseClasses = clsx(
-      styles.skeleton,
-      styles[shape],
-      styles[animation],
-      styles[variant],
-      className
-    )
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.skeleton,
+        styles[shape],
+        styles[animation],
+        styles[variant]
+      )
+    })
 
     // For text skeleton with multiple lines
     if (isText && lines > 1) {
@@ -84,7 +91,8 @@ export const Skeleton = forwardRef<HTMLDivElement, SkeletonProps>(
       return (
         <div
           ref={ref}
-          className={styles.textContainer}
+          className={clsx(styles.textContainer, processedClassName)}
+          style={processedStyle}
           role="status"
           aria-label="Loading content"
           {...props}
@@ -94,12 +102,14 @@ export const Skeleton = forwardRef<HTMLDivElement, SkeletonProps>(
       )
     }
 
-    // Single skeleton element
+    // Single skeleton element - merge processed style with dimension styles
+    const finalStyle = { ...dimensionStyles, ...processedStyle }
+
     return (
       <div
         ref={ref}
-        className={baseClasses}
-        style={dimensionStyles}
+        className={processedClassName}
+        style={finalStyle}
         role="status"
         aria-label="Loading content"
         aria-hidden="true"

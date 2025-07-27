@@ -3,9 +3,10 @@
  * @description A dropdown menu component triggered by user interaction. Features automatic positioning, keyboard navigation, and flexible content with support for icons and shortcuts.
  */
 
-import React, { useState, useRef, useEffect, useCallback, createContext, useContext, forwardRef, HTMLAttributes } from 'react'
+import React, { useState, useRef, useEffect, useCallback, createContext, useContext, forwardRef, HTMLAttributes, CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
 import { clsx } from 'clsx'
+import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
 import styles from './Dropdown.module.css'
 
 export type DropdownPosition = 
@@ -67,6 +68,11 @@ export interface DropdownProps {
    * Additional CSS class name for styling
    */
   className?: string
+  
+  /**
+   * Custom styles to apply to the dropdown
+   */
+  style?: CSSProperties
 }
 
 interface DropdownContextValue {
@@ -108,6 +114,7 @@ export const Dropdown: React.FC<DropdownProps> & {
   closeOnClickOutside = true,
   closeOnEscape = true,
   className,
+  style,
 }) => {
   const [open, setOpen] = useState(false)
   const [actualPosition, setActualPosition] = useState<DropdownPosition>(position)
@@ -264,7 +271,7 @@ export const Dropdown: React.FC<DropdownProps> & {
         document.removeEventListener('keydown', handleKeyDown)
       }
     }
-  }, [isOpen, calculatePosition, handleClickOutside, handleKeyDown])
+  }, [isOpen, calculatePosition, handleClickOutside, handleKeyDown, closeDropdown])
 
   // Clone trigger with ref and click handler
   const trigger = triggerElement && React.isValidElement(triggerElement) ? React.cloneElement(triggerElement, {
@@ -284,6 +291,16 @@ export const Dropdown: React.FC<DropdownProps> & {
     closeOnItemClick,
   }
 
+  // Process utility classes for the dropdown
+  const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+    className,
+    style,
+    componentClasses: clsx(
+      styles.dropdown,
+      styles[actualPosition.split('-')[0]]
+    )
+  })
+
   return (
     <>
       {trigger}
@@ -291,16 +308,13 @@ export const Dropdown: React.FC<DropdownProps> & {
         <DropdownContext.Provider value={contextValue}>
           <div
             ref={dropdownRef}
-            className={clsx(
-              styles.dropdown,
-              styles[actualPosition.split('-')[0]],
-              className
-            )}
+            className={processedClassName}
             style={{
               position: 'fixed',
               left: coords.x,
               top: coords.y,
               zIndex: 'var(--brutal-z-dropdown)',
+              ...processedStyle
             }}
             role="menu"
             aria-orientation="vertical"
@@ -318,10 +332,17 @@ export const Dropdown: React.FC<DropdownProps> & {
  * Container for dropdown menu items.
  * Must be a direct child of the Dropdown component.
  */
-export const DropdownMenu = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
-  ({ className, children, ...props }, ref) => {
+export const DropdownMenu = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement> & { style?: CSSProperties }>(
+  ({ className, style, children, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.menu
+    })
+
     return (
-      <div ref={ref} className={clsx(styles.menu, className)} {...props}>
+      <div ref={ref} className={processedClassName} style={processedStyle} {...props}>
         {children}
       </div>
     )
@@ -353,6 +374,11 @@ interface DropdownItemProps extends HTMLAttributes<HTMLDivElement> {
    * Keyboard shortcut to display on the right
    */
   shortcut?: string
+  
+  /**
+   * Custom styles to apply to the item
+   */
+  style?: CSSProperties
 }
 
 /**
@@ -360,7 +386,7 @@ interface DropdownItemProps extends HTMLAttributes<HTMLDivElement> {
  * Supports icons, shortcuts, and various states.
  */
 export const DropdownItem = forwardRef<HTMLDivElement, DropdownItemProps>(
-  ({ className, disabled, destructive, icon, shortcut, children, onClick, ...props }, ref) => {
+  ({ className, style, disabled, destructive, icon, shortcut, children, onClick, ...props }, ref) => {
     const context = useContext(DropdownContext)
 
     const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -372,17 +398,24 @@ export const DropdownItem = forwardRef<HTMLDivElement, DropdownItemProps>(
       }
     }
 
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.item,
+        {
+          [styles.disabled]: disabled,
+          [styles.destructive]: destructive,
+        }
+      )
+    })
+
     return (
       <div
         ref={ref}
-        className={clsx(
-          styles.item,
-          {
-            [styles.disabled]: disabled,
-            [styles.destructive]: destructive,
-          },
-          className
-        )}
+        className={processedClassName}
+        style={processedStyle}
         role="menuitem"
         tabIndex={disabled ? -1 : 0}
         onClick={handleClick}
@@ -399,12 +432,20 @@ export const DropdownItem = forwardRef<HTMLDivElement, DropdownItemProps>(
 /**
  * Visual separator between dropdown items or groups.
  */
-export const DropdownSeparator = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => {
+export const DropdownSeparator = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement> & { style?: CSSProperties }>(
+  ({ className, style, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.separator
+    })
+
     return (
       <div
         ref={ref}
-        className={clsx(styles.separator, className)}
+        className={processedClassName}
+        style={processedStyle}
         role="separator"
         {...props}
       />
@@ -416,12 +457,20 @@ export const DropdownSeparator = forwardRef<HTMLDivElement, HTMLAttributes<HTMLD
  * Label for grouping dropdown items.
  * Non-interactive and used for organizational purposes.
  */
-export const DropdownLabel = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
-  ({ className, children, ...props }, ref) => {
+export const DropdownLabel = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement> & { style?: CSSProperties }>(
+  ({ className, style, children, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.label
+    })
+
     return (
       <div
         ref={ref}
-        className={clsx(styles.label, className)}
+        className={processedClassName}
+        style={processedStyle}
         {...props}
       >
         {children}

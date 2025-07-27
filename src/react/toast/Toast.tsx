@@ -3,9 +3,10 @@
  * @description A notification system with support for different types, positioning, and actions. Provides both hook-based and imperative APIs for showing temporary messages to users.
  */
 
-import React, { useState, useEffect, createContext, useContext, useCallback } from 'react'
+import React, { useState, useEffect, createContext, useContext, useCallback, CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
 import { clsx } from 'clsx'
+import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
 import styles from './Toast.module.css'
 
 /**
@@ -116,12 +117,24 @@ export interface ToastProviderProps {
    * @default 5
    */
   maxToasts?: number
+  
+  /**
+   * Additional CSS classes to apply to the toast container
+   */
+  className?: string
+  
+  /**
+   * Custom styles to apply to the toast container
+   */
+  style?: CSSProperties
 }
 
 export const ToastProvider: React.FC<ToastProviderProps> = ({ 
   children, 
   position = 'bottom-right',
-  maxToasts = 5 
+  maxToasts = 5,
+  className,
+  style
 }) => {
   const [toasts, setToasts] = useState<ToastData[]>([])
 
@@ -146,7 +159,12 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({
     setToasts([])
   }, [])
 
-  const contextValue = { toasts, showToast, hideToast, hideAllToasts }
+  const contextValue = React.useMemo(() => ({ 
+    toasts, 
+    showToast, 
+    hideToast, 
+    hideAllToasts 
+  }), [toasts, showToast, hideToast, hideAllToasts])
 
   // Register the store for imperative API
   useEffect(() => {
@@ -159,17 +177,27 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({
   return (
     <ToastContext.Provider value={contextValue}>
       {children}
-      <ToastContainer position={position} />
+      <ToastContainer position={position} className={className} style={style} />
     </ToastContext.Provider>
   )
 }
 
 interface ToastContainerProps {
   position: ToastPosition
+  className?: string
+  style?: CSSProperties
 }
 
-const ToastContainer: React.FC<ToastContainerProps> = ({ position }) => {
+const ToastContainer: React.FC<ToastContainerProps> = ({ position, className, style }) => {
   const context = useContext(ToastContext)
+  
+  // Process utility classes - must be called before any conditional returns
+  const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+    className,
+    style,
+    componentClasses: clsx(styles.container, styles[position])
+  })
+  
   if (!context) return null
 
   const { toasts } = context
@@ -177,7 +205,7 @@ const ToastContainer: React.FC<ToastContainerProps> = ({ position }) => {
   if (toasts.length === 0) return null
 
   return createPortal(
-    <div className={clsx(styles.container, styles[position])}>
+    <div className={processedClassName} style={processedStyle}>
       {toasts.map(toast => (
         <ToastItem key={toast.id} {...toast} />
       ))}
@@ -186,7 +214,10 @@ const ToastContainer: React.FC<ToastContainerProps> = ({ position }) => {
   )
 }
 
-interface ToastItemProps extends ToastData {}
+interface ToastItemProps extends ToastData {
+  className?: string
+  style?: CSSProperties
+}
 
 const ToastItem: React.FC<ToastItemProps> = ({
   id,
@@ -195,7 +226,9 @@ const ToastItem: React.FC<ToastItemProps> = ({
   message,
   duration = 5000,
   dismissible = true,
-  action
+  action,
+  className,
+  style
 }) => {
   const context = useContext(ToastContext)
   const [isExiting, setIsExiting] = useState(false)
@@ -231,15 +264,23 @@ const ToastItem: React.FC<ToastItemProps> = ({
     }
   }
 
+  // Process utility classes
+  const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+    className,
+    style,
+    componentClasses: clsx(
+      styles.toast,
+      styles[type],
+      {
+        [styles.exiting]: isExiting
+      }
+    )
+  })
+
   return (
     <div
-      className={clsx(
-        styles.toast,
-        styles[type],
-        {
-          [styles.exiting]: isExiting
-        }
-      )}
+      className={processedClassName}
+      style={processedStyle}
       role="alert"
       aria-live="polite"
     >
@@ -297,28 +338,28 @@ export const registerToastStore = (store: ToastContextValue) => {
 export const toast = {
   info: (message: string, options?: Partial<Omit<ToastData, 'id' | 'type' | 'message'>>) => {
     if (!toastStore) {
-      console.warn('ToastProvider not found. Make sure to wrap your app with ToastProvider.')
+      // ToastProvider not found. Make sure to wrap your app with ToastProvider.
       return ''
     }
     return toastStore.showToast({ ...options, type: 'info', message })
   },
   success: (message: string, options?: Partial<Omit<ToastData, 'id' | 'type' | 'message'>>) => {
     if (!toastStore) {
-      console.warn('ToastProvider not found. Make sure to wrap your app with ToastProvider.')
+      // ToastProvider not found. Make sure to wrap your app with ToastProvider.
       return ''
     }
     return toastStore.showToast({ ...options, type: 'success', message })
   },
   warning: (message: string, options?: Partial<Omit<ToastData, 'id' | 'type' | 'message'>>) => {
     if (!toastStore) {
-      console.warn('ToastProvider not found. Make sure to wrap your app with ToastProvider.')
+      // ToastProvider not found. Make sure to wrap your app with ToastProvider.
       return ''
     }
     return toastStore.showToast({ ...options, type: 'warning', message })
   },
   error: (message: string, options?: Partial<Omit<ToastData, 'id' | 'type' | 'message'>>) => {
     if (!toastStore) {
-      console.warn('ToastProvider not found. Make sure to wrap your app with ToastProvider.')
+      // ToastProvider not found. Make sure to wrap your app with ToastProvider.
       return ''
     }
     return toastStore.showToast({ ...options, type: 'error', message })

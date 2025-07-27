@@ -3,8 +3,9 @@
  * @description A comprehensive sidebar navigation component with collapsible functionality, hierarchical menu structure, and multiple layout variants. Features responsive design and accessibility support.
  */
 
-import React, { forwardRef, HTMLAttributes, createContext, useContext } from 'react'
+import React, { forwardRef, HTMLAttributes, createContext, useContext, CSSProperties } from 'react'
 import { clsx } from 'clsx'
+import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
 import styles from './Sidebar.module.css'
 
 /**
@@ -44,6 +45,11 @@ export interface SidebarProps extends HTMLAttributes<HTMLDivElement> {
    * Additional CSS classes to apply to the sidebar
    */
   className?: string
+  
+  /**
+   * Custom inline styles (supports utility classes)
+   */
+  style?: CSSProperties
 }
 
 /**
@@ -163,6 +169,7 @@ export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
       side = 'left',
       variant = 'default',
       className,
+      style,
       children,
       ...props
     },
@@ -172,21 +179,28 @@ export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
       collapsed,
       collapsible,
     }
+    
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.sidebar,
+        styles[side],
+        styles[variant],
+        {
+          [styles.collapsed]: collapsed,
+          [styles.collapsible]: collapsible,
+        }
+      )
+    })
 
     return (
       <SidebarContext.Provider value={contextValue}>
         <div
           ref={ref}
-          className={clsx(
-            styles.sidebar,
-            styles[side],
-            styles[variant],
-            {
-              [styles.collapsed]: collapsed,
-              [styles.collapsible]: collapsible,
-            },
-            className
-          )}
+          className={processedClassName}
+          style={processedStyle}
           data-sidebar="sidebar"
           data-collapsed={collapsed}
           {...props}
@@ -199,11 +213,19 @@ export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
 )
 
 export const SidebarHeader = forwardRef<HTMLDivElement, SidebarHeaderProps>(
-  ({ className, children, ...props }, ref) => {
+  ({ className, style, children, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.header
+    })
+    
     return (
       <div
         ref={ref}
-        className={clsx(styles.header, className)}
+        className={processedClassName}
+        style={processedStyle}
         data-sidebar="header"
         {...props}
       >
@@ -214,11 +236,19 @@ export const SidebarHeader = forwardRef<HTMLDivElement, SidebarHeaderProps>(
 )
 
 export const SidebarContent = forwardRef<HTMLDivElement, SidebarContentProps>(
-  ({ className, children, ...props }, ref) => {
+  ({ className, style, children, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.content
+    })
+    
     return (
       <div
         ref={ref}
-        className={clsx(styles.content, className)}
+        className={processedClassName}
+        style={processedStyle}
         data-sidebar="content"
         {...props}
       >
@@ -229,11 +259,19 @@ export const SidebarContent = forwardRef<HTMLDivElement, SidebarContentProps>(
 )
 
 export const SidebarFooter = forwardRef<HTMLDivElement, SidebarFooterProps>(
-  ({ className, children, ...props }, ref) => {
+  ({ className, style, children, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.footer
+    })
+    
     return (
       <div
         ref={ref}
-        className={clsx(styles.footer, className)}
+        className={processedClassName}
+        style={processedStyle}
         data-sidebar="footer"
         {...props}
       >
@@ -244,11 +282,19 @@ export const SidebarFooter = forwardRef<HTMLDivElement, SidebarFooterProps>(
 )
 
 export const SidebarGroup = forwardRef<HTMLDivElement, SidebarGroupProps>(
-  ({ className, children, ...props }, ref) => {
+  ({ className, style, children, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.group
+    })
+    
     return (
       <div
         ref={ref}
-        className={clsx(styles.group, className)}
+        className={processedClassName}
+        style={processedStyle}
         data-sidebar="group"
         {...props}
       >
@@ -259,11 +305,19 @@ export const SidebarGroup = forwardRef<HTMLDivElement, SidebarGroupProps>(
 )
 
 export const SidebarGroupLabel = forwardRef<HTMLDivElement, SidebarGroupLabelProps>(
-  ({ className, children, ...props }, ref) => {
+  ({ className, style, children, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.groupLabel
+    })
+    
     return (
       <div
         ref={ref}
-        className={clsx(styles.groupLabel, className)}
+        className={processedClassName}
+        style={processedStyle}
         data-sidebar="group-label"
         {...props}
       >
@@ -274,11 +328,19 @@ export const SidebarGroupLabel = forwardRef<HTMLDivElement, SidebarGroupLabelPro
 )
 
 export const SidebarGroupContent = forwardRef<HTMLDivElement, SidebarGroupContentProps>(
-  ({ className, children, ...props }, ref) => {
+  ({ className, style, children, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.groupContent
+    })
+    
     return (
       <div
         ref={ref}
-        className={clsx(styles.groupContent, className)}
+        className={processedClassName}
+        style={processedStyle}
         data-sidebar="group-content"
         {...props}
       >
@@ -289,11 +351,19 @@ export const SidebarGroupContent = forwardRef<HTMLDivElement, SidebarGroupConten
 )
 
 export const SidebarMenu = forwardRef<HTMLUListElement, SidebarMenuProps>(
-  ({ className, children, ...props }, ref) => {
+  ({ className, style, children, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.menu
+    })
+    
     return (
       <ul
         ref={ref}
-        className={clsx(styles.menu, className)}
+        className={processedClassName}
+        style={processedStyle}
         data-sidebar="menu"
         {...props}
       >
@@ -304,11 +374,19 @@ export const SidebarMenu = forwardRef<HTMLUListElement, SidebarMenuProps>(
 )
 
 export const SidebarMenuItem = forwardRef<HTMLLIElement, SidebarMenuItemProps>(
-  ({ className, children, ...props }, ref) => {
+  ({ className, style, children, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.menuItem
+    })
+    
     return (
       <li
         ref={ref}
-        className={clsx(styles.menuItem, className)}
+        className={processedClassName}
+        style={processedStyle}
         data-sidebar="menu-item"
         {...props}
       >
@@ -319,20 +397,27 @@ export const SidebarMenuItem = forwardRef<HTMLLIElement, SidebarMenuItemProps>(
 )
 
 export const SidebarMenuButton = forwardRef<HTMLButtonElement, SidebarMenuButtonProps>(
-  ({ isActive = false, icon, className, children, ...props }, ref) => {
+  ({ isActive = false, icon, className, style, children, ...props }, ref) => {
     const context = useContext(SidebarContext)
+    
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.menuButton,
+        {
+          [styles.active]: isActive,
+          [styles.withIcon]: !!icon,
+        }
+      )
+    })
 
     return (
       <button
         ref={ref}
-        className={clsx(
-          styles.menuButton,
-          {
-            [styles.active]: isActive,
-            [styles.withIcon]: !!icon,
-          },
-          className
-        )}
+        className={processedClassName}
+        style={processedStyle}
         data-sidebar="menu-button"
         data-active={isActive}
         {...props}

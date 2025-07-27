@@ -3,8 +3,9 @@
  * @description A comprehensive table component with support for sorting, alignment, and various styling options. Includes compound components for building complex data tables with accessibility features.
  */
 
-import { forwardRef, HTMLAttributes, ThHTMLAttributes, TdHTMLAttributes } from 'react'
+import { forwardRef, HTMLAttributes, ThHTMLAttributes, TdHTMLAttributes, CSSProperties } from 'react'
 import { clsx } from 'clsx'
+import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
 import styles from './Table.module.css'
 
 /**
@@ -39,6 +40,11 @@ export interface TableProps extends HTMLAttributes<HTMLTableElement> {
    * Additional CSS classes to apply to the table
    */
   className?: string
+
+  /**
+   * Custom styles to apply to the table
+   */
+  style?: CSSProperties
 }
 
 /**
@@ -55,6 +61,11 @@ export interface TableHeadProps extends HTMLAttributes<HTMLTableSectionElement> 
    * Additional CSS classes to apply to the table head
    */
   className?: string
+
+  /**
+   * Custom styles to apply to the table head
+   */
+  style?: CSSProperties
 }
 
 /**
@@ -88,6 +99,11 @@ export interface TableHeaderProps extends ThHTMLAttributes<HTMLTableCellElement>
    * Additional CSS classes to apply to the header cell
    */
   className?: string
+
+  /**
+   * Custom styles to apply to the header cell
+   */
+  style?: CSSProperties
 }
 
 /**
@@ -110,6 +126,11 @@ export interface TableCellProps extends TdHTMLAttributes<HTMLTableCellElement> {
    * Additional CSS classes to apply to the cell
    */
   className?: string
+
+  /**
+   * Custom styles to apply to the cell
+   */
+  style?: CSSProperties
 }
 
 export const Table = forwardRef<HTMLTableElement, TableProps>(
@@ -120,25 +141,33 @@ export const Table = forwardRef<HTMLTableElement, TableProps>(
       hoverable = false,
       fullWidth = true,
       className,
+      style,
       children,
       ...props
     },
     ref
   ) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.table,
+        styles[variant],
+        styles[size],
+        {
+          [styles.hoverable]: hoverable,
+          [styles.fullWidth]: fullWidth,
+        }
+      )
+    })
+
     return (
       <div className={clsx(styles.tableWrapper, { [styles.fullWidth]: fullWidth })}>
         <table
           ref={ref}
-          className={clsx(
-            styles.table,
-            styles[variant],
-            styles[size],
-            {
-              [styles.hoverable]: hoverable,
-              [styles.fullWidth]: fullWidth,
-            },
-            className
-          )}
+          className={processedClassName}
+          style={processedStyle}
           {...props}
         >
           {children}
@@ -149,17 +178,24 @@ export const Table = forwardRef<HTMLTableElement, TableProps>(
 )
 
 export const TableHead = forwardRef<HTMLTableSectionElement, TableHeadProps>(
-  ({ sticky = false, className, children, ...props }, ref) => {
+  ({ sticky = false, className, style, children, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.thead,
+        {
+          [styles.sticky]: sticky,
+        }
+      )
+    })
+
     return (
       <thead
         ref={ref}
-        className={clsx(
-          styles.thead,
-          {
-            [styles.sticky]: sticky,
-          },
-          className
-        )}
+        className={processedClassName}
+        style={processedStyle}
         {...props}
       >
         {children}
@@ -168,20 +204,34 @@ export const TableHead = forwardRef<HTMLTableSectionElement, TableHeadProps>(
   }
 )
 
-export const TableBody = forwardRef<HTMLTableSectionElement, HTMLAttributes<HTMLTableSectionElement>>(
-  ({ className, children, ...props }, ref) => {
+export const TableBody = forwardRef<HTMLTableSectionElement, HTMLAttributes<HTMLTableSectionElement> & { style?: CSSProperties }>(
+  ({ className, style, children, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.tbody
+    })
+
     return (
-      <tbody ref={ref} className={clsx(styles.tbody, className)} {...props}>
+      <tbody ref={ref} className={processedClassName} style={processedStyle} {...props}>
         {children}
       </tbody>
     )
   }
 )
 
-export const TableRow = forwardRef<HTMLTableRowElement, HTMLAttributes<HTMLTableRowElement>>(
-  ({ className, children, ...props }, ref) => {
+export const TableRow = forwardRef<HTMLTableRowElement, HTMLAttributes<HTMLTableRowElement> & { style?: CSSProperties }>(
+  ({ className, style, children, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.tr
+    })
+
     return (
-      <tr ref={ref} className={clsx(styles.tr, className)} {...props}>
+      <tr ref={ref} className={processedClassName} style={processedStyle} {...props}>
         {children}
       </tr>
     )
@@ -196,6 +246,7 @@ export const TableHeader = forwardRef<HTMLTableCellElement, TableHeaderProps>(
       sortDirection = 'none',
       onSort,
       className,
+      style,
       children,
       ...props
     },
@@ -207,18 +258,25 @@ export const TableHeader = forwardRef<HTMLTableCellElement, TableHeaderProps>(
       }
     }
 
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.th,
+        styles[`align-${align}`],
+        {
+          [styles.sortable]: sortable,
+          [styles.sorted]: sortDirection !== 'none',
+        }
+      )
+    })
+
     return (
       <th
         ref={ref}
-        className={clsx(
-          styles.th,
-          styles[`align-${align}`],
-          {
-            [styles.sortable]: sortable,
-            [styles.sorted]: sortDirection !== 'none',
-          },
-          className
-        )}
+        className={processedClassName}
+        style={processedStyle}
         onClick={handleClick}
         role={sortable ? 'button' : undefined}
         tabIndex={sortable ? 0 : undefined}
@@ -247,18 +305,25 @@ export const TableHeader = forwardRef<HTMLTableCellElement, TableHeaderProps>(
 )
 
 export const TableCell = forwardRef<HTMLTableCellElement, TableCellProps>(
-  ({ align = 'left', numeric = false, className, children, ...props }, ref) => {
+  ({ align = 'left', numeric = false, className, style, children, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.td,
+        styles[`align-${align}`],
+        {
+          [styles.numeric]: numeric,
+        }
+      )
+    })
+
     return (
       <td
         ref={ref}
-        className={clsx(
-          styles.td,
-          styles[`align-${align}`],
-          {
-            [styles.numeric]: numeric,
-          },
-          className
-        )}
+        className={processedClassName}
+        style={processedStyle}
         {...props}
       >
         {children}

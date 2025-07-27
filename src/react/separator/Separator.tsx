@@ -5,6 +5,7 @@
 
 import React from 'react'
 import { clsx } from 'clsx'
+import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
 import styles from './Separator.module.css'
 
 /**
@@ -69,20 +70,26 @@ export const Separator: React.FC<SeparatorProps> = ({
 }) => {
   const isHorizontal = orientation === 'horizontal'
   
+  // Process utility classes
+  const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+    className,
+    style,
+    componentClasses: clsx(
+      styles.separator,
+      styles[orientation],
+      styles[thickness],
+      styles[variant],
+      {
+        [styles.withLabel]: label && isHorizontal,
+        [styles[`label-${labelPosition}`]]: label && isHorizontal,
+      }
+    )
+  })
+  
   return (
     <div
-      className={clsx(
-        styles.separator,
-        styles[orientation],
-        styles[thickness],
-        styles[variant],
-        {
-          [styles.withLabel]: label && isHorizontal,
-          [styles[`label-${labelPosition}`]]: label && isHorizontal,
-        },
-        className
-      )}
-      style={style}
+      className={processedClassName}
+      style={processedStyle}
       role="separator"
       aria-orientation={orientation}
       aria-label={ariaLabel}

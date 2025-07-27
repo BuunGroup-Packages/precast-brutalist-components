@@ -3,9 +3,10 @@
  * @description A modal dialog component for displaying content that requires user interaction. Supports accessibility features including focus trap and ESC key handling.
  */
 
-import React, { forwardRef, HTMLAttributes, useEffect, useRef, useCallback, useState, createContext, useContext } from 'react'
+import React, { forwardRef, HTMLAttributes, useEffect, useRef, useCallback, useState, createContext, useContext, CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
 import { clsx } from 'clsx'
+import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
 import styles from './Dialog.module.css'
 
 export interface DialogProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {
@@ -31,6 +32,8 @@ export interface DialogProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title
   initialFocus?: string
   /** Additional CSS classes */
   className?: string
+  /** Custom styles to apply to the dialog */
+  style?: CSSProperties
 }
 
 interface DialogContextValue {
@@ -53,6 +56,7 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(
       autoFocus = true,
       initialFocus,
       className,
+      style,
       children,
       ...props
     },
@@ -188,6 +192,21 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(
       close,
     }
 
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.dialog,
+        styles[size],
+        styles[position],
+        {
+          [styles.animate]: animate,
+          [styles.exiting]: isExiting,
+        }
+      )
+    })
+
     if (!open && !isExiting) return null
 
     return createPortal(
@@ -204,16 +223,8 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(
         >
           <div
             ref={setRefs}
-            className={clsx(
-              styles.dialog,
-              styles[size],
-              styles[position],
-              {
-                [styles.animate]: animate,
-                [styles.exiting]: isExiting,
-              },
-              className
-            )}
+            className={processedClassName}
+            style={processedStyle}
             role="dialog"
             aria-modal="true"
             tabIndex={-1}
@@ -229,40 +240,68 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(
 )
 
 // Dialog subcomponents
-export const DialogHeader = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
-  ({ className, children, ...props }, ref) => {
+export const DialogHeader = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement> & { style?: CSSProperties }>(
+  ({ className, style, children, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.header
+    })
+
     return (
-      <div ref={ref} className={clsx(styles.header, className)} {...props}>
+      <div ref={ref} className={processedClassName} style={processedStyle} {...props}>
         {children}
       </div>
     )
   }
 )
 
-export const DialogTitle = forwardRef<HTMLHeadingElement, HTMLAttributes<HTMLHeadingElement>>(
-  ({ className, children, ...props }, ref) => {
+export const DialogTitle = forwardRef<HTMLHeadingElement, HTMLAttributes<HTMLHeadingElement> & { style?: CSSProperties }>(
+  ({ className, style, children, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.title
+    })
+
     return (
-      <h2 ref={ref} className={clsx(styles.title, className)} {...props}>
+      <h2 ref={ref} className={processedClassName} style={processedStyle} {...props}>
         {children}
       </h2>
     )
   }
 )
 
-export const DialogBody = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
-  ({ className, children, ...props }, ref) => {
+export const DialogBody = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement> & { style?: CSSProperties }>(
+  ({ className, style, children, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.body
+    })
+
     return (
-      <div ref={ref} className={clsx(styles.body, className)} {...props}>
+      <div ref={ref} className={processedClassName} style={processedStyle} {...props}>
         {children}
       </div>
     )
   }
 )
 
-export const DialogFooter = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
-  ({ className, children, ...props }, ref) => {
+export const DialogFooter = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement> & { style?: CSSProperties }>(
+  ({ className, style, children, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.footer
+    })
+
     return (
-      <div ref={ref} className={clsx(styles.footer, className)} {...props}>
+      <div ref={ref} className={processedClassName} style={processedStyle} {...props}>
         {children}
       </div>
     )
@@ -271,16 +310,24 @@ export const DialogFooter = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivEle
 
 interface DialogCloseProps extends HTMLAttributes<HTMLButtonElement> {
   asChild?: boolean
+  style?: CSSProperties
 }
 
 export const DialogClose = forwardRef<HTMLButtonElement, DialogCloseProps>(
-  ({ className, children, asChild, onClick, ...props }, ref) => {
+  ({ className, style, children, asChild, onClick, ...props }, ref) => {
     const context = useContext(DialogContext)
 
     const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
       onClick?.(e)
       context?.close()
     }
+
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.close
+    })
 
     if (asChild && React.isValidElement(children)) {
       return React.cloneElement(children as React.ReactElement<React.HTMLAttributes<HTMLElement>>, {
@@ -291,7 +338,8 @@ export const DialogClose = forwardRef<HTMLButtonElement, DialogCloseProps>(
     return (
       <button
         ref={ref}
-        className={clsx(styles.close, className)}
+        className={processedClassName}
+        style={processedStyle}
         onClick={handleClick}
         aria-label="Close dialog"
         {...props}

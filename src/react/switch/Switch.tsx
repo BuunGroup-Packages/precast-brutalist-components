@@ -6,6 +6,7 @@
 import React, { forwardRef, InputHTMLAttributes, useState, useCallback } from 'react'
 import { clsx } from 'clsx'
 import styles from './Switch.module.css'
+import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
 
 export interface SwitchProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'size'> {
   size?: 'sm' | 'md' | 'lg'
@@ -20,6 +21,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
   (
     {
       className,
+      style,
       size = 'md',
       label,
       labelPosition = 'right',
@@ -55,6 +57,20 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
 
     const switchId = id || `switch-${Math.random().toString(36).substr(2, 9)}`
     const isDisabled = disabled || loading
+
+    // Process container utilities
+    const { className: containerClassName, style: containerStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.container,
+        styles[size],
+        {
+          [styles.disabled]: isDisabled,
+          [styles.labelLeft]: labelPosition === 'left',
+        }
+      )
+    })
 
     const switchElement = (
       <div className={styles.switchWrapper}>
@@ -95,15 +111,8 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
 
     return (
       <div 
-        className={clsx(
-          styles.container,
-          styles[size],
-          {
-            [styles.disabled]: isDisabled,
-            [styles.labelLeft]: labelPosition === 'left',
-          },
-          className
-        )}
+        className={containerClassName}
+        style={containerStyle}
       >
         {labelPosition === 'left' && labelElement}
         {switchElement}

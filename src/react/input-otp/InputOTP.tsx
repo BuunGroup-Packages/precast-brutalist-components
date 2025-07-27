@@ -3,8 +3,9 @@
  * @description A one-time password input component that provides an intuitive interface for entering verification codes. Features automatic focus management, paste support, and full keyboard navigation.
  */
 
-import { forwardRef, useRef, useState, useEffect, KeyboardEvent, ClipboardEvent } from 'react'
+import { forwardRef, useRef, useState, useEffect, KeyboardEvent, ClipboardEvent, CSSProperties } from 'react'
 import { clsx } from 'clsx'
+import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
 import styles from './InputOTP.module.css'
 
 /**
@@ -75,6 +76,11 @@ export interface InputOTPProps {
   className?: string
   
   /**
+   * Custom inline styles (supports utility classes)
+   */
+  style?: CSSProperties
+  
+  /**
    * Whether to apply the brutalist shadow effect to input fields
    * @default true
    */
@@ -95,6 +101,7 @@ export const InputOTP = forwardRef<HTMLDivElement, InputOTPProps>(
       type = 'text',
       placeholder = '•',
       className,
+      style,
       brutalistShadow = true,
     },
     ref
@@ -104,6 +111,21 @@ export const InputOTP = forwardRef<HTMLDivElement, InputOTPProps>(
       return [...arr, ...Array(length - arr.length).fill('')]
     })
     const inputRefs = useRef<(HTMLInputElement | null)[]>([])
+    
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.container,
+        styles[variant],
+        styles[size],
+        {
+          [styles.brutalistShadow]: brutalistShadow,
+          [styles.disabled]: disabled,
+        }
+      )
+    })
 
     useEffect(() => {
       const arr = value.split('').slice(0, length)
@@ -181,11 +203,8 @@ export const InputOTP = forwardRef<HTMLDivElement, InputOTPProps>(
     return (
       <div
         ref={ref}
-        className={clsx(
-          styles.container,
-          styles[size],
-          className
-        )}
+        className={processedClassName}
+        style={processedStyle}
       >
         {Array.from({ length }).map((_, index) => (
           <input

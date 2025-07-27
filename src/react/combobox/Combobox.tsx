@@ -3,9 +3,10 @@
  * @description A searchable dropdown component that combines a text input with a select menu. Supports keyboard navigation, search filtering, and customizable options.
  */
 
-import React, { createContext, useContext, useState, useRef, useEffect, useCallback } from 'react'
+import React, { createContext, useContext, useState, useRef, useEffect, useCallback, CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
 import clsx from 'clsx'
+import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
 import styles from './Combobox.module.css'
 
 /**
@@ -78,6 +79,11 @@ interface ComboboxProps {
    * Additional CSS class name for styling
    */
   className?: string
+  
+  /**
+   * Custom inline styles (supports utility classes)
+   */
+  style?: CSSProperties
   
   /**
    * Custom content for the combobox (overrides default rendering)
@@ -160,7 +166,8 @@ const Combobox = React.forwardRef<HTMLDivElement, ComboboxProps>(
     placeholder,
     emptyMessage,
     searchPlaceholder,
-    className, 
+    className,
+    style, 
     children, 
     size = 'md',
     variant = 'default',
@@ -173,6 +180,17 @@ const Combobox = React.forwardRef<HTMLDivElement, ComboboxProps>(
     
     const triggerRef = useRef<HTMLButtonElement>(null)
     const contentRef = useRef<HTMLDivElement>(null)
+    
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.combobox,
+        styles[`combobox--${size}`],
+        styles[`combobox--${variant}`]
+      )
+    })
 
     // Filter options based on search
     const filteredOptions = React.useMemo(() => {
@@ -279,12 +297,8 @@ const Combobox = React.forwardRef<HTMLDivElement, ComboboxProps>(
       <ComboboxContext.Provider value={contextValue}>
         <div 
           ref={ref}
-          className={clsx(
-            styles.combobox,
-            styles[`combobox--${size}`],
-            styles[`combobox--${variant}`],
-            className
-          )}
+          className={processedClassName}
+          style={processedStyle}
           onKeyDown={handleKeyDown}
           {...props}
         >
@@ -310,6 +324,11 @@ interface ComboboxTriggerProps {
   className?: string
   
   /**
+   * Custom inline styles (supports utility classes)
+   */
+  style?: CSSProperties
+  
+  /**
    * Placeholder text when no option is selected
    */
   placeholder?: string
@@ -325,11 +344,18 @@ interface ComboboxTriggerProps {
  * Displays the selected value or placeholder text.
  */
 const ComboboxTrigger = React.forwardRef<HTMLButtonElement, ComboboxTriggerProps>(
-  ({ className, placeholder: triggerPlaceholder, icon, ...props }, _ref) => {
+  ({ className, style, placeholder: triggerPlaceholder, icon, ...props }, _ref) => {
     const { isOpen, setIsOpen, selectedValue, options, triggerRef, placeholder: contextPlaceholder } = useCombobox()
     
     const selectedOption = options.find(option => option.value === selectedValue)
     const finalPlaceholder = triggerPlaceholder || contextPlaceholder || 'Select option...'
+    
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.trigger
+    })
     
     return (
       <button
@@ -338,7 +364,8 @@ const ComboboxTrigger = React.forwardRef<HTMLButtonElement, ComboboxTriggerProps
         role="combobox"
         aria-expanded={isOpen}
         aria-haspopup="listbox"
-        className={clsx(styles.trigger, className)}
+        className={processedClassName}
+        style={processedStyle}
         onClick={() => setIsOpen(!isOpen)}
         {...props}
       >

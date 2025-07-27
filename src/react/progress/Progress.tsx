@@ -6,6 +6,7 @@
 import { forwardRef, HTMLAttributes } from 'react'
 import { clsx } from 'clsx'
 import styles from './Progress.module.css'
+import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
 
 export interface ProgressProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onChange'> {
   /** Progress value (0-max for determinate, undefined for indeterminate) */
@@ -43,6 +44,7 @@ export const Progress = forwardRef<HTMLDivElement, ProgressProps>(
       indeterminate = false,
       color = 'accent',
       className,
+      style,
       ...props
     },
     ref
@@ -71,18 +73,22 @@ export const Progress = forwardRef<HTMLDivElement, ProgressProps>(
       }),
     }
 
-    const commonClasses = clsx(
-      styles.progress,
-      styles[type],
-      styles[variant],
-      styles[size],
-      styles[color],
-      {
-        [styles.indeterminate]: indeterminate,
-        [styles.withLabel]: showLabel,
-      },
-      className
-    )
+    // Process progress utilities
+    const { className: progressClassName, style: progressStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.progress,
+        styles[type],
+        styles[variant],
+        styles[size],
+        styles[color],
+        {
+          [styles.indeterminate]: indeterminate,
+          [styles.withLabel]: showLabel,
+        }
+      )
+    })
 
     // Accessibility props
     const progressRole = 'progressbar'
@@ -100,7 +106,8 @@ export const Progress = forwardRef<HTMLDivElement, ProgressProps>(
       return (
         <div
           ref={ref}
-          className={commonClasses}
+          className={progressClassName}
+          style={progressStyle}
           role={progressRole}
           aria-valuenow={ariaValueNow}
           aria-valuemin={ariaValueMin}
@@ -156,7 +163,8 @@ export const Progress = forwardRef<HTMLDivElement, ProgressProps>(
     return (
       <div
         ref={ref}
-        className={commonClasses}
+        className={progressClassName}
+        style={progressStyle}
         role={progressRole}
         aria-valuenow={ariaValueNow}
         aria-valuemin={ariaValueMin}

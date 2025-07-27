@@ -6,6 +6,7 @@
 import React, { forwardRef, HTMLAttributes } from 'react'
 import { clsx } from 'clsx'
 import styles from './Badge.module.css'
+import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
 
 export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
   /** Badge content */
@@ -38,6 +39,7 @@ export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
       dismissible = false,
       onDismiss,
       className,
+      style,
       onClick,
       clickable = false,
       ...props
@@ -81,21 +83,27 @@ export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
       </svg>
     )
 
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.badge,
+        styles[variant],
+        styles[color],
+        styles[size],
+        {
+          [styles.clickable]: isClickable,
+          [styles.dismissible]: isDismissible,
+          [styles.dot]: isDot,
+        }
+      )
+    })
+
     return (
       <span
         ref={ref}
-        className={clsx(
-          styles.badge,
-          styles[variant],
-          styles[color],
-          styles[size],
-          {
-            [styles.clickable]: isClickable,
-            [styles.dismissible]: isDismissible,
-            [styles.dot]: isDot,
-          },
-          className
-        )}
+        className={processedClassName}
+        style={processedStyle}
         onClick={isClickable ? handleClick : undefined}
         onKeyDown={isClickable ? handleKeyDown : undefined}
         role={isClickable ? 'button' : isDot ? 'status' : undefined}

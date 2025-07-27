@@ -7,6 +7,7 @@ import React, { forwardRef, SelectHTMLAttributes } from 'react'
 import { clsx } from 'clsx'
 import { CustomSelect } from './CustomSelect'
 import styles from './Select.module.css'
+import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
 
 export interface SelectOption {
   value: string
@@ -39,6 +40,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
   (
     {
       className,
+      style,
       variant = 'default',
       size = 'md',
       options = [],
@@ -54,6 +56,39 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
     },
     ref
   ) => {
+    // Process select utilities
+    const { className: selectClassName, style: selectStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.select,
+        styles[variant],
+        styles[size],
+        {
+          [styles.disabled]: disabled,
+          [styles.withShadow]: brutalistShadow && !disabled,
+          [styles.fullWidth]: fullWidth,
+          [styles.hasPlaceholder]: placeholder && !props.value && !props.defaultValue,
+        }
+      )
+    })
+
+    // Process wrapper utilities
+    const { className: wrapperClassName, style: wrapperStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.selectWrapper,
+        styles[variant],
+        styles[size],
+        {
+          [styles.fullWidth]: fullWidth,
+          [styles.disabled]: disabled,
+          [styles.withShadow]: brutalistShadow && !disabled,
+        }
+      )
+    })
+
     // Use custom dropdown by default for better styling
     if (useCustomDropdown) {
       // Convert JSX children to options array if options prop is empty
@@ -125,26 +160,18 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
           onBlur={props.onBlur ? () => props.onBlur?.({} as React.FocusEvent<HTMLSelectElement>) : undefined}
           onFocus={props.onFocus ? () => props.onFocus?.({} as React.FocusEvent<HTMLSelectElement>) : undefined}
           className={className}
+          style={style}
           name={props.name}
           id={props.id}
         />
       )
     }
+
     const selectElement = (
       <select
         ref={ref}
-        className={clsx(
-          styles.select,
-          styles[variant],
-          styles[size],
-          {
-            [styles.disabled]: disabled,
-            [styles.withShadow]: brutalistShadow && !disabled,
-            [styles.fullWidth]: fullWidth,
-            [styles.hasPlaceholder]: placeholder && !props.value && !props.defaultValue,
-          },
-          className
-        )}
+        className={selectClassName}
+        style={selectStyle}
         disabled={disabled}
         {...props}
       >
@@ -188,16 +215,8 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
     if (customArrow) {
       return (
         <div
-          className={clsx(
-            styles.selectWrapper,
-            styles[variant],
-            styles[size],
-            {
-              [styles.fullWidth]: fullWidth,
-              [styles.disabled]: disabled,
-              [styles.withShadow]: brutalistShadow && !disabled,
-            }
-          )}
+          className={wrapperClassName}
+          style={wrapperStyle}
         >
           {selectElement}
           <div className={styles.arrow}>

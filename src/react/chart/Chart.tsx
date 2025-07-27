@@ -3,8 +3,9 @@
  * @description A comprehensive chart container component that provides structure and styling for data visualizations. Includes compound components for headers, legends, and content areas.
  */
 
-import React, { forwardRef, createContext, useContext } from 'react'
+import React, { forwardRef, createContext, useContext, CSSProperties } from 'react'
 import clsx from 'clsx'
+import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
 import styles from './Chart.module.css'
 
 /**
@@ -51,6 +52,16 @@ interface ChartProps extends React.HTMLAttributes<HTMLDivElement> {
    * Fixed height for the chart (overrides aspectRatio)
    */
   height?: number | string
+  
+  /**
+   * Additional CSS class name for styling
+   */
+  className?: string
+  
+  /**
+   * Custom inline styles (supports utility classes)
+   */
+  style?: CSSProperties
 }
 
 interface ChartContextValue {
@@ -103,8 +114,21 @@ const Chart = forwardRef<HTMLDivElement, ChartProps>(
     style,
     ...props
   }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.chart,
+        styles[`chart-${size}`],
+        styles[`chart-${variant}`],
+        !showBorder && styles.noBorder,
+        !showShadow && styles.noShadow
+      )
+    })
+    
     const chartStyle: React.CSSProperties = {
-      ...style,
+      ...processedStyle,
       height: height,
       aspectRatio: !height ? aspectRatio : undefined
     }
@@ -113,14 +137,7 @@ const Chart = forwardRef<HTMLDivElement, ChartProps>(
       <ChartContext.Provider value={{ variant, size, showGrid }}>
         <div
           ref={ref}
-          className={clsx(
-            styles.chart,
-            styles[`chart-${size}`],
-            styles[`chart-${variant}`],
-            !showBorder && styles.noBorder,
-            !showShadow && styles.noShadow,
-            className
-          )}
+          className={processedClassName}
           style={chartStyle}
           data-variant={variant}
           data-size={size}
@@ -143,6 +160,16 @@ interface ChartHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
    * The header content (typically Chart.Title and Chart.Subtitle)
    */
   children?: React.ReactNode
+  
+  /**
+   * Additional CSS class name for styling
+   */
+  className?: string
+  
+  /**
+   * Custom inline styles (supports utility classes)
+   */
+  style?: CSSProperties
 }
 
 /**
@@ -150,11 +177,19 @@ interface ChartHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
  * Contains the chart title and optional subtitle.
  */
 const ChartHeader = forwardRef<HTMLDivElement, ChartHeaderProps>(
-  ({ children, className, ...props }, ref) => {
+  ({ children, className, style, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.chartHeader
+    })
+    
     return (
       <div
         ref={ref}
-        className={clsx(styles.chartHeader, className)}
+        className={processedClassName}
+        style={processedStyle}
         {...props}
       >
         {children}
@@ -171,6 +206,16 @@ interface ChartTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {
    * The title text for the chart
    */
   children?: React.ReactNode
+  
+  /**
+   * Additional CSS class name for styling
+   */
+  className?: string
+  
+  /**
+   * Custom inline styles (supports utility classes)
+   */
+  style?: CSSProperties
 }
 
 /**
@@ -178,11 +223,19 @@ interface ChartTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {
  * Renders as an h3 element with appropriate styling.
  */
 const ChartTitle = forwardRef<HTMLHeadingElement, ChartTitleProps>(
-  ({ children, className, ...props }, ref) => {
+  ({ children, className, style, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.chartTitle
+    })
+    
     return (
       <h3
         ref={ref}
-        className={clsx(styles.chartTitle, className)}
+        className={processedClassName}
+        style={processedStyle}
         {...props}
       >
         {children}
@@ -199,6 +252,16 @@ interface ChartSubtitleProps extends React.HTMLAttributes<HTMLParagraphElement> 
    * The subtitle text for the chart
    */
   children?: React.ReactNode
+  
+  /**
+   * Additional CSS class name for styling
+   */
+  className?: string
+  
+  /**
+   * Custom inline styles (supports utility classes)
+   */
+  style?: CSSProperties
 }
 
 /**
@@ -206,11 +269,19 @@ interface ChartSubtitleProps extends React.HTMLAttributes<HTMLParagraphElement> 
  * Provides additional context or time period information.
  */
 const ChartSubtitle = forwardRef<HTMLParagraphElement, ChartSubtitleProps>(
-  ({ children, className, ...props }, ref) => {
+  ({ children, className, style, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.chartSubtitle
+    })
+    
     return (
       <p
         ref={ref}
-        className={clsx(styles.chartSubtitle, className)}
+        className={processedClassName}
+        style={processedStyle}
         {...props}
       >
         {children}
@@ -227,6 +298,16 @@ interface ChartContentProps extends React.HTMLAttributes<HTMLDivElement> {
    * The chart visualization content (e.g., SVG, canvas, or third-party chart library)
    */
   children?: React.ReactNode
+  
+  /**
+   * Additional CSS class name for styling
+   */
+  className?: string
+  
+  /**
+   * Custom inline styles (supports utility classes)
+   */
+  style?: CSSProperties
 }
 
 /**
@@ -234,13 +315,21 @@ interface ChartContentProps extends React.HTMLAttributes<HTMLDivElement> {
  * Contains the actual chart visualization with optional grid background.
  */
 const ChartContent = forwardRef<HTMLDivElement, ChartContentProps>(
-  ({ children, className, ...props }, ref) => {
+  ({ children, className, style, ...props }, ref) => {
     const { showGrid } = useChart()
+    
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.chartContent
+    })
     
     return (
       <div
         ref={ref}
-        className={clsx(styles.chartContent, className)}
+        className={processedClassName}
+        style={processedStyle}
         {...props}
       >
         <div className={styles.chartWrapper}>
@@ -268,6 +357,16 @@ interface ChartLegendProps extends React.HTMLAttributes<HTMLDivElement> {
    * The legend items to display
    */
   children?: React.ReactNode
+  
+  /**
+   * Additional CSS class name for styling
+   */
+  className?: string
+  
+  /**
+   * Custom inline styles (supports utility classes)
+   */
+  style?: CSSProperties
 }
 
 /**
@@ -275,15 +374,22 @@ interface ChartLegendProps extends React.HTMLAttributes<HTMLDivElement> {
  * Displays color/pattern mappings for data series.
  */
 const ChartLegend = forwardRef<HTMLDivElement, ChartLegendProps>(
-  ({ position = 'bottom', children, className, ...props }, ref) => {
+  ({ position = 'bottom', children, className, style, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.chartLegend,
+        styles[`legend-${position}`]
+      )
+    })
+    
     return (
       <div
         ref={ref}
-        className={clsx(
-          styles.chartLegend,
-          styles[`legend-${position}`],
-          className
-        )}
+        className={processedClassName}
+        style={processedStyle}
         role="group"
         aria-label="Chart legend"
         {...props}
@@ -302,6 +408,16 @@ interface ChartFooterProps extends React.HTMLAttributes<HTMLDivElement> {
    * The footer content (typically source information or notes)
    */
   children?: React.ReactNode
+  
+  /**
+   * Additional CSS class name for styling
+   */
+  className?: string
+  
+  /**
+   * Custom inline styles (supports utility classes)
+   */
+  style?: CSSProperties
 }
 
 /**
@@ -309,11 +425,19 @@ interface ChartFooterProps extends React.HTMLAttributes<HTMLDivElement> {
  * Typically contains data source information or additional notes.
  */
 const ChartFooter = forwardRef<HTMLDivElement, ChartFooterProps>(
-  ({ children, className, ...props }, ref) => {
+  ({ children, className, style, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.chartFooter
+    })
+    
     return (
       <div
         ref={ref}
-        className={clsx(styles.chartFooter, className)}
+        className={processedClassName}
+        style={processedStyle}
         {...props}
       >
         {children}

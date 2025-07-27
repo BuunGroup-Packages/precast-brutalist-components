@@ -3,7 +3,9 @@
  * @description A line chart component for visualizing data trends over time. Features smooth curves, animated rendering, tooltips, and customizable styling with brutalist aesthetics.
  */
 
-import React from 'react'
+import React, { CSSProperties } from 'react'
+import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
+import { clsx } from 'clsx'
 import styles from './LineChart.module.css'
 import { Tooltip } from '../tooltip'
 
@@ -124,9 +126,9 @@ interface LineChartProps {
   className?: string
   
   /**
-   * Inline styles
+   * Inline styles (supports utility classes)
    */
-  style?: React.CSSProperties
+  style?: CSSProperties
 }
 
 /**
@@ -169,14 +171,21 @@ const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
     ...props 
   }, ref) => {
     
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.lineChart
+    })
+    
     if (!data || data.length === 0) {
       return (
         <div 
           ref={ref} 
-          className={`${styles.lineChart} ${styles.empty} ${className || ''}`}
+          className={clsx(processedClassName, styles.empty)}
           data-size={size}
           data-variant={variant}
-          style={style}
+          style={processedStyle}
           {...props}
         >
           <div className={styles.emptyState}>
@@ -238,13 +247,13 @@ const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
     return (
       <div 
         ref={ref} 
-        className={`${styles.lineChart} ${className || ''}`}
+        className={processedClassName}
         data-size={size}
         data-variant={variant}
         data-animated={animated}
         data-show-grid={showGrid}
         data-show-container={showContainer}
-        style={style}
+        style={processedStyle}
         {...props}
       >
         {/* Chart Header */}

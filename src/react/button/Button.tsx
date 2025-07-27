@@ -6,6 +6,7 @@
 import React, { forwardRef, ButtonHTMLAttributes } from 'react'
 import { clsx } from 'clsx'
 import styles from './Button.module.css'
+import { useUtilityStyles } from '../hooks/useUtilityClasses'
 
 /**
  * Props for the Button component
@@ -83,26 +84,34 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       brutalistShadow = true,
       glitch = false,
       disabled,
+      style,
       ...props
     },
     ref
   ) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useUtilityStyles(
+      className,
+      style,
+      clsx(
+        styles.button,
+        styles[variant],
+        styles[size],
+        {
+          [styles.fullWidth]: fullWidth,
+          [styles.loading]: loading,
+          [styles.withShadow]: brutalistShadow,
+          [styles.glitch]: glitch,
+          [styles.disabled]: disabled || loading,
+        }
+      )
+    )
+
     return (
       <button
         ref={ref}
-        className={clsx(
-          styles.button,
-          styles[variant],
-          styles[size],
-          {
-            [styles.fullWidth]: fullWidth,
-            [styles.loading]: loading,
-            [styles.withShadow]: brutalistShadow,
-            [styles.glitch]: glitch,
-            [styles.disabled]: disabled || loading,
-          },
-          className
-        )}
+        className={processedClassName}
+        style={processedStyle}
         disabled={disabled || loading}
         data-text={glitch ? children : undefined}
         {...props}

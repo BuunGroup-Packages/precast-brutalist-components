@@ -3,8 +3,9 @@
  * @description A flexible navigation component system that supports vertical and horizontal layouts with keyboard navigation and accessibility features. Includes list, item, link, and separator sub-components.
  */
 
-import React, { forwardRef, HTMLAttributes } from 'react'
+import React, { forwardRef, HTMLAttributes, CSSProperties } from 'react'
 import { clsx } from 'clsx'
+import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
 import styles from './Navigation.module.css'
 
 /**
@@ -27,6 +28,11 @@ export interface NavigationProps extends HTMLAttributes<HTMLElement> {
    * Additional CSS classes to apply to the navigation
    */
   className?: string
+  
+  /**
+   * Custom styles to apply to the navigation
+   */
+  style?: CSSProperties
 }
 
 /**
@@ -37,6 +43,11 @@ export interface NavigationListProps extends HTMLAttributes<HTMLUListElement> {
    * Additional CSS classes to apply to the navigation list
    */
   className?: string
+  
+  /**
+   * Custom styles to apply to the navigation list
+   */
+  style?: CSSProperties
 }
 
 /**
@@ -59,6 +70,11 @@ export interface NavigationItemProps extends HTMLAttributes<HTMLLIElement> {
    * Additional CSS classes to apply to the navigation item
    */
   className?: string
+  
+  /**
+   * Custom styles to apply to the navigation item
+   */
+  style?: CSSProperties
 }
 
 /**
@@ -91,6 +107,11 @@ export interface NavigationLinkProps extends HTMLAttributes<HTMLAnchorElement> {
    * Additional CSS classes to apply to the navigation link
    */
   className?: string
+  
+  /**
+   * Custom styles to apply to the navigation link
+   */
+  style?: CSSProperties
 }
 
 /**
@@ -101,6 +122,11 @@ export interface NavigationSeparatorProps extends HTMLAttributes<HTMLHRElement> 
    * Additional CSS classes to apply to the navigation separator
    */
   className?: string
+  
+  /**
+   * Custom styles to apply to the navigation separator
+   */
+  style?: CSSProperties
 }
 
 // Create compound component interface
@@ -112,18 +138,25 @@ interface NavigationComponent extends React.ForwardRefExoticComponent<Navigation
 }
 
 export const Navigation = forwardRef<HTMLElement, NavigationProps>(
-  ({ vertical = false, size = 'md', className, children, ...props }, ref) => {
+  ({ vertical = false, size = 'md', className, style, children, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.navigation,
+        {
+          [styles.vertical]: vertical,
+          [styles[size]]: size,
+        }
+      )
+    })
+
     return (
       <nav
         ref={ref}
-        className={clsx(
-          styles.navigation,
-          {
-            [styles.vertical]: vertical,
-            [styles[size]]: size,
-          },
-          className
-        )}
+        className={processedClassName}
+        style={processedStyle}
         {...props}
       >
         {children}
@@ -133,11 +166,19 @@ export const Navigation = forwardRef<HTMLElement, NavigationProps>(
 ) as NavigationComponent
 
 export const NavigationList = forwardRef<HTMLUListElement, NavigationListProps>(
-  ({ className, children, ...props }, ref) => {
+  ({ className, style, children, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.list
+    })
+
     return (
       <ul
         ref={ref}
-        className={clsx(styles.list, className)}
+        className={processedClassName}
+        style={processedStyle}
         {...props}
       >
         {children}
@@ -147,18 +188,25 @@ export const NavigationList = forwardRef<HTMLUListElement, NavigationListProps>(
 )
 
 export const NavigationItem = forwardRef<HTMLLIElement, NavigationItemProps>(
-  ({ isActive, disabled, className, children, ...props }, ref) => {
+  ({ isActive, disabled, className, style, children, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.item,
+        {
+          [styles.active]: isActive,
+          [styles.disabled]: disabled,
+        }
+      )
+    })
+
     return (
       <li
         ref={ref}
-        className={clsx(
-          styles.item,
-          {
-            [styles.active]: isActive,
-            [styles.disabled]: disabled,
-          },
-          className
-        )}
+        className={processedClassName}
+        style={processedStyle}
         {...props}
       >
         {children}
@@ -168,19 +216,26 @@ export const NavigationItem = forwardRef<HTMLLIElement, NavigationItemProps>(
 )
 
 export const NavigationLink = forwardRef<HTMLAnchorElement, NavigationLinkProps>(
-  ({ href, isActive, disabled, icon, className, children, ...props }, ref) => {
+  ({ href, isActive, disabled, icon, className, style, children, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.link,
+        {
+          [styles.active]: isActive,
+          [styles.disabled]: disabled,
+        }
+      )
+    })
+
     return (
       <a
         ref={ref}
         href={disabled ? undefined : href}
-        className={clsx(
-          styles.link,
-          {
-            [styles.active]: isActive,
-            [styles.disabled]: disabled,
-          },
-          className
-        )}
+        className={processedClassName}
+        style={processedStyle}
         aria-current={isActive ? 'page' : undefined}
         tabIndex={disabled ? -1 : undefined}
         {...props}
@@ -193,11 +248,19 @@ export const NavigationLink = forwardRef<HTMLAnchorElement, NavigationLinkProps>
 )
 
 export const NavigationSeparator = forwardRef<HTMLHRElement, NavigationSeparatorProps>(
-  ({ className, ...props }, ref) => {
+  ({ className, style, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.separator
+    })
+
     return (
       <hr
         ref={ref}
-        className={clsx(styles.separator, className)}
+        className={processedClassName}
+        style={processedStyle}
         {...props}
       />
     )

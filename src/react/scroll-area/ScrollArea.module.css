@@ -14,6 +14,8 @@
   width: 100%;
   height: 100%;
   border-radius: inherit;
+  /* Allow utilities to override defaults */
+  box-sizing: border-box;
 }
 
 /* Hide native scrollbars */

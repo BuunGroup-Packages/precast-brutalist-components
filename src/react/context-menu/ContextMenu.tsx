@@ -3,9 +3,10 @@
  * @description A context menu component that appears on right-click. Supports nested menus, keyboard navigation, and customizable items with icons and shortcuts.
  */
 
-import React, { createContext, useContext, useState, useRef, useEffect, useCallback, forwardRef } from 'react'
+import React, { createContext, useContext, useState, useRef, useEffect, useCallback, forwardRef, CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
 import clsx from 'clsx'
+import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
 import styles from './ContextMenu.module.css'
 
 // Context for managing context menu state
@@ -42,6 +43,11 @@ export interface ContextMenuProps {
    * Additional CSS class name for styling
    */
   className?: string
+  
+  /**
+   * Custom styles to apply to the context menu
+   */
+  style?: CSSProperties
   
   /**
    * The size variant of the context menu
@@ -82,7 +88,7 @@ export interface ContextMenuProps {
  * ```
  */
 const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
-  ({ children, className, size = 'md', variant = 'default', onOpenChange }, ref) => {
+  ({ children, className, style, size = 'md', variant = 'default', onOpenChange }, ref) => {
     const [isOpen, setIsOpen] = useState(false)
     const [position, setPosition] = useState<{ x: number; y: number } | null>(null)
 
@@ -142,9 +148,16 @@ const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
       variant
     }
 
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.root
+    })
+
     return (
       <ContextMenuContext.Provider value={contextValue}>
-        <div ref={ref} className={clsx(styles.root, className)}>
+        <div ref={ref} className={processedClassName} style={processedStyle}>
           {children}
         </div>
       </ContextMenuContext.Provider>
@@ -167,6 +180,11 @@ export interface ContextMenuTriggerProps {
   className?: string
   
   /**
+   * Custom styles to apply to the trigger
+   */
+  style?: CSSProperties
+  
+  /**
    * Whether to render as a child element instead of wrapping in a div
    * @default false
    */
@@ -178,8 +196,15 @@ export interface ContextMenuTriggerProps {
  * Activates the menu on right-click (context menu event).
  */
 const ContextMenuTrigger = forwardRef<HTMLDivElement, ContextMenuTriggerProps>(
-  ({ children, className, asChild = false }, ref) => {
+  ({ children, className, style, asChild = false }, ref) => {
     const { onOpen } = useContextMenu()
+    
+    // Process utility classes - must be called before any returns
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.trigger
+    })
 
     if (asChild && React.isValidElement(children)) {
       return React.cloneElement(children as React.ReactElement<{ onContextMenu?: (e: React.MouseEvent) => void; ref?: React.Ref<HTMLElement> }>, {
@@ -191,7 +216,8 @@ const ContextMenuTrigger = forwardRef<HTMLDivElement, ContextMenuTriggerProps>(
     return (
       <div 
         ref={ref}
-        className={clsx(styles.trigger, className)}
+        className={processedClassName}
+        style={processedStyle}
         onContextMenu={onOpen}
       >
         {children}
@@ -282,6 +308,13 @@ const ContextMenuContent = forwardRef<HTMLDivElement, ContextMenuContentProps>(
     const size = sizeProp || contextSize
     const variant = variantProp || contextVariant
     const contentRef = useRef<HTMLDivElement>(null)
+    
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style: rest.style,
+      componentClasses: styles.content
+    })
 
     // Define ref callback outside of conditionals
     const refCallback = useCallback((node: HTMLDivElement | null) => {
@@ -363,10 +396,7 @@ const ContextMenuContent = forwardRef<HTMLDivElement, ContextMenuContentProps>(
         />
         <div
           ref={refCallback}
-          className={clsx(
-            styles.content,
-            className
-          )}
+          className={processedClassName}
           data-size={size}
           data-variant={variant}
           style={{
@@ -374,7 +404,7 @@ const ContextMenuContent = forwardRef<HTMLDivElement, ContextMenuContentProps>(
             left: `${adjustedPosition.x}px`,
             top: `${adjustedPosition.y}px`,
             zIndex: 9999,
-            ...rest.style
+            ...processedStyle
           }}
           role="menu"
           aria-orientation="vertical"
@@ -403,6 +433,11 @@ export interface ContextMenuItemProps {
    * Additional CSS class name for styling
    */
   className?: string
+  
+  /**
+   * Custom styles to apply to the menu item
+   */
+  style?: CSSProperties
   
   /**
    * Whether the item is disabled and cannot be selected
@@ -453,12 +488,23 @@ export interface ContextMenuItemProps {
  * Supports icons, shortcuts, and various states.
  */
 const ContextMenuItem = forwardRef<HTMLDivElement, ContextMenuItemProps>(
-  ({ children, className, disabled = false, destructive = false, onSelect, closeOnSelect = true, icon, shortcut, checked, dotted }, ref) => {
+  ({ children, className, style, disabled = false, destructive = false, onSelect, closeOnSelect = true, icon, shortcut, checked, dotted }, ref) => {
     const { onClose } = useContextMenu()
     const [isHighlighted, setIsHighlighted] = useState(false)
+    
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.item,
+        disabled && styles.itemDisabled,
+        destructive && styles.itemDestructive
+      )
+    })
 
     const handleClick = (e: React.MouseEvent) => {
-      console.log('Context menu item clicked', { disabled, children })
+      // Context menu item clicked
       if (disabled) {
         e.preventDefault()
         return
@@ -484,12 +530,8 @@ const ContextMenuItem = forwardRef<HTMLDivElement, ContextMenuItemProps>(
     return (
       <div
         ref={ref}
-        className={clsx(
-          styles.item,
-          disabled && styles.itemDisabled,
-          destructive && styles.itemDestructive,
-          className
-        )}
+        className={processedClassName}
+        style={processedStyle}
         role="menuitem"
         tabIndex={disabled ? -1 : 0}
         aria-disabled={disabled}
@@ -523,17 +565,29 @@ export interface ContextMenuSeparatorProps {
    * Additional CSS class name for styling
    */
   className?: string
+  
+  /**
+   * Custom styles to apply to the separator
+   */
+  style?: CSSProperties
 }
 
 /**
  * Visual separator between menu items or groups.
  */
 const ContextMenuSeparator = forwardRef<HTMLDivElement, ContextMenuSeparatorProps>(
-  ({ className }, ref) => {
+  ({ className, style }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.separator
+    })
     return (
       <div
         ref={ref}
-        className={clsx(styles.separator, className)}
+        className={processedClassName}
+        style={processedStyle}
         role="separator"
         aria-orientation="horizontal"
       />
@@ -554,6 +608,11 @@ export interface ContextMenuLabelProps {
    * Additional CSS class name for styling
    */
   className?: string
+  
+  /**
+   * Custom styles to apply to the label
+   */
+  style?: CSSProperties
 }
 
 /**
@@ -561,11 +620,18 @@ export interface ContextMenuLabelProps {
  * Non-interactive and used for organizational purposes.
  */
 const ContextMenuLabel = forwardRef<HTMLDivElement, ContextMenuLabelProps>(
-  ({ children, className }, ref) => {
+  ({ children, className, style }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.label
+    })
     return (
       <div
         ref={ref}
-        className={clsx(styles.label, className)}
+        className={processedClassName}
+        style={processedStyle}
         role="presentation"
       >
         {children}
@@ -589,6 +655,11 @@ export interface ContextMenuSubProps {
   className?: string
   
   /**
+   * Custom styles to apply to the sub menu
+   */
+  style?: CSSProperties
+  
+  /**
    * Controlled open state
    */
   open?: boolean
@@ -604,13 +675,20 @@ export interface ContextMenuSubProps {
  * Manages the open state and positioning of submenu content.
  */
 const ContextMenuSub = forwardRef<HTMLDivElement, ContextMenuSubProps>(
-  ({ children, className, open: controlledOpen, onOpenChange }, ref) => {
+  ({ children, className, style, open: controlledOpen, onOpenChange }, ref) => {
     const parentContext = useContextMenu()
     const [internalOpen, setInternalOpen] = useState(false)
     const [position, setPosition] = useState<{ x: number; y: number } | null>(null)
     const isOpen = controlledOpen !== undefined ? controlledOpen : internalOpen
     const hoverTimeoutRef = useRef<NodeJS.Timeout>()
     const closeTimeoutRef = useRef<NodeJS.Timeout>()
+    
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: undefined // No default classes for Sub
+    })
 
     const handleOpenChange = (newOpen: boolean) => {
       if (controlledOpen === undefined) {
@@ -660,7 +738,8 @@ const ContextMenuSub = forwardRef<HTMLDivElement, ContextMenuSubProps>(
       }}>
         <div 
           ref={ref} 
-          className={className}
+          className={processedClassName}
+          style={processedStyle}
           onMouseEnter={() => {
             clearTimeout(closeTimeoutRef.current)
             clearTimeout(hoverTimeoutRef.current)
@@ -689,6 +768,11 @@ export interface ContextMenuSubTriggerProps {
   className?: string
   
   /**
+   * Custom styles to apply to the sub trigger
+   */
+  style?: CSSProperties
+  
+  /**
    * Whether the submenu trigger is disabled
    * @default false
    */
@@ -705,9 +789,20 @@ export interface ContextMenuSubTriggerProps {
  * Displays an arrow indicator to show it has a submenu.
  */
 const ContextMenuSubTrigger = forwardRef<HTMLDivElement, ContextMenuSubTriggerProps>(
-  ({ children, className, disabled = false, icon }, ref) => {
+  ({ children, className, style, disabled = false, icon }, ref) => {
     const { onOpen, onClose, isOpen } = useContextMenu()
     const [isHighlighted, setIsHighlighted] = useState(false)
+    
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.subTrigger,
+        disabled && styles.itemDisabled,
+        isOpen && styles.subTriggerOpen
+      )
+    })
 
     const handleMouseEnter = (e: React.MouseEvent) => {
       setIsHighlighted(true)
@@ -725,12 +820,8 @@ const ContextMenuSubTrigger = forwardRef<HTMLDivElement, ContextMenuSubTriggerPr
     return (
       <div
         ref={ref}
-        className={clsx(
-          styles.subTrigger,
-          disabled && styles.itemDisabled,
-          isOpen && styles.subTriggerOpen,
-          className
-        )}
+        className={processedClassName}
+        style={processedStyle}
         role="menuitem"
         aria-haspopup="menu"
         aria-expanded={isOpen}

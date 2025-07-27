@@ -3,8 +3,9 @@
  * @description A range slider component for selecting values from a continuous range. Supports keyboard navigation and ARIA attributes.
  */
 
-import React, { forwardRef, InputHTMLAttributes, useState, useEffect, useRef } from 'react'
+import React, { forwardRef, InputHTMLAttributes, useState, useEffect, useRef, CSSProperties } from 'react'
 import { clsx } from 'clsx'
+import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
 import styles from './Slider.module.css'
 
 export interface SliderProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size' | 'type'> {
@@ -17,6 +18,8 @@ export interface SliderProps extends Omit<InputHTMLAttributes<HTMLInputElement>,
   step?: number
   disabled?: boolean
   className?: string
+  /** Custom CSS styles (supports utility classes) */
+  style?: CSSProperties
   trackClassName?: string
   thumbClassName?: string
   valueClassName?: string
@@ -37,6 +40,7 @@ export const Slider = forwardRef<HTMLInputElement, SliderProps>(
       defaultValue = min,
       onChange,
       className,
+      style,
       trackClassName,
       thumbClassName,
       valueClassName,
@@ -109,19 +113,28 @@ export const Slider = forwardRef<HTMLInputElement, SliderProps>(
             height: '200px',
           }
 
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.container,
+        styles[size],
+        styles[orientation],
+        {
+          [styles.disabled]: disabled,
+          [styles.withValue]: showValue,
+        }
+      )
+    })
+
+    // Merge slider-specific styles with processed styles
+    const finalStyle = { ...sliderStyle, ...processedStyle } as React.CSSProperties
+
     return (
       <div
-        className={clsx(
-          styles.container,
-          styles[size],
-          styles[orientation],
-          {
-            [styles.disabled]: disabled,
-            [styles.withValue]: showValue,
-          },
-          className
-        )}
-        style={sliderStyle as React.CSSProperties}
+        className={processedClassName}
+        style={finalStyle}
       >
         <div className={clsx(styles.track, trackClassName)}>
           <div className={styles.progress} />

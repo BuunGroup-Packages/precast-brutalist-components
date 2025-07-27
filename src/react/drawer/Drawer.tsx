@@ -3,9 +3,10 @@
  * @description A slide-out panel component that appears from the edge of the screen. Perfect for navigation menus, forms, and supplementary content with full accessibility support.
  */
 
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react'
+import React, { createContext, useContext, useState, useEffect, useCallback, CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
 import clsx from 'clsx'
+import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
 import styles from './Drawer.module.css'
 
 /**
@@ -50,6 +51,11 @@ interface DrawerProps {
    * Additional CSS class name for styling
    */
   className?: string
+  
+  /**
+   * Custom styles to apply to the drawer
+   */
+  style?: CSSProperties
   
   /**
    * Drawer trigger and content components
@@ -103,7 +109,8 @@ const Drawer = React.forwardRef<HTMLDivElement, DrawerProps>(
     direction = 'right',
     size = 'md',
     variant = 'default',
-    className, 
+    className,
+    style, 
     children, 
     ...props 
   }, ref) => {
@@ -129,9 +136,16 @@ const Drawer = React.forwardRef<HTMLDivElement, DrawerProps>(
       variant
     }
 
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: ''
+    })
+
     return (
       <DrawerContext.Provider value={contextValue}>
-        <div ref={ref} className={className} {...props}>
+        <div ref={ref} className={processedClassName} style={processedStyle} {...props}>
           {children}
         </div>
       </DrawerContext.Provider>
@@ -154,6 +168,11 @@ interface DrawerTriggerProps {
   className?: string
   
   /**
+   * Custom styles to apply to the trigger
+   */
+  style?: CSSProperties
+  
+  /**
    * Whether to render as a child element instead of a button
    * @default false
    */
@@ -164,8 +183,15 @@ interface DrawerTriggerProps {
  * Button or element that opens the drawer when clicked.
  */
 const DrawerTrigger = React.forwardRef<HTMLButtonElement, DrawerTriggerProps>(
-  ({ children, className, asChild = false, ...props }, ref) => {
+  ({ children, className, style, asChild = false, ...props }, ref) => {
     const { setOpen } = useDrawer()
+
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.trigger
+    })
 
     if (asChild) {
       return React.cloneElement(children as React.ReactElement, {
@@ -177,7 +203,8 @@ const DrawerTrigger = React.forwardRef<HTMLButtonElement, DrawerTriggerProps>(
     return (
       <button
         ref={ref}
-        className={clsx(styles.trigger, className)}
+        className={processedClassName}
+        style={processedStyle}
         onClick={() => setOpen(true)}
         {...props}
       >
@@ -200,6 +227,11 @@ interface DrawerContentProps {
    * Additional CSS class name for styling
    */
   className?: string
+  
+  /**
+   * Custom styles to apply to the content
+   */
+  style?: CSSProperties
   
   /**
    * Whether to show a backdrop overlay
@@ -227,7 +259,8 @@ interface DrawerContentProps {
 const DrawerContent = React.forwardRef<HTMLDivElement, DrawerContentProps>(
   ({ 
     children, 
-    className, 
+    className,
+    style, 
     showOverlay = true,
     closeOnOverlayClick = true,
     closeOnEscape = true,
@@ -281,6 +314,18 @@ const DrawerContent = React.forwardRef<HTMLDivElement, DrawerContentProps>(
       }
     }, [open])
 
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.content,
+        styles[`content--${direction}`],
+        styles[`content--${size}`],
+        styles[`content--${variant}`]
+      )
+    })
+
     if (!open) return null
 
     const content = (
@@ -294,13 +339,8 @@ const DrawerContent = React.forwardRef<HTMLDivElement, DrawerContentProps>(
         )}
         <div
           ref={ref}
-          className={clsx(
-            styles.content,
-            styles[`content--${direction}`],
-            styles[`content--${size}`],
-            styles[`content--${variant}`],
-            className
-          )}
+          className={processedClassName}
+          style={processedStyle}
           role="dialog"
           aria-modal="true"
           data-drawer-content
@@ -329,6 +369,11 @@ interface DrawerHeaderProps {
    * Additional CSS class name for styling
    */
   className?: string
+  
+  /**
+   * Custom styles to apply to the header
+   */
+  style?: CSSProperties
 }
 
 /**
@@ -336,11 +381,19 @@ interface DrawerHeaderProps {
  * Typically contains the title and close button.
  */
 const DrawerHeader = React.forwardRef<HTMLDivElement, DrawerHeaderProps>(
-  ({ children, className, ...props }, ref) => {
+  ({ children, className, style, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.header
+    })
+
     return (
       <div
         ref={ref}
-        className={clsx(styles.header, className)}
+        className={processedClassName}
+        style={processedStyle}
         {...props}
       >
         {children}
@@ -362,6 +415,11 @@ interface DrawerTitleProps {
    * Additional CSS class name for styling
    */
   className?: string
+  
+  /**
+   * Custom styles to apply to the title
+   */
+  style?: CSSProperties
 }
 
 /**
@@ -369,11 +427,19 @@ interface DrawerTitleProps {
  * Renders as an h2 element.
  */
 const DrawerTitle = React.forwardRef<HTMLHeadingElement, DrawerTitleProps>(
-  ({ children, className, ...props }, ref) => {
+  ({ children, className, style, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.title
+    })
+
     return (
       <h2
         ref={ref}
-        className={clsx(styles.title, className)}
+        className={processedClassName}
+        style={processedStyle}
         {...props}
       >
         {children}
@@ -395,6 +461,11 @@ interface DrawerDescriptionProps {
    * Additional CSS class name for styling
    */
   className?: string
+  
+  /**
+   * Custom styles to apply to the description
+   */
+  style?: CSSProperties
 }
 
 /**
@@ -402,11 +473,19 @@ interface DrawerDescriptionProps {
  * Provides additional context below the title.
  */
 const DrawerDescription = React.forwardRef<HTMLParagraphElement, DrawerDescriptionProps>(
-  ({ children, className, ...props }, ref) => {
+  ({ children, className, style, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.description
+    })
+
     return (
       <p
         ref={ref}
-        className={clsx(styles.description, className)}
+        className={processedClassName}
+        style={processedStyle}
         {...props}
       >
         {children}
@@ -428,6 +507,11 @@ interface DrawerBodyProps {
    * Additional CSS class name for styling
    */
   className?: string
+  
+  /**
+   * Custom styles to apply to the body
+   */
+  style?: CSSProperties
 }
 
 /**
@@ -435,11 +519,19 @@ interface DrawerBodyProps {
  * Scrollable when content exceeds the drawer height.
  */
 const DrawerBody = React.forwardRef<HTMLDivElement, DrawerBodyProps>(
-  ({ children, className, ...props }, ref) => {
+  ({ children, className, style, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.body
+    })
+
     return (
       <div
         ref={ref}
-        className={clsx(styles.body, className)}
+        className={processedClassName}
+        style={processedStyle}
         {...props}
       >
         {children}
@@ -461,6 +553,11 @@ interface DrawerFooterProps {
    * Additional CSS class name for styling
    */
   className?: string
+  
+  /**
+   * Custom styles to apply to the footer
+   */
+  style?: CSSProperties
 }
 
 /**
@@ -468,11 +565,19 @@ interface DrawerFooterProps {
  * Typically contains action buttons.
  */
 const DrawerFooter = React.forwardRef<HTMLDivElement, DrawerFooterProps>(
-  ({ children, className, ...props }, ref) => {
+  ({ children, className, style, ...props }, ref) => {
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.footer
+    })
+
     return (
       <div
         ref={ref}
-        className={clsx(styles.footer, className)}
+        className={processedClassName}
+        style={processedStyle}
         {...props}
       >
         {children}
@@ -496,6 +601,11 @@ interface DrawerCloseProps {
   className?: string
   
   /**
+   * Custom styles to apply to the close button
+   */
+  style?: CSSProperties
+  
+  /**
    * Whether to render as a child element instead of a button
    * @default false
    */
@@ -507,8 +617,15 @@ interface DrawerCloseProps {
  * Typically placed in the drawer header.
  */
 const DrawerClose = React.forwardRef<HTMLButtonElement, DrawerCloseProps>(
-  ({ children, className, asChild = false, ...props }, ref) => {
+  ({ children, className, style, asChild = false, ...props }, ref) => {
     const { setOpen } = useDrawer()
+
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.close
+    })
 
     if (asChild) {
       return React.cloneElement(children as React.ReactElement, {
@@ -520,7 +637,8 @@ const DrawerClose = React.forwardRef<HTMLButtonElement, DrawerCloseProps>(
     return (
       <button
         ref={ref}
-        className={clsx(styles.close, className)}
+        className={processedClassName}
+        style={processedStyle}
         onClick={() => setOpen(false)}
         aria-label="Close drawer"
         {...props}

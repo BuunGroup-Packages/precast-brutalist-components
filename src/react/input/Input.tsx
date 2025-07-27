@@ -6,6 +6,7 @@
 import React, { forwardRef, InputHTMLAttributes } from 'react'
 import { clsx } from 'clsx'
 import styles from './Input.module.css'
+import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
 
 /**
  * Props for the Input component
@@ -65,6 +66,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
   (
     {
       className,
+      style,
       variant = 'default',
       size = 'md',
       leftIcon,
@@ -78,23 +80,47 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     },
     ref
   ) => {
+    // Process input utilities
+    const { className: inputClassName, style: inputStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.input,
+        styles[variant],
+        styles[size],
+        {
+          [styles.withLeftIcon]: leftIcon,
+          [styles.withRightIcon]: rightIcon,
+          [styles.disabled]: disabled,
+          [styles.readOnly]: readOnly,
+          [styles.withShadow]: brutalistShadow && !disabled && !readOnly,
+        }
+      )
+    })
+
+    // Process wrapper utilities (will only be used if icons are present)
+    const { className: wrapperClassName, style: wrapperStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.inputWrapper,
+        styles[variant],
+        styles[size],
+        {
+          [styles.fullWidth]: fullWidth,
+          [styles.disabled]: disabled,
+          [styles.readOnly]: readOnly,
+          [styles.withShadow]: brutalistShadow && !disabled && !readOnly,
+        }
+      )
+    })
+
     const inputElement = (
       <input
         ref={ref}
         type={type}
-        className={clsx(
-          styles.input,
-          styles[variant],
-          styles[size],
-          {
-            [styles.withLeftIcon]: leftIcon,
-            [styles.withRightIcon]: rightIcon,
-            [styles.disabled]: disabled,
-            [styles.readOnly]: readOnly,
-            [styles.withShadow]: brutalistShadow && !disabled && !readOnly,
-          },
-          className
-        )}
+        className={inputClassName}
+        style={inputStyle}
         disabled={disabled}
         readOnly={readOnly}
         {...props}
@@ -104,17 +130,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     if (leftIcon || rightIcon) {
       return (
         <div
-          className={clsx(
-            styles.inputWrapper,
-            styles[variant],
-            styles[size],
-            {
-              [styles.fullWidth]: fullWidth,
-              [styles.disabled]: disabled,
-              [styles.readOnly]: readOnly,
-              [styles.withShadow]: brutalistShadow && !disabled && !readOnly,
-            }
-          )}
+          className={wrapperClassName}
+          style={wrapperStyle}
         >
           {leftIcon && (
             <span className={clsx(styles.icon, styles.leftIcon)}>{leftIcon}</span>

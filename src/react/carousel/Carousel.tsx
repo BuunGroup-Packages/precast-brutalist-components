@@ -3,8 +3,9 @@
  * @description A fully-featured carousel component with support for touch gestures, keyboard navigation, and auto-play. Includes compound components for flexible composition.
  */
 
-import React, { createContext, useContext, useState, useEffect, useCallback, useRef, forwardRef } from 'react'
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef, forwardRef, CSSProperties } from 'react'
 import clsx from 'clsx'
+import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
 import styles from './Carousel.module.css'
 
 /**
@@ -62,6 +63,16 @@ interface CarouselProps extends React.HTMLAttributes<HTMLDivElement> {
    * @default 'default'
    */
   variant?: 'default' | 'brutal' | 'outline'
+  
+  /**
+   * Additional CSS class name for styling
+   */
+  className?: string
+  
+  /**
+   * Custom inline styles (supports utility classes)
+   */
+  style?: CSSProperties
 }
 
 interface CarouselContextValue {
@@ -153,6 +164,17 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
       }
     }, [autoPlay, autoPlayInterval, currentIndex, setCurrentIndex, totalItems])
 
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.carousel,
+        styles[`carousel-${size}`],
+        styles[`carousel-${variant}`]
+      )
+    })
+
     return (
       <CarouselContext.Provider
         value={{
@@ -170,13 +192,8 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
       >
         <div
           ref={ref}
-          className={clsx(
-            styles.carousel,
-            styles[`carousel-${size}`],
-            styles[`carousel-${variant}`],
-            className
-          )}
-          style={style}
+          className={processedClassName}
+          style={processedStyle}
           data-orientation={orientation}
           data-size={size}
           data-variant={variant}

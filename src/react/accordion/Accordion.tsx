@@ -3,8 +3,9 @@
  * @description A collapsible content component that allows users to toggle the visibility of sections. Supports single and multiple selection modes with smooth animations and full keyboard navigation.
  */
 
-import { createContext, forwardRef, HTMLAttributes, useContext, useState, useId, ReactNode } from 'react'
+import { createContext, forwardRef, HTMLAttributes, useContext, useState, useId, ReactNode, CSSProperties } from 'react'
 import { clsx } from 'clsx'
+import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
 import styles from './Accordion.module.css'
 
 /**
@@ -55,6 +56,11 @@ export interface AccordionProps extends HTMLAttributes<HTMLDivElement> {
    * @default false
    */
   disabled?: boolean
+
+  /**
+   * Custom CSS styles (supports utility classes)
+   */
+  style?: CSSProperties
 }
 
 /**
@@ -71,6 +77,11 @@ export interface AccordionItemProps extends HTMLAttributes<HTMLDivElement> {
    * @default false
    */
   disabled?: boolean
+
+  /**
+   * Custom CSS styles (supports utility classes)
+   */
+  style?: CSSProperties
 }
 
 /**
@@ -87,6 +98,11 @@ export interface AccordionTriggerProps extends HTMLAttributes<HTMLButtonElement>
    * @default false
    */
   hideIcon?: boolean
+
+  /**
+   * Custom CSS styles (supports utility classes)
+   */
+  style?: CSSProperties
 }
 
 /**
@@ -97,6 +113,11 @@ export interface AccordionContentProps extends HTMLAttributes<HTMLDivElement> {
    * The content to display when the accordion item is expanded
    */
   children: ReactNode
+
+  /**
+   * Custom CSS styles (supports utility classes)
+   */
+  style?: CSSProperties
 }
 
 // Context for accordion state
@@ -129,6 +150,7 @@ const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
     {
       children,
       className,
+      style,
       type = 'single',
       collapsible = false,
       defaultValue,
@@ -157,6 +179,20 @@ const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
       onValueChange?.(newValue)
     }
 
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.accordion,
+        styles[size],
+        styles[variant],
+        {
+          [styles.disabled]: disabled,
+        }
+      )
+    })
+
     return (
       <AccordionContext.Provider
         value={{
@@ -171,15 +207,8 @@ const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
       >
         <div
           ref={ref}
-          className={clsx(
-            styles.accordion,
-            styles[size],
-            styles[variant],
-            {
-              [styles.disabled]: disabled,
-            },
-            className
-          )}
+          className={processedClassName}
+          style={processedStyle}
           {...props}
         >
           {children}
@@ -190,7 +219,7 @@ const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
 )
 
 const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(
-  ({ children, className, value, disabled: itemDisabled = false, ...props }, ref) => {
+  ({ children, className, style, value, disabled: itemDisabled = false, ...props }, ref) => {
     const context = useContext(AccordionContext)
     if (!context) {
       throw new Error('AccordionItem must be used within an Accordion')
@@ -224,6 +253,19 @@ const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(
       }
     }
 
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.item,
+        {
+          [styles.open]: isOpen,
+          [styles.disabled]: disabled,
+        }
+      )
+    })
+
     return (
       <AccordionItemContext.Provider
         value={{
@@ -237,14 +279,8 @@ const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(
       >
         <div
           ref={ref}
-          className={clsx(
-            styles.item,
-            {
-              [styles.open]: isOpen,
-              [styles.disabled]: disabled,
-            },
-            className
-          )}
+          className={processedClassName}
+          style={processedStyle}
           {...props}
         >
           {children}
@@ -255,7 +291,7 @@ const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(
 )
 
 const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
-  ({ children, className, icon, hideIcon = false, onClick, ...props }, ref) => {
+  ({ children, className, style, icon, hideIcon = false, onClick, ...props }, ref) => {
     const itemContext = useContext(AccordionItemContext)
     const accordionContext = useContext(AccordionContext)
     
@@ -270,19 +306,26 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
       onClick?.(event)
     }
 
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.trigger,
+        {
+          [styles.open]: isOpen,
+          [styles.disabled]: disabled,
+        }
+      )
+    })
+
     return (
       <button
         ref={ref}
         id={triggerId}
         type="button"
-        className={clsx(
-          styles.trigger,
-          {
-            [styles.open]: isOpen,
-            [styles.disabled]: disabled,
-          },
-          className
-        )}
+        className={processedClassName}
+        style={processedStyle}
         onClick={handleClick}
         disabled={disabled}
         aria-expanded={isOpen}
@@ -305,7 +348,7 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
 )
 
 const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
-  ({ children, className, ...props }, ref) => {
+  ({ children, className, style, ...props }, ref) => {
     const itemContext = useContext(AccordionItemContext)
     
     if (!itemContext) {
@@ -314,19 +357,26 @@ const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
 
     const { isOpen, contentId, triggerId } = itemContext
 
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.content,
+        {
+          [styles.open]: isOpen,
+        }
+      )
+    })
+
     return (
       <div
         ref={ref}
         id={contentId}
         role="region"
         aria-labelledby={triggerId}
-        className={clsx(
-          styles.content,
-          {
-            [styles.open]: isOpen,
-          },
-          className
-        )}
+        className={processedClassName}
+        style={processedStyle}
         {...props}
       >
         <div className={styles.contentInner}>

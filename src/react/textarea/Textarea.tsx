@@ -6,6 +6,7 @@
 import React, { forwardRef, TextareaHTMLAttributes, useEffect, useRef, useState, useCallback } from 'react'
 import { clsx } from 'clsx'
 import styles from './Textarea.module.css'
+import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
 
 export interface TextareaProps extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'size'> {
   variant?: 'default' | 'error' | 'success'
@@ -26,6 +27,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
   (
     {
       className,
+      style,
       variant = 'default',
       size = 'md',
       autoResize = false,
@@ -144,31 +146,45 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       maxWidth: getWidthValue(maxWidth),
     }
 
+    // Process wrapper utilities
+    const { className: wrapperClassName, style: wrapperStyleProcessed } = useResponsiveUtilities({
+      className: '',
+      style: { ...wrapperStyle, ...style },
+      componentClasses: clsx(
+        styles.wrapper,
+        {
+          [styles.fullWidth]: fullWidth,
+        }
+      )
+    })
+
+    // Process textarea utilities
+    const { className: textareaClassName, style: textareaStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.textarea,
+        styles[variant],
+        styles[size],
+        {
+          [styles.disabled]: disabled,
+          [styles.readOnly]: readOnly,
+          [styles.withShadow]: brutalistShadow && !disabled && !readOnly,
+          [styles.autoResize]: autoResize,
+          [styles.overLimit]: isOverLimit,
+        }
+      )
+    })
+
     return (
       <div
-        className={clsx(
-          styles.wrapper,
-          {
-            [styles.fullWidth]: fullWidth,
-          }
-        )}
-        style={wrapperStyle}
+        className={wrapperClassName}
+        style={wrapperStyleProcessed}
       >
         <textarea
           ref={setRefs}
-          className={clsx(
-            styles.textarea,
-            styles[variant],
-            styles[size],
-            {
-              [styles.disabled]: disabled,
-              [styles.readOnly]: readOnly,
-              [styles.withShadow]: brutalistShadow && !disabled && !readOnly,
-              [styles.autoResize]: autoResize,
-              [styles.overLimit]: isOverLimit,
-            },
-            className
-          )}
+          className={textareaClassName}
+          style={textareaStyle}
           disabled={disabled}
           readOnly={readOnly}
           value={currentValue}

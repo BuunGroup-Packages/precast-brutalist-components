@@ -5,6 +5,7 @@
 
 import React, { forwardRef, useRef, useState, useEffect, useCallback } from 'react'
 import { clsx } from 'clsx'
+import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
 import styles from './ScrollArea.module.css'
 
 export interface ScrollAreaProps {
@@ -108,6 +109,25 @@ export const ScrollArea = forwardRef<HTMLDivElement, ScrollAreaProps>(
     const [horizontalThumbWidth, setHorizontalThumbWidth] = useState(0)
     const [verticalThumbTop, setVerticalThumbTop] = useState(0)
     const [horizontalThumbLeft, setHorizontalThumbLeft] = useState(0)
+    
+    // Process utility classes for the container
+    const containerClasses = clsx(
+      styles.scrollArea,
+      styles[variant],
+      styles[`size-${scrollbarSize}`],
+      {
+        [styles.showBorder]: showBorder,
+        [styles.autoHide]: autoHide,
+        [styles.isScrolling]: isScrolling,
+      }
+    )
+    
+    // Process utility classes for the viewport (content area)
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: styles.viewport
+    })
     
     // Use useEffect to update external ref
     useEffect(() => {
@@ -252,25 +272,16 @@ export const ScrollArea = forwardRef<HTMLDivElement, ScrollAreaProps>(
     
     return (
       <div
-        className={clsx(
-          styles.scrollArea,
-          styles[variant],
-          styles[`size-${scrollbarSize}`],
-          {
-            [styles.showBorder]: showBorder,
-            [styles.autoHide]: autoHide,
-            [styles.isScrolling]: isScrolling,
-          },
-          className
-        )}
+        className={containerClasses}
         style={scrollAreaStyle}
         {...props}
       >
         <div
           ref={scrollRef}
-          className={styles.viewport}
+          className={processedClassName}
           onScroll={handleScroll}
           style={{
+            ...processedStyle,
             overflowX: horizontal ? 'auto' : 'hidden',
             overflowY: vertical ? 'auto' : 'hidden',
           }}

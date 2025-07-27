@@ -6,6 +6,7 @@
 import React, { forwardRef, useMemo } from 'react'
 import { clsx } from 'clsx'
 import styles from './Pagination.module.css'
+import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
 
 export interface PaginationProps extends Omit<React.HTMLAttributes<HTMLElement>, 'onChange'> {
   /** Current active page number (1-indexed) */
@@ -112,6 +113,7 @@ export const Pagination = forwardRef<HTMLElement, PaginationProps>(
       },
       size = 'md',
       className,
+      style,
       disabled = false,
       ...props
     },
@@ -125,6 +127,16 @@ export const Pagination = forwardRef<HTMLElement, PaginationProps>(
       }
     }
 
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.pagination,
+        styles[size],
+        disabled && styles.disabled
+      )
+    })
+
     if (totalPages <= 1) {
       return null
     }
@@ -132,12 +144,8 @@ export const Pagination = forwardRef<HTMLElement, PaginationProps>(
     return (
       <nav
         ref={ref}
-        className={clsx(
-          styles.pagination,
-          styles[size],
-          disabled && styles.disabled,
-          className
-        )}
+        className={processedClassName}
+        style={processedStyle}
         aria-label="Pagination Navigation"
         {...props}
       >

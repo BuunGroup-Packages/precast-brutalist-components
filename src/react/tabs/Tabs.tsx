@@ -3,8 +3,9 @@
  * @description A tab navigation component for organizing content into separate views. Supports keyboard navigation and ARIA attributes.
  */
 
-import React, { forwardRef, HTMLAttributes, useState, useCallback, createContext, useContext } from 'react'
+import React, { forwardRef, HTMLAttributes, useState, useCallback, createContext, useContext, CSSProperties } from 'react'
 import { clsx } from 'clsx'
+import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
 import styles from './Tabs.module.css'
 
 export interface TabsProps extends HTMLAttributes<HTMLDivElement> {
@@ -22,6 +23,8 @@ export interface TabsProps extends HTMLAttributes<HTMLDivElement> {
   fullWidth?: boolean
   /** Additional CSS classes */
   className?: string
+  /** Custom CSS styles (supports utility classes) */
+  style?: CSSProperties
 }
 
 interface TabsContextValue {
@@ -43,6 +46,7 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(
       size = 'md',
       fullWidth = false,
       className,
+      style,
       children,
       ...props
     },
@@ -65,19 +69,26 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(
       size,
     }
 
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.tabs,
+        styles[orientation],
+        styles[size],
+        {
+          [styles.fullWidth]: fullWidth,
+        }
+      )
+    })
+
     return (
       <TabsContext.Provider value={contextValue}>
         <div
           ref={ref}
-          className={clsx(
-            styles.tabs,
-            styles[orientation],
-            styles[size],
-            {
-              [styles.fullWidth]: fullWidth,
-            },
-            className
-          )}
+          className={processedClassName}
+          style={processedStyle}
           {...props}
         >
           {children}
@@ -91,23 +102,32 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(
 interface TabsListProps extends HTMLAttributes<HTMLDivElement> {
   /** Additional CSS classes */
   className?: string
+  /** Custom CSS styles (supports utility classes) */
+  style?: CSSProperties
 }
 
 export const TabsList = forwardRef<HTMLDivElement, TabsListProps>(
-  ({ className, children, ...props }, ref) => {
+  ({ className, style, children, ...props }, ref) => {
     const context = useContext(TabsContext)
     if (!context) {
       throw new Error('TabsList must be used within Tabs')
     }
 
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.list,
+        styles[context.orientation]
+      )
+    })
+
     return (
       <div
         ref={ref}
-        className={clsx(
-          styles.list,
-          styles[context.orientation],
-          className
-        )}
+        className={processedClassName}
+        style={processedStyle}
         role="tablist"
         aria-orientation={context.orientation}
         {...props}
@@ -126,10 +146,12 @@ interface TabsTriggerProps extends HTMLAttributes<HTMLButtonElement> {
   disabled?: boolean
   /** Additional CSS classes */
   className?: string
+  /** Custom CSS styles (supports utility classes) */
+  style?: CSSProperties
 }
 
 export const TabsTrigger = forwardRef<HTMLButtonElement, TabsTriggerProps>(
-  ({ value, disabled, className, children, onClick, ...props }, ref) => {
+  ({ value, disabled, className, style, children, onClick, ...props }, ref) => {
     const context = useContext(TabsContext)
     if (!context) {
       throw new Error('TabsTrigger must be used within Tabs')
@@ -144,18 +166,25 @@ export const TabsTrigger = forwardRef<HTMLButtonElement, TabsTriggerProps>(
       }
     }
 
+    // Process utility classes
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.trigger,
+        styles[context.size],
+        {
+          [styles.active]: isActive,
+          [styles.disabled]: disabled,
+        }
+      )
+    })
+
     return (
       <button
         ref={ref}
-        className={clsx(
-          styles.trigger,
-          styles[context.size],
-          {
-            [styles.active]: isActive,
-            [styles.disabled]: disabled,
-          },
-          className
-        )}
+        className={processedClassName}
+        style={processedStyle}
         role="tab"
         aria-selected={isActive}
         aria-controls={`tabpanel-${value}`}
@@ -179,16 +208,31 @@ interface TabsContentProps extends HTMLAttributes<HTMLDivElement> {
   forceMount?: boolean
   /** Additional CSS classes */
   className?: string
+  /** Custom CSS styles (supports utility classes) */
+  style?: CSSProperties
 }
 
 export const TabsContent = forwardRef<HTMLDivElement, TabsContentProps>(
-  ({ value, forceMount = false, className, children, ...props }, ref) => {
+  ({ value, forceMount = false, className, style, children, ...props }, ref) => {
     const context = useContext(TabsContext)
     if (!context) {
       throw new Error('TabsContent must be used within Tabs')
     }
 
     const isActive = context.activeTab === value
+
+    // Process utility classes (must be called before any conditional returns)
+    const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
+      className,
+      style,
+      componentClasses: clsx(
+        styles.content,
+        {
+          [styles.active]: isActive,
+          [styles.inactive]: !isActive,
+        }
+      )
+    })
 
     if (!isActive && !forceMount) {
       return null
@@ -197,14 +241,8 @@ export const TabsContent = forwardRef<HTMLDivElement, TabsContentProps>(
     return (
       <div
         ref={ref}
-        className={clsx(
-          styles.content,
-          {
-            [styles.active]: isActive,
-            [styles.inactive]: !isActive,
-          },
-          className
-        )}
+        className={processedClassName}
+        style={processedStyle}
         role="tabpanel"
         aria-labelledby={`tab-${value}`}
         id={`tabpanel-${value}`}
