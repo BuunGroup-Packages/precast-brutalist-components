@@ -5,10 +5,17 @@
   display: inline-block;
   width: auto;
   font-family: var(--brutal-font-mono);
+  /* Create a new stacking context */
+  isolation: isolate;
 }
 
 .selectWrapper.fullWidth {
   width: 100%;
+}
+
+/* When dropdown is open, elevate the entire wrapper */
+.selectWrapper.isOpen {
+  z-index: var(--brutal-z-tooltip);
 }
 
 /* Trigger Button */
@@ -166,7 +173,7 @@
   background-color: var(--brutal-white);
   border: var(--brutal-border-width) var(--brutal-border-style) var(--brutal-black);
   box-shadow: var(--brutal-shadow-lg);
-  z-index: var(--brutal-z-dropdown);
+  z-index: var(--brutal-z-tooltip);
   max-height: 200px;
   overflow-y: auto;
   animation: brutalistDropdown 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);

@@ -111,3 +111,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - add styling additional docs to the README.md (8551d1a2)
 - add styling additional docs to the README.md (8551d1a2)
 - added utils and react changes to components (22a46687)
+- added tooltip changes (5af4508f)

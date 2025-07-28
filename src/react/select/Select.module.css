@@ -17,6 +17,8 @@
   background-image: none;
   /* Ensure dropdown renders properly */
   position: relative;
+  /* Create a new stacking context */
+  isolation: isolate;
 }
 
 /* Remove default arrow in IE */
@@ -176,10 +178,9 @@
   border-bottom: var(--brutal-border-width) solid var(--brutal-black);
 }
 
-/* Z-index to ensure dropdown appears above other elements */
-.select {
-  position: relative;
-  z-index: var(--brutal-z-dropdown);
+/* When focused/open, elevate z-index to ensure dropdown appears above other elements */
+.select:focus {
+  z-index: var(--brutal-z-tooltip);
 }
 
 /* Additional dropdown styling for webkit browsers */
@@ -204,6 +205,13 @@
   position: relative;
   display: inline-block;
   width: 100%;
+  /* Create a new stacking context */
+  isolation: isolate;
+}
+
+/* When select is focused, elevate wrapper */
+.selectWrapper:focus-within {
+  z-index: var(--brutal-z-tooltip);
 }
 
 .selectWrapper.fullWidth {
