@@ -3,7 +3,7 @@
  * @description A component for displaying important messages to users. Supports different severity levels and optional dismiss functionality.
  */
 
-import { forwardRef, HTMLAttributes, useState, CSSProperties } from 'react'
+import { forwardRef, HTMLAttributes, useState, CSSProperties, useEffect } from 'react'
 import { clsx } from 'clsx'
 import styles from './Alert.module.css'
 import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
@@ -101,12 +101,19 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(
 
     const handleDismiss = () => {
       setIsExiting(true)
-      // Wait for animation to complete before removing from DOM
-      setTimeout(() => {
-        setDismissed(true)
-        onDismiss?.()
-      }, 300) // Match animation duration
     }
+
+    useEffect(() => {
+      if (isExiting) {
+        // Wait for animation to complete before removing from DOM
+        const timer = setTimeout(() => {
+          setDismissed(true)
+          onDismiss?.()
+        }, 300) // Match animation duration
+
+        return () => clearTimeout(timer)
+      }
+    }, [isExiting, onDismiss])
 
     const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
       className,

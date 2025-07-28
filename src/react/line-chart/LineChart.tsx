@@ -314,8 +314,8 @@ const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
               
               {/* Data points */}
               {showDots && data.map((point, index) => {
-                const x = (index / (data.length - 1)) * 100
-                const y = 100 - ((point.value - minValue) / valueRange) * 100
+                const x = data.length === 1 ? 50 : (index / (data.length - 1)) * 100
+                const y = valueRange === 0 ? 50 : 100 - ((point.value - minValue) / valueRange) * 100
                 const dotSize = 4 // Fixed small size
                 
                 return (
@@ -336,8 +336,8 @@ const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
 
             {/* Interactive data point areas for tooltips */}
             {data.map((point, index) => {
-              const x = (index / (data.length - 1)) * 100
-              const y = 100 - ((point.value - minValue) / valueRange) * 100
+              const x = data.length === 1 ? 50 : (index / (data.length - 1)) * 100
+              const y = valueRange === 0 ? 50 : 100 - ((point.value - minValue) / valueRange) * 100
               
               return (
                 <Tooltip key={`tooltip-${index}`} content={`${point.label}: ${point.value}`}>
