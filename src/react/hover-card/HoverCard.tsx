@@ -212,7 +212,7 @@ const HoverCardTrigger = forwardRef<HTMLDivElement, HoverCardTriggerProps>(
     }
 
     if (asChild && React.isValidElement(children)) {
-      return React.cloneElement(children as React.ReactElement<HTMLElement>, triggerProps)
+      return React.cloneElement(children as React.ReactElement<any>, triggerProps)
     }
 
     return (

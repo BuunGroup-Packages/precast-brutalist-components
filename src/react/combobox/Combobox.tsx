@@ -101,11 +101,6 @@ interface ComboboxProps {
    * @default 'default'
    */
   variant?: 'default' | 'brutal' | 'outline' | 'info' | 'system' | 'destructive' | 'success' | 'warning' | 'ghost' | 'neon' | 'retro'
-  
-  /**
-   * Inline styles for the combobox container
-   */
-  style?: React.CSSProperties
 }
 
 interface ComboboxContextValue {

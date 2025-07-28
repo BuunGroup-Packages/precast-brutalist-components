@@ -27,6 +27,7 @@ export interface CustomSelectProps {
   onBlur?: () => void
   onFocus?: () => void
   className?: string
+  style?: React.CSSProperties
   name?: string
   id?: string
 }
@@ -39,6 +40,7 @@ export const CustomSelect = forwardRef<HTMLDivElement, CustomSelectProps>(
   (
     {
       className,
+      style,
       variant = 'default',
       size = 'md',
       options = [],
@@ -175,6 +177,7 @@ export const CustomSelect = forwardRef<HTMLDivElement, CustomSelectProps>(
           },
           className
         )}
+        style={style}
       >
         {/* Hidden input for form submission */}
         <input

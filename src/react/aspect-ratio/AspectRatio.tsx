@@ -4,7 +4,6 @@
  */
 
 import React, { forwardRef, CSSProperties } from 'react'
-import { clsx } from 'clsx'
 import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
 import styles from './AspectRatio.module.css'
 

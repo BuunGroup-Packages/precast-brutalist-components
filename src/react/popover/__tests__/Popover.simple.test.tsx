@@ -40,7 +40,9 @@ describe('Popover Component', () => {
       </Popover>
     );
 
-    await user.click(screen.getByText('Trigger'));
+    await act(async () => {
+      await user.click(screen.getByText('Trigger'));
+    });
     
     await waitFor(() => {
       expect(screen.getByText('Hello World')).toBeInTheDocument();
@@ -57,12 +59,16 @@ describe('Popover Component', () => {
 
     const trigger = screen.getByText('Trigger');
     
-    await user.click(trigger);
+    await act(async () => {
+      await user.click(trigger);
+    });
     await waitFor(() => {
       expect(screen.getByText('Hello World')).toBeInTheDocument();
     });
 
-    await user.click(trigger);
+    await act(async () => {
+      await user.click(trigger);
+    });
     await waitFor(() => {
       expect(screen.queryByText('Hello World')).not.toBeInTheDocument();
     });
@@ -76,7 +82,9 @@ describe('Popover Component', () => {
       </Popover>
     );
 
-    await user.tab(); // Focus the button
+    await act(async () => {
+      await user.tab();
+    }); // Focus the button
     
     await waitFor(() => {
       expect(screen.getByText('Hello World')).toBeInTheDocument();
@@ -97,8 +105,10 @@ describe('Popover Component', () => {
     const trigger = screen.getByText('Trigger');
     
     // Use userEvent to focus the trigger
-    await user.click(trigger);
-    trigger.focus();
+    await act(async () => {
+      await user.click(trigger);
+      trigger.focus();
+    });
     
     await waitFor(() => {
       expect(screen.getByText('Hello World')).toBeInTheDocument();
@@ -138,7 +148,9 @@ describe('Popover Component', () => {
       </Popover>
     );
 
-    await user.click(screen.getByText('Trigger'));
+    await act(async () => {
+      await user.click(screen.getByText('Trigger'));
+    });
     expect(onOpenChange).toHaveBeenCalledWith(true);
   });
 
@@ -150,12 +162,16 @@ describe('Popover Component', () => {
       </Popover>
     );
 
-    await user.click(screen.getByText('Trigger'));
+    await act(async () => {
+      await user.click(screen.getByText('Trigger'));
+    });
     await waitFor(() => {
       expect(screen.getByText('Hello World')).toBeInTheDocument();
     });
 
-    await user.keyboard('{Escape}');
+    await act(async () => {
+      await user.keyboard('{Escape}');
+    });
     await waitFor(() => {
       expect(screen.queryByText('Hello World')).not.toBeInTheDocument();
     });
@@ -169,12 +185,16 @@ describe('Popover Component', () => {
       </Popover>
     );
 
-    await user.click(screen.getByText('Trigger'));
+    await act(async () => {
+      await user.click(screen.getByText('Trigger'));
+    });
     await waitFor(() => {
       expect(screen.getByText('Hello World')).toBeInTheDocument();
     });
 
-    await user.keyboard('{Escape}');
+    await act(async () => {
+      await user.keyboard('{Escape}');
+    });
     
     // Wait a bit and check it's still there
     await act(async () => {
@@ -195,12 +215,16 @@ describe('Popover Component', () => {
       </div>
     );
 
-    await user.click(screen.getByText('Trigger'));
+    await act(async () => {
+      await user.click(screen.getByText('Trigger'));
+    });
     await waitFor(() => {
       expect(screen.getByText('Hello World')).toBeInTheDocument();
     });
 
-    await user.click(screen.getByTestId('outside'));
+    await act(async () => {
+      await user.click(screen.getByTestId('outside'));
+    });
     await waitFor(() => {
       expect(screen.queryByText('Hello World')).not.toBeInTheDocument();
     });
@@ -217,12 +241,16 @@ describe('Popover Component', () => {
       </div>
     );
 
-    await user.click(screen.getByText('Trigger'));
+    await act(async () => {
+      await user.click(screen.getByText('Trigger'));
+    });
     await waitFor(() => {
       expect(screen.getByText('Hello World')).toBeInTheDocument();
     });
 
-    await user.click(screen.getByTestId('outside'));
+    await act(async () => {
+      await user.click(screen.getByTestId('outside'));
+    });
     
     // Wait a bit and check it's still there
     await act(async () => {
@@ -240,7 +268,9 @@ describe('Popover Component', () => {
       </Popover>
     );
 
-    await user.click(screen.getByText('Trigger'));
+    await act(async () => {
+      await user.click(screen.getByText('Trigger'));
+    });
     
     await act(async () => {
       await new Promise(resolve => setTimeout(resolve, 100));
@@ -275,7 +305,9 @@ describe('Popover Component', () => {
       </Popover>
     );
 
-    await user.click(screen.getByText('Trigger'));
+    await act(async () => {
+      await user.click(screen.getByText('Trigger'));
+    });
     
     await waitFor(() => {
       expect(screen.getByText('Hello World')).toBeInTheDocument();
@@ -294,7 +326,9 @@ describe('Popover Component', () => {
       </Popover>
     );
 
-    await user.click(screen.getByText('Trigger'));
+    await act(async () => {
+      await user.click(screen.getByText('Trigger'));
+    });
     
     await waitFor(() => {
       expect(screen.getByText('Hello World')).toBeInTheDocument();
@@ -319,7 +353,9 @@ describe('Popover Component', () => {
       </Popover>
     );
 
-    await user.click(screen.getByText('Trigger'));
+    await act(async () => {
+      await user.click(screen.getByText('Trigger'));
+    });
     
     await waitFor(() => {
       expect(screen.getByText('Header')).toBeInTheDocument();
@@ -336,7 +372,9 @@ describe('Popover Component', () => {
       </Popover>
     );
 
-    await user.click(screen.getByText('Trigger'));
+    await act(async () => {
+      await user.click(screen.getByText('Trigger'));
+    });
     
     await waitFor(() => {
       const popover = screen.getByRole('dialog');
@@ -352,7 +390,9 @@ describe('Popover Component', () => {
       </Popover>
     );
 
-    await user.click(screen.getByText('Trigger'));
+    await act(async () => {
+      await user.click(screen.getByText('Trigger'));
+    });
     
     await waitFor(() => {
       const popover = screen.getByRole('dialog');
@@ -387,7 +427,9 @@ describe('Popover Component', () => {
       </Popover>
     );
 
-    await user.click(screen.getByText('Trigger'));
+    await act(async () => {
+      await user.click(screen.getByText('Trigger'));
+    });
     
     await waitFor(() => {
       // First focusable element should receive focus
@@ -410,7 +452,9 @@ describe('Popover Component', () => {
       </Popover>
     );
 
-    await user.click(screen.getByText('Trigger'));
+    await act(async () => {
+      await user.click(screen.getByText('Trigger'));
+    });
     
     await waitFor(() => {
       expect(screen.getByText('Initial Focus')).toHaveFocus();
@@ -432,22 +476,30 @@ describe('Popover Component', () => {
       </Popover>
     );
 
-    await user.click(screen.getByText('Trigger'));
+    await act(async () => {
+      await user.click(screen.getByText('Trigger'));
+    });
     
     await waitFor(() => {
       expect(screen.getByText('First')).toHaveFocus();
     });
 
     // Tab to last button
-    await user.tab();
+    await act(async () => {
+      await user.tab();
+    });
     expect(screen.getByText('Last')).toHaveFocus();
 
     // Tab again should cycle back to first
-    await user.tab();
+    await act(async () => {
+      await user.tab();
+    });
     expect(screen.getByText('First')).toHaveFocus();
 
     // Shift+Tab should go to last
-    await user.tab({ shift: true });
+    await act(async () => {
+      await user.tab({ shift: true });
+    });
     expect(screen.getByText('Last')).toHaveFocus();
   });
 
@@ -464,13 +516,17 @@ describe('Popover Component', () => {
     );
 
     const trigger = screen.getByText('Trigger');
-    await user.click(trigger);
+    await act(async () => {
+      await user.click(trigger);
+    });
     
     await waitFor(() => {
       expect(screen.getByText('Hello World')).toBeInTheDocument();
     });
 
-    await user.keyboard('{Escape}');
+    await act(async () => {
+      await user.keyboard('{Escape}');
+    });
     
     await waitFor(() => {
       expect(screen.queryByText('Hello World')).not.toBeInTheDocument();
@@ -488,7 +544,9 @@ describe('Popover Component', () => {
       </div>
     );
 
-    await user.click(screen.getByText('Trigger'));
+    await act(async () => {
+      await user.click(screen.getByText('Trigger'));
+    });
     
     await waitFor(() => {
       const popover = screen.getByText('Hello World');
@@ -508,7 +566,9 @@ describe('Popover Component', () => {
 
     const trigger = screen.getByText('Trigger');
     
-    await user.click(trigger);
+    await act(async () => {
+      await user.click(trigger);
+    });
     
     await waitFor(() => {
       expect(trigger).toHaveAttribute('aria-expanded', 'true');
@@ -534,7 +594,9 @@ describe('Popover Component', () => {
       </Popover>
     );
 
-    await user.click(screen.getByText('Trigger'));
+    await act(async () => {
+      await user.click(screen.getByText('Trigger'));
+    });
     
     await waitFor(() => {
       expect(document.querySelector('.custom-content')).toBeInTheDocument();

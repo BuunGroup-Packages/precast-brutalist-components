@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import { ContextMenu } from '../ContextMenu';
@@ -33,7 +33,10 @@ describe('ContextMenu Component', () => {
     );
     
     const trigger = screen.getByText('Right-click me');
-    fireEvent.contextMenu(trigger);
+    
+    await act(async () => {
+      fireEvent.contextMenu(trigger);
+    });
     
     await waitFor(() => {
       expect(screen.getByText('Edit')).toBeInTheDocument();
@@ -54,7 +57,9 @@ describe('ContextMenu Component', () => {
       </ContextMenu>
     );
     
-    fireEvent.contextMenu(screen.getByText('Right-click me'));
+    await act(async () => {
+      fireEvent.contextMenu(screen.getByText('Right-click me'));
+    });
     expect(screen.getByText('Edit')).toBeInTheDocument();
     
     await user.keyboard('{Escape}');
@@ -77,7 +82,9 @@ describe('ContextMenu Component', () => {
       </ContextMenu>
     );
     
-    fireEvent.contextMenu(screen.getByText('Right-click me'));
+    await act(async () => {
+      fireEvent.contextMenu(screen.getByText('Right-click me'));
+    });
     expect(screen.getByText('Edit')).toBeInTheDocument();
     
     // Click on backdrop (finding the backdrop by its style)
