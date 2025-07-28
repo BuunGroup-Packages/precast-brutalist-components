@@ -92,12 +92,14 @@ describe('ScrollArea Component', () => {
   });
 
   it('applies custom className', () => {
-    const { container } = render(
+    const { getByText } = render(
       <ScrollArea className="custom-scroll">
         <div>Content</div>
       </ScrollArea>
     );
-    expect(container.firstChild).toHaveClass('custom-scroll');
+    const content = getByText('Content');
+    const viewport = content.parentElement;
+    expect(viewport).toHaveClass('custom-scroll');
   });
 
   it('renders long content', () => {

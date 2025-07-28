@@ -215,8 +215,8 @@ const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
       if (data.length === 0) return ''
       
       const points = data.map((point, index) => {
-        const x = (index / (data.length - 1)) * 100
-        const y = 100 - ((point.value - minValue) / valueRange) * 100
+        const x = data.length === 1 ? 50 : (index / (data.length - 1)) * 100
+        const y = valueRange === 0 ? 50 : 100 - ((point.value - minValue) / valueRange) * 100
         return { x, y }
       })
 

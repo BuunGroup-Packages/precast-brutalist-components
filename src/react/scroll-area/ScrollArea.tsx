@@ -278,7 +278,7 @@ export const ScrollArea = forwardRef<HTMLDivElement, ScrollAreaProps>(
       >
         <div
           ref={scrollRef}
-          className={processedClassName}
+          className={clsx(styles.viewport, processedClassName)}
           onScroll={handleScroll}
           style={{
             ...processedStyle,
