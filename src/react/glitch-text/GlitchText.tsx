@@ -3,7 +3,7 @@
  * @description A glitchy, cyberpunk-style text component with digital distortion effects
  */
 
-import React, { forwardRef, HTMLAttributes } from 'react'
+import { forwardRef, HTMLAttributes } from 'react'
 import { clsx } from 'clsx'
 import styles from './GlitchText.module.css'
 import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'

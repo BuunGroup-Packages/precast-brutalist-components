@@ -3,7 +3,7 @@
  * @description A brutalist grid pattern background component with thick lines and bold aesthetics
  */
 
-import React, { forwardRef, SVGProps, useEffect, useRef, useState } from 'react'
+import React, { forwardRef, SVGProps, useEffect, useState } from 'react'
 import { clsx } from 'clsx'
 import styles from './BrutalGrid.module.css'
 import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
@@ -79,14 +79,14 @@ export const BrutalGrid = forwardRef<SVGSVGElement, BrutalGridProps>(
     style,
     ...props 
   }, ref) => {
-    const containerRef = useRef<SVGSVGElement>(null)
+    const [svgElement, setSvgElement] = useState<SVGSVGElement | null>(null)
     const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
-    const id = `brutal-grid-${Math.random().toString(36).substr(2, 9)}`
+    const id = `brutal-grid-${Math.random().toString(36).substring(2, 11)}`
 
     useEffect(() => {
       const updateDimensions = () => {
-        if (containerRef.current) {
-          const { width, height } = containerRef.current.getBoundingClientRect()
+        if (svgElement) {
+          const { width, height } = svgElement.getBoundingClientRect()
           setDimensions({ width, height })
         }
       }
@@ -94,7 +94,7 @@ export const BrutalGrid = forwardRef<SVGSVGElement, BrutalGridProps>(
       updateDimensions()
       window.addEventListener('resize', updateDimensions)
       return () => window.removeEventListener('resize', updateDimensions)
-    }, [])
+    }, [svgElement])
 
     const { className: processedClassName, style: processedStyle } = useResponsiveUtilities({
       className,
@@ -113,10 +113,13 @@ export const BrutalGrid = forwardRef<SVGSVGElement, BrutalGridProps>(
     return (
       <svg
         ref={(node) => {
-          containerRef.current = node
+          setSvgElement(node)
           if (ref) {
-            if (typeof ref === 'function') ref(node)
-            else ref.current = node
+            if (typeof ref === 'function') {
+              ref(node)
+            } else {
+              (ref as React.MutableRefObject<SVGSVGElement | null>).current = node
+            }
           }
         }}
         className={processedClassName}

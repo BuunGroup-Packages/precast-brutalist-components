@@ -3,7 +3,7 @@
  * @description A rubber stamp-style text component with ink bleed and distressed effects
  */
 
-import React, { forwardRef, HTMLAttributes } from 'react'
+import { forwardRef, HTMLAttributes } from 'react'
 import { clsx } from 'clsx'
 import styles from './StampText.module.css'
 import { useResponsiveUtilities } from '../hooks/useResponsiveUtilities'
