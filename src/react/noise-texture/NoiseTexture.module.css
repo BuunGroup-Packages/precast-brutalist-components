@@ -1,0 +1,112 @@
+.noiseTexture {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.noiseSvg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.noiseRect {
+  width: 100%;
+  height: 100%;
+  opacity: var(--noise-opacity, 0.5);
+  mix-blend-mode: var(--noise-blend-mode, multiply);
+}
+
+/* Intensity variants */
+.subtle {
+  --noise-intensity: 0.3;
+}
+
+.medium {
+  --noise-intensity: 0.5;
+}
+
+.heavy {
+  --noise-intensity: 0.7;
+}
+
+.extreme {
+  --noise-intensity: 1;
+  filter: contrast(2) brightness(0.8);
+}
+
+/* Color variants */
+.monochrome {
+  --noise-color: currentColor;
+}
+
+.warm {
+  --noise-base-color: #FF6B6B;
+}
+
+.cool {
+  --noise-base-color: #4ECDC4;
+}
+
+.rainbow {
+  --noise-base-color: #FF006E;
+}
+
+/* Variant styles */
+.static {
+  --noise-animation: none;
+}
+
+.grainy {
+  filter: contrast(1.2);
+}
+
+.rough {
+  filter: contrast(1.5) brightness(1.1);
+}
+
+.organic {
+  filter: contrast(0.9) brightness(0.95);
+}
+
+/* Animation */
+.animated .noiseSvg {
+  animation: noiseShift 8s linear infinite;
+}
+
+.animated .noiseRect {
+  animation: noisePulse 3s ease-in-out infinite;
+}
+
+@keyframes noiseShift {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-10%, -10%) scale(1.2);
+  }
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+}
+
+@keyframes noisePulse {
+  0%, 100% {
+    opacity: var(--noise-opacity, 0.5);
+  }
+  50% {
+    opacity: calc(var(--noise-opacity, 0.5) * 1.5);
+  }
+}
+
+/* Ensure children appear above noise */
+.noiseTexture > *:not(svg) {
+  position: relative;
+  z-index: 2;
+}

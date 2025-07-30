@@ -45,7 +45,9 @@
 }
 
 .default:hover:not(.disabled) {
-  background-color: var(--brutal-gray-100);
+  background-color: var(--brutal-white);
+  color: var(--brutal-accent);
+  border-color: var(--brutal-accent);
 }
 
 .destructive {
@@ -64,8 +66,9 @@
 }
 
 .outline:hover:not(.disabled) {
-  background-color: var(--brutal-black);
-  color: var(--brutal-white);
+  background-color: transparent;
+  color: var(--brutal-accent);
+  border-color: var(--brutal-accent);
 }
 
 .ghost {
@@ -75,8 +78,9 @@
 }
 
 .ghost:hover:not(.disabled) {
-  background-color: var(--brutal-gray-100);
-  border-color: var(--brutal-black);
+  background-color: transparent;
+  color: var(--brutal-accent);
+  border-color: var(--brutal-accent);
 }
 
 .brutal {
@@ -105,7 +109,9 @@
 }
 
 .secondary:hover:not(.disabled) {
-  background-color: var(--brutal-gray-300);
+  background-color: var(--brutal-gray-200);
+  color: var(--brutal-accent);
+  border-color: var(--brutal-accent);
 }
 
 .danger {

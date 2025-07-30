@@ -1,0 +1,403 @@
+.wireframe {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--brutal-white);
+  border: var(--brutal-border-width-thick) var(--brutal-border-style) var(--brutal-black);
+  overflow: hidden;
+  transition: var(--brutal-transition-base);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Variants */
+.box {
+  border-style: solid;
+  border-width: 3px;
+}
+
+.dashed {
+  border-style: dashed;
+  border-width: 3px;
+}
+
+.dotted {
+  border-style: dotted;
+  border-width: 4px;
+}
+
+.sketch {
+  border: none;
+  position: relative;
+}
+
+.sketch::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: 
+    linear-gradient(to right, transparent 0%, transparent 48%, var(--brutal-black) 49%, var(--brutal-black) 51%, transparent 52%, transparent 100%),
+    linear-gradient(to bottom, transparent 0%, transparent 48%, var(--brutal-black) 49%, var(--brutal-black) 51%, transparent 52%, transparent 100%);
+  background-size: 20px 20px;
+  background-position: 0 0, 0 0;
+  pointer-events: none;
+  opacity: 0.3;
+}
+
+.sketch::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border: 3px solid var(--brutal-black);
+  border-radius: 2px;
+  transform: rotate(-0.5deg);
+  pointer-events: none;
+}
+
+/* Types */
+.type-container {
+  min-height: 200px;
+}
+
+.type-text {
+  min-height: 60px;
+  background-color: var(--brutal-white);
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent,
+    transparent 8px,
+    var(--brutal-gray-400) 8px,
+    var(--brutal-gray-400) 10px,
+    transparent 10px,
+    transparent 14px,
+    var(--brutal-gray-300) 14px,
+    var(--brutal-gray-300) 16px,
+    transparent 16px,
+    transparent 20px
+  );
+  background-size: 100% 20px;
+  background-position: 0 8px;
+}
+
+.type-image {
+  min-height: 150px;
+  background-color: var(--brutal-gray-100);
+  background-image: 
+    linear-gradient(135deg, transparent 45%, var(--brutal-gray-400) 45%, var(--brutal-gray-400) 55%, transparent 55%),
+    linear-gradient(45deg, transparent 45%, var(--brutal-gray-400) 45%, var(--brutal-gray-400) 55%, transparent 55%);
+  background-size: 30px 30px;
+  background-position: 0 0, 15px 15px;
+}
+
+.type-button {
+  min-height: 48px;
+  background-color: var(--brutal-gray-200);
+  background-image: 
+    linear-gradient(to bottom, 
+      transparent 0%, 
+      transparent 40%, 
+      var(--brutal-gray-400) 40%, 
+      var(--brutal-gray-400) 60%, 
+      transparent 60%, 
+      transparent 100%
+    );
+  background-size: 100% 100%;
+  background-position: center;
+}
+
+.type-input {
+  min-height: 48px;
+  background-color: var(--brutal-white);
+  background-image: 
+    linear-gradient(to bottom, 
+      transparent 0%, 
+      transparent calc(100% - 3px), 
+      var(--brutal-gray-600) calc(100% - 3px), 
+      var(--brutal-gray-600) 100%
+    );
+  background-size: 100% 100%;
+}
+
+.type-header {
+  min-height: 80px;
+  background-color: var(--brutal-gray-100);
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.type-header::before {
+  content: '';
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100px;
+  height: 30px;
+  background-color: var(--brutal-gray-300);
+  border-radius: 2px;
+}
+
+.type-header::after {
+  content: '';
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 200px;
+  height: 10px;
+  background-image: repeating-linear-gradient(
+    to right,
+    var(--brutal-gray-400) 0px,
+    var(--brutal-gray-400) 30px,
+    transparent 30px,
+    transparent 40px
+  );
+}
+
+.type-nav {
+  min-height: 60px;
+  background-color: var(--brutal-white);
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 10px,
+    var(--brutal-gray-200) 10px,
+    var(--brutal-gray-200) 40px,
+    transparent 40px,
+    transparent 50px
+  );
+  background-size: 100% 50px;
+  padding: 10px;
+}
+
+.type-content {
+  min-height: 300px;
+  background-color: var(--brutal-white);
+  background-image: 
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0px,
+      transparent 20px,
+      var(--brutal-gray-200) 20px,
+      var(--brutal-gray-200) 22px,
+      transparent 22px,
+      transparent 26px,
+      var(--brutal-gray-300) 26px,
+      var(--brutal-gray-300) 28px,
+      transparent 28px,
+      transparent 32px,
+      var(--brutal-gray-200) 32px,
+      var(--brutal-gray-200) 34px,
+      transparent 34px,
+      transparent 38px,
+      var(--brutal-gray-300) 38px,
+      var(--brutal-gray-300) 40px,
+      transparent 40px,
+      transparent 60px
+    );
+  background-size: 100% 60px;
+  background-position: 0 10px;
+}
+
+/* Heights */
+.height-sm {
+  height: 100px;
+}
+
+.height-md {
+  height: 200px;
+}
+
+.height-lg {
+  height: 400px;
+}
+
+.height-full {
+  height: 100%;
+}
+
+/* Padding */
+.padding-none {
+  padding: 0;
+}
+
+.padding-sm {
+  padding: var(--brutal-space-2);
+}
+
+.padding-md {
+  padding: var(--brutal-space-4);
+}
+
+.padding-lg {
+  padding: var(--brutal-space-6);
+}
+
+/* Hatched pattern */
+.hatched {
+  position: relative;
+}
+
+.hatched::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 8px,
+    rgba(0, 0, 0, 0.1) 8px,
+    rgba(0, 0, 0, 0.1) 10px
+  );
+  pointer-events: none;
+}
+
+/* Interactive states */
+.interactive {
+  cursor: pointer;
+}
+
+.interactive:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: var(--brutal-shadow);
+}
+
+.interactive:active {
+  transform: translate(0, 0);
+  box-shadow: none;
+}
+
+/* Label */
+.label {
+  font-family: var(--brutal-font-mono);
+  font-size: var(--brutal-text-xs);
+  font-weight: var(--brutal-font-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--brutal-gray-600);
+  background-color: var(--brutal-white);
+  padding: var(--brutal-space-1) var(--brutal-space-2);
+  border: 2px solid var(--brutal-gray-400);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+/* Group styles */
+.group {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.direction-horizontal {
+  flex-direction: row;
+}
+
+.direction-horizontal > * {
+  flex: 1;
+}
+
+.direction-vertical {
+  flex-direction: column;
+}
+
+.direction-vertical > * {
+  width: 100%;
+}
+
+.gap-sm {
+  gap: var(--brutal-space-2);
+}
+
+.gap-md {
+  gap: var(--brutal-space-4);
+}
+
+.gap-lg {
+  gap: var(--brutal-space-6);
+}
+
+/* Special effects for different types */
+.type-image .label {
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.type-button .label {
+  border: 3px solid var(--brutal-black);
+  background-color: var(--brutal-gray-100);
+  color: var(--brutal-black);
+}
+
+.type-header .label {
+  top: auto;
+  left: auto;
+  bottom: var(--brutal-space-2);
+  right: var(--brutal-space-2);
+  transform: none;
+}
+
+/* Scrollable states */
+.scrollable {
+  overflow: hidden;
+}
+
+.scroll-vertical {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.scroll-horizontal {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.scroll-both {
+  overflow: auto;
+}
+
+/* Custom scrollbar for brutalist aesthetic */
+.scrollable::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+.scrollable::-webkit-scrollbar-track {
+  background: var(--brutal-gray-100);
+  border: 2px solid var(--brutal-black);
+}
+
+.scrollable::-webkit-scrollbar-thumb {
+  background: var(--brutal-gray-400);
+  border: 2px solid var(--brutal-black);
+}
+
+.scrollable::-webkit-scrollbar-thumb:hover {
+  background: var(--brutal-gray-600);
+}
+
+/* Focus states */
+.wireframe:focus-visible {
+  outline: 3px solid var(--brutal-accent);
+  outline-offset: 2px;
+}
+
+/* Animation for sketch variant */
+@keyframes sketch-wobble {
+  0%, 100% {
+    transform: rotate(-0.5deg);
+  }
+  50% {
+    transform: rotate(0.5deg);
+  }
+}
+
+.sketch.interactive:hover::after {
+  animation: sketch-wobble 0.3s ease-in-out;
+}

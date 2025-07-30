@@ -59,6 +59,13 @@ export * from './sheet'
 export * from './carousel'
 export * from './chart'
 export * from './scroll-area'
+export * from './wireframe'
+export * from './comic-text'
+export * from './glitch-text'
+export * from './stamp-text'
+export * from './noise-texture'
+export * from './halftone-pattern'
+export * from './brutal-grid'
 
 // Brutalist SVG Shapes
 export * from './shapes'

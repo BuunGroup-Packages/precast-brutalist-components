@@ -1,0 +1,229 @@
+.stampText {
+  position: relative;
+  display: inline-block;
+  font-family: 'Impact', 'Arial Black', var(--brutal-font-sans);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  user-select: none;
+  padding: 0.5em 1em;
+  border-radius: 0.1em;
+  transform-origin: center;
+  transition: var(--brutal-transition-base);
+}
+
+.stampContent {
+  position: relative;
+  z-index: 2;
+}
+
+/* Size variants */
+.sm {
+  font-size: 1.25rem;
+  border-width: 3px;
+}
+
+.md {
+  font-size: 2rem;
+  border-width: 4px;
+}
+
+.lg {
+  font-size: 3rem;
+  border-width: 5px;
+}
+
+.xl {
+  font-size: 4.5rem;
+  border-width: 6px;
+}
+
+/* Variant colors and styles */
+.approved {
+  color: #00C853;
+  border: var(--stamp-border-width, 4px) solid #00C853;
+  background: rgba(0, 200, 83, 0.1);
+  box-shadow: 
+    inset 0 0 20px rgba(0, 200, 83, 0.2),
+    0 0 10px rgba(0, 200, 83, 0.3);
+}
+
+.rejected {
+  color: #D50000;
+  border: var(--stamp-border-width, 4px) solid #D50000;
+  background: rgba(213, 0, 0, 0.1);
+  box-shadow: 
+    inset 0 0 20px rgba(213, 0, 0, 0.2),
+    0 0 10px rgba(213, 0, 0, 0.3);
+}
+
+.urgent {
+  color: #FF6F00;
+  border: var(--stamp-border-width, 4px) solid #FF6F00;
+  background: rgba(255, 111, 0, 0.1);
+  box-shadow: 
+    inset 0 0 20px rgba(255, 111, 0, 0.2),
+    0 0 10px rgba(255, 111, 0, 0.3);
+}
+
+.classified {
+  color: #000000;
+  border: var(--stamp-border-width, 4px) solid #000000;
+  background: rgba(0, 0, 0, 0.05);
+  box-shadow: 
+    inset 0 0 20px rgba(0, 0, 0, 0.1),
+    0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.draft {
+  color: #2962FF;
+  border: var(--stamp-border-width, 4px) solid #2962FF;
+  background: rgba(41, 98, 255, 0.1);
+  box-shadow: 
+    inset 0 0 20px rgba(41, 98, 255, 0.2),
+    0 0 10px rgba(41, 98, 255, 0.3);
+}
+
+.void {
+  color: #6A1B9A;
+  border: var(--stamp-border-width, 4px) solid #6A1B9A;
+  background: rgba(106, 27, 154, 0.1);
+  box-shadow: 
+    inset 0 0 20px rgba(106, 27, 154, 0.2),
+    0 0 10px rgba(106, 27, 154, 0.3);
+}
+
+/* Rotation variants */
+.none {
+  transform: rotate(0deg);
+}
+
+.slight {
+  transform: rotate(-3deg);
+}
+
+.tilted {
+  transform: rotate(-12deg);
+}
+
+.heavy {
+  transform: rotate(-25deg);
+}
+
+/* Ink effects using pseudo-elements for texture */
+.stampText::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 2px,
+      currentColor 2px,
+      currentColor 3px
+    );
+  opacity: 0.05;
+  z-index: 1;
+  border-radius: inherit;
+}
+
+.stampText::after {
+  content: '';
+  position: absolute;
+  top: -5%;
+  left: -5%;
+  right: -5%;
+  bottom: -5%;
+  background: 
+    radial-gradient(circle at 20% 20%, transparent 1px, currentColor 1px, currentColor 2px, transparent 2px),
+    radial-gradient(circle at 60% 60%, transparent 1px, currentColor 1px, currentColor 2px, transparent 2px),
+    radial-gradient(circle at 80% 20%, transparent 1px, currentColor 1px, currentColor 2px, transparent 2px),
+    radial-gradient(circle at 40% 80%, transparent 1px, currentColor 1px, currentColor 2px, transparent 2px);
+  background-size: 20px 20px, 15px 15px, 25px 25px, 18px 18px;
+  opacity: 0.03;
+  z-index: 0;
+  filter: blur(0.5px);
+  border-radius: inherit;
+}
+
+/* Ink intensity variants */
+.light::before {
+  opacity: 0.02;
+}
+
+.light::after {
+  opacity: 0.01;
+}
+
+.normal::before {
+  opacity: 0.05;
+}
+
+.normal::after {
+  opacity: 0.03;
+}
+
+.heavy::before {
+  opacity: 0.08;
+}
+
+.heavy::after {
+  opacity: 0.05;
+}
+
+.worn {
+  border-style: dashed;
+  position: relative;
+}
+
+.worn::before {
+  opacity: 0.1;
+  filter: blur(1px);
+}
+
+.worn::after {
+  opacity: 0.08;
+  filter: blur(2px);
+}
+
+.worn .stampContent {
+  filter: blur(0.3px);
+}
+
+/* Hover effect */
+.stampText:hover {
+  transform: scale(1.05) rotate(calc(var(--rotation, -3deg) - 2deg));
+  filter: brightness(1.1) contrast(1.1);
+}
+
+.stampText:active {
+  transform: scale(0.98) rotate(calc(var(--rotation, -3deg) + 1deg));
+  filter: brightness(0.95) contrast(1.2) saturate(1.2);
+}
+
+/* Distressed border effect for all variants */
+.stampText {
+  position: relative;
+  border-image: repeating-linear-gradient(
+    90deg,
+    currentColor 0,
+    currentColor 2px,
+    transparent 2px,
+    transparent 4px
+  ) 1;
+}
+
+/* Additional texture overlay */
+.stampText .stampContent::before {
+  content: attr(data-text);
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  opacity: 0.2;
+  filter: blur(1px);
+  z-index: -1;
+}
